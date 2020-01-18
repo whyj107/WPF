@@ -1,0 +1,14 @@
+C:\Users\qndbs\OneDrive\바탕 화면\c#\Test\Test\bin\Debug\Test.exe.config
+C:\Users\qndbs\OneDrive\바탕 화면\c#\Test\Test\bin\Debug\Test.exe
+C:\Users\qndbs\OneDrive\바탕 화면\c#\Test\Test\bin\Debug\Test.pdb
+C:\Users\qndbs\OneDrive\바탕 화면\c#\Test\Test\obj\Debug\Test.csprojAssemblyReference.cache
+C:\Users\qndbs\OneDrive\바탕 화면\c#\Test\Test\obj\Debug\MainWindow.g.cs
+C:\Users\qndbs\OneDrive\바탕 화면\c#\Test\Test\obj\Debug\App.g.cs
+C:\Users\qndbs\OneDrive\바탕 화면\c#\Test\Test\obj\Debug\Test_MarkupCompile.cache
+C:\Users\qndbs\OneDrive\바탕 화면\c#\Test\Test\obj\Debug\Test_MarkupCompile.lref
+C:\Users\qndbs\OneDrive\바탕 화면\c#\Test\Test\obj\Debug\MainWindow.baml
+C:\Users\qndbs\OneDrive\바탕 화면\c#\Test\Test\obj\Debug\Test.g.resources
+C:\Users\qndbs\OneDrive\바탕 화면\c#\Test\Test\obj\Debug\Test.Properties.Resources.resources
+C:\Users\qndbs\OneDrive\바탕 화면\c#\Test\Test\obj\Debug\Test.csproj.GenerateResource.cache
+C:\Users\qndbs\OneDrive\바탕 화면\c#\Test\Test\obj\Debug\Test.exe
+C:\Users\qndbs\OneDrive\바탕 화면\c#\Test\Test\obj\Debug\Test.pdb
