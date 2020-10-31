@@ -1,0 +1,56 @@
+﻿<Window x:Class="ForU_Excel.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ForU_Excel"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="300" Width="600">
+
+    <Window.Resources>
+        <SolidColorBrush x:Key="Progress_FG" Color="#7896b0"/>
+        <SolidColorBrush x:Key="Progress_BG" Color="#f3f3f3"/>
+
+        <Style TargetType="TextBox">
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+        </Style>
+    </Window.Resources>
+    
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <StackPanel>
+            <!-- 특정 빈행 추가 부분 -->
+            <StackPanel Orientation="Horizontal" Margin="10">
+                <Label Content="x번째에 빈행 추가 : "/>
+                <TextBox x:Name="AR_TB" Width="50" PreviewTextInput="AR_TB_PreviewTextInput"/>
+            </StackPanel>
+            
+            <!-- 데이터 범위 지정 부분 -->
+            <StackPanel Orientation="Horizontal" Margin="10">
+                <Label Content="찾을 열의 범위 선택: "/>
+                <TextBox x:Name="RC_TB1" Width="20" MaxLength="1" PreviewTextInput="RC_TB_PreviewTextInput"/>
+                <Label Content=":"/>
+                <TextBox x:Name="RC_TB2" Width="20" MaxLength="1" PreviewTextInput="RC_TB_PreviewTextInput"/>
+            </StackPanel>
+            <!-- 주의 사항 -->
+            <Label Content="A열에서 C열일 경우 A:C로 쓰시면 됩니다."/>
+            <Label Content="A열에서만 찾고 싶으실 경우는 A:A로 설정해주세요."/>
+
+            <!-- 찾을 데이터를 입력해주세요. -->
+            <StackPanel Orientation="Horizontal" Margin="10">
+                <Label Content="찾을 데이터 : "/>
+                <TextBox x:Name="FD_TB" Width="100"/>
+            </StackPanel>
+            <Button x:Name="Btn1" Content="매크로 생성" Click="Btn1_Click"/>
+        </StackPanel>
+        
+        <!-- 텍스트박스 -->
+        <TextBox Grid.Column="1" x:Name="Mecro_TB" IsReadOnly="True"/>
+
+
+    </Grid>
+</Window>
