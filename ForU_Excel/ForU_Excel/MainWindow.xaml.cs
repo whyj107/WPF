@@ -37,7 +37,6 @@ namespace ForU_Excel
         // 버튼 클릭
         private void Btn1_Click(object sender, RoutedEventArgs e)
         {
-            Mecro_TB.Text = "";
 
             if (!AR_TB.Text.Equals(""))
             {
@@ -47,13 +46,13 @@ namespace ForU_Excel
                 string R_change = string.Format("    Rows({0}).Insert", row.ToString());
                 string R_end = "End Sub";
 
-                Mecro_TB.AppendText("x번째에 빈행 추가 시작--------------\n");
-                Mecro_TB.AppendText(R_start);
-                Mecro_TB.AppendText("\n");
-                Mecro_TB.AppendText(R_change);
-                Mecro_TB.AppendText("\n");
-                Mecro_TB.AppendText(R_end);
-                Mecro_TB.AppendText("\nx번째에 빈행 추가 끝--------------\n");
+                Mecro_TB1.Text = "";
+
+                Mecro_TB1.AppendText(R_start);
+                Mecro_TB1.AppendText("\n");
+                Mecro_TB1.AppendText(R_change);
+                Mecro_TB1.AppendText("\n");
+                Mecro_TB1.AppendText(R_end);
             }
 
             if (!RC_TB1.Text.Equals("") && !RC_TB2.Text.Equals(""))
@@ -64,6 +63,8 @@ namespace ForU_Excel
                 }
                 else
                 {
+                    Mecro_TB2.Text = "";
+
                     string F = string.Format(
                         "Sub find_func()\n" +
                         "    Dim strAddr As String\n" +
@@ -81,9 +82,7 @@ namespace ForU_Excel
                         "End Sub",
                         RC_TB1.Text.ToUpper(), RC_TB2.Text.ToUpper(), FD_TB.Text);
 
-                    Mecro_TB.AppendText("특정값 빈행 추가 시작--------------\n");
-                    Mecro_TB.AppendText(F);
-                    Mecro_TB.AppendText("\n특정값 빈행 추가 끝--------------\n");
+                    Mecro_TB2.AppendText(F);
                 }
             }
         }

@@ -4,6 +4,5 @@
              xmlns:local="clr-namespace:ForU_Excel"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
-         
     </Application.Resources>
 </Application>

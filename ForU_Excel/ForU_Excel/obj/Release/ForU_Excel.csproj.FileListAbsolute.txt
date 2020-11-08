@@ -1,0 +1,13 @@
+C:\Users\qndbs\source\repos\ForU_Excel\ForU_Excel\bin\Release\For My Sis-M.M.exe.config
+C:\Users\qndbs\source\repos\ForU_Excel\ForU_Excel\bin\Release\For My Sis-M.M.exe
+C:\Users\qndbs\source\repos\ForU_Excel\ForU_Excel\bin\Release\For My Sis-M.M.pdb
+C:\Users\qndbs\source\repos\ForU_Excel\ForU_Excel\obj\Release\MainWindow.baml
+C:\Users\qndbs\source\repos\ForU_Excel\ForU_Excel\obj\Release\MainWindow.g.cs
+C:\Users\qndbs\source\repos\ForU_Excel\ForU_Excel\obj\Release\App.g.cs
+C:\Users\qndbs\source\repos\ForU_Excel\ForU_Excel\obj\Release\For My Sis-M.M_MarkupCompile.cache
+C:\Users\qndbs\source\repos\ForU_Excel\ForU_Excel\obj\Release\For My Sis-M.M.g.resources
+C:\Users\qndbs\source\repos\ForU_Excel\ForU_Excel\obj\Release\ForU_Excel.Properties.Resources.resources
+C:\Users\qndbs\source\repos\ForU_Excel\ForU_Excel\obj\Release\ForU_Excel.csproj.GenerateResource.cache
+C:\Users\qndbs\source\repos\ForU_Excel\ForU_Excel\obj\Release\ForU_Excel.csproj.CoreCompileInputs.cache
+C:\Users\qndbs\source\repos\ForU_Excel\ForU_Excel\obj\Release\For My Sis-M.M.exe
+C:\Users\qndbs\source\repos\ForU_Excel\ForU_Excel\obj\Release\For My Sis-M.M.pdb

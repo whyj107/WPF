@@ -3,53 +3,164 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:ForU_Excel"
         mc:Ignorable="d"
-        Title="MainWindow" Height="300" Width="600">
-
+        Icon="NF.ico"
+        Title="For My Sis - M.M.1.1" Height="500" Width="800" ResizeMode="NoResize">
+    
     <Window.Resources>
-        <SolidColorBrush x:Key="Progress_FG" Color="#7896b0"/>
-        <SolidColorBrush x:Key="Progress_BG" Color="#f3f3f3"/>
-
+        <!-- Color Chart : PEACH PASSION PALETTE -->
+        <SolidColorBrush x:Key="Color1" Color="#ff8c72"/>
+        <SolidColorBrush x:Key="Color2" Color="#f0b19e"/>
+        <SolidColorBrush x:Key="Color3" Color="#f0cbaf"/>
+        <SolidColorBrush x:Key="Color4" Color="#f8afa1"/>
+        <SolidColorBrush x:Key="Color5" Color="#fbe4b5"/>
+        
+        <!-- Grid 디자인 -->
+        <Style TargetType="Grid">
+            <Setter Property="Background" Value="{StaticResource Color3}"/>
+        </Style>
+        
+        <!-- StackPanel 디자인-->
+        <Style TargetType="StackPanel">
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="Margin" Value="10"/>
+        </Style>
+        
+        <!-- TextBox 디자인 -->
         <Style TargetType="TextBox">
             <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Background" Value="WhiteSmoke"/>
+        </Style>
+        <!-- x번째 빈행 추가 -->
+        <Style x:Key="TB1" TargetType="TextBox">
+            <Setter Property="Width" Value="50"/>
+            <Setter Property="Height" Value="20"/>
+            <Setter Property="MaxLength" Value="5"/>
+            <EventSetter Event="PreviewTextInput" Handler="AR_TB_PreviewTextInput"/>
+        </Style>
+        <!-- 찾을 열 -->
+        <Style x:Key="TB2" TargetType="TextBox">
+            <Setter Property="Width" Value="20"/>
+            <Setter Property="Height" Value="20"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="MaxLength" Value="1"/>
+            <EventSetter Event="PreviewTextInput" Handler="RC_TB_PreviewTextInput"/>
+        </Style>
+        <!-- 찾을 데이터 -->
+        <Style x:Key="TB3" TargetType="TextBox">
+            <Setter Property="Width" Value="100"/>
+            <Setter Property="Height" Value="20"/>
+        </Style>
+        <!-- 매크로-->
+        <Style x:Key="TB4" TargetType="TextBox">
+            <Setter Property="Grid.Column" Value="1"/>
+            <Setter Property="Grid.RowSpan" Value="2"/>
+            <Setter Property="IsReadOnly" Value="True"/>
+            <Setter Property="Margin" Value="10"/>
+            <Setter Property="FontSize" Value="11"/>
+        </Style>
+
+        <!-- Button 디자인 -->
+        <Style TargetType="Button">
+            <Setter Property="Width" Value="100"/>
+            <Setter Property="Height" Value="30"/>
+            <Setter Property="Background" Value="{StaticResource Color2}"/>
+            <Setter Property="Foreground" Value="Black"/>
+            <EventSetter Event="Click" Handler="Btn1_Click"/>
+        </Style>
+
+        <!-- GroupBox 디자인 -->
+        <Style x:Key="Manual_GB" TargetType="GroupBox">
+            <Setter Property="Grid.Row" Value="1"/>
+            <Setter Property="Background" Value="WhiteSmoke"/>
+            <Setter Property="Foreground" Value="IndianRed"/>
+            <Setter Property="Margin" Value="10"/>
+            <Setter Property="FontWeight" Value="ExtraBold"/>
+        </Style>
+        
+        <!-- TextBlock -->
+        <Style TargetType="TextBlock">
+            <Setter Property="TextWrapping" Value="Wrap"/>
+            <Setter Property="FontSize" Value="10"/>
+            <Setter Property="Padding" Value="10"/>
         </Style>
     </Window.Resources>
     
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="0.7*"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="0.85*"/>
+        </Grid.RowDefinitions>
+        
         <StackPanel>
             <!-- 특정 빈행 추가 부분 -->
-            <StackPanel Orientation="Horizontal" Margin="10">
-                <Label Content="x번째에 빈행 추가 : "/>
-                <TextBox x:Name="AR_TB" Width="50" PreviewTextInput="AR_TB_PreviewTextInput"/>
-            </StackPanel>
+            <GroupBox Header="Macro 1">
+                <StackPanel Orientation="Horizontal">
+                    <Label Content="x번째에 빈행 추가 : "/>
+                    <TextBox x:Name="AR_TB" Style="{StaticResource TB1}"/>
+                </StackPanel>
+            </GroupBox>
             
             <!-- 데이터 범위 지정 부분 -->
-            <StackPanel Orientation="Horizontal" Margin="10">
-                <Label Content="찾을 열의 범위 선택: "/>
-                <TextBox x:Name="RC_TB1" Width="20" MaxLength="1" PreviewTextInput="RC_TB_PreviewTextInput"/>
-                <Label Content=":"/>
-                <TextBox x:Name="RC_TB2" Width="20" MaxLength="1" PreviewTextInput="RC_TB_PreviewTextInput"/>
-            </StackPanel>
-            <!-- 주의 사항 -->
-            <Label Content="A열에서 C열일 경우 A:C로 쓰시면 됩니다."/>
-            <Label Content="A열에서만 찾고 싶으실 경우는 A:A로 설정해주세요."/>
+            <GroupBox Header="Macro 2">
+                <StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Label Content="찾을 열의 범위 선택: "/>
+                        <TextBox x:Name="RC_TB1" Style="{StaticResource TB2}"/>
+                        <Label Content=":"/>
+                        <TextBox x:Name="RC_TB2" Style="{StaticResource TB2}"/>
+                    </StackPanel>
 
-            <!-- 찾을 데이터를 입력해주세요. -->
-            <StackPanel Orientation="Horizontal" Margin="10">
-                <Label Content="찾을 데이터 : "/>
-                <TextBox x:Name="FD_TB" Width="100"/>
-            </StackPanel>
-            <Button x:Name="Btn1" Content="매크로 생성" Click="Btn1_Click"/>
+                    <!-- 찾을 데이터를 입력해주세요. -->
+                    <StackPanel Orientation="Horizontal">
+                        <Label Content="찾을 데이터 : "/>
+                        <TextBox x:Name="FD_TB" Style="{StaticResource TB3}"/>
+                    </StackPanel>
+                    <Button x:Name="Btn1" Content="매크로 생성"/>
+                </StackPanel>
+            </GroupBox>
         </StackPanel>
+
+
+        <!-- 사용법 -->
+        <GroupBox Header="사용법" Style="{StaticResource Manual_GB}">
+            <TextBlock>
+                x번째는 숫자 5자리까지 입력이 가능합니다.
+                <LineBreak/>
+                <LineBreak/>
+                찾을 열의 범위는 알파벳 1자리만 입력 가능합니다.
+                <LineBreak/>
+                <LineBreak/>
+                A열에서 C열일 경우 A:C로 쓰시면 됩니다.
+                <LineBreak/>
+                <LineBreak/>
+                A열에서만 찾고 싶으실 경우는 A:A로 설정해주세요.
+                <LineBreak/>
+                <LineBreak/>
+                추가하고 싶은신 것이 있으시면 문의 주세요.
+                <LineBreak/>
+                whyj107@gmail.com
+                <LineBreak/>
+                <LineBreak/>
+                For My Sis
+            </TextBlock>
+        </GroupBox>
         
         <!-- 텍스트박스 -->
-        <TextBox Grid.Column="1" x:Name="Mecro_TB" IsReadOnly="True"/>
+        <StackPanel Grid.Column="1" Grid.Row="0" Grid.RowSpan="2">
+            <GroupBox Header="Macro 1" Height="150">
+                <TextBox Style="{StaticResource TB4}" x:Name="Mecro_TB1"/>
+            </GroupBox>
+
+            <GroupBox Header="Macro 2" Height="300">
+                <TextBox Style="{StaticResource TB4}" x:Name="Mecro_TB2"/>
+            </GroupBox>
+        </StackPanel>
 
 
     </Grid>
