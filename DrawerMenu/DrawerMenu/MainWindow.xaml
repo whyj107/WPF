@@ -1,0 +1,112 @@
+﻿<Window x:Class="DrawerMenu.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:DrawerMenu"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="1080" ResizeMode="NoResize">
+    <Window.Resources>
+        <!-- 메뉴 닫는 애니메이션 스토리보드 -->
+        <Storyboard x:Key="CloseMenu">
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.X)" Storyboard.TargetName="GridMenu">
+                <EasingDoubleKeyFrame KeyTime="0" Value="150"/>
+                <EasingDoubleKeyFrame KeyTime="0:0:0.5" Value="0"/>
+            </DoubleAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="GridBackground">
+                <EasingDoubleKeyFrame KeyTime="0" Value="1"/>
+                <EasingDoubleKeyFrame KeyTime="0:0:0.5" Value="0"/>
+            </DoubleAnimationUsingKeyFrames>
+        </Storyboard>
+        <!-- 메뉴 여는 애니메이션 스토리보드 -->
+        <Storyboard x:Key="OpenMenu">
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.X)" Storyboard.TargetName="GridMenu">
+                <EasingDoubleKeyFrame KeyTime="0" Value="0"/>
+                <EasingDoubleKeyFrame KeyTime="0:0:0.5" Value="150"/>
+            </DoubleAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="GridBackground">
+                <EasingDoubleKeyFrame KeyTime="0" Value="0"/>
+                <EasingDoubleKeyFrame KeyTime="0:0:0.5" Value="1"/>
+            </DoubleAnimationUsingKeyFrames>
+        </Storyboard>
+    </Window.Resources>
+    <Window.Triggers>
+        <EventTrigger RoutedEvent="ButtonBase.Click" SourceName="BtnClose">
+            <BeginStoryboard x:Name="CloseMenu_BeginStoryboard" Storyboard="{StaticResource CloseMenu}"/>
+        </EventTrigger>
+        <EventTrigger RoutedEvent="ButtonBase.Click" SourceName="BtnOpen">
+            <BeginStoryboard Storyboard="{StaticResource OpenMenu}"/>
+        </EventTrigger>
+    </Window.Triggers>
+    <Grid>
+        <Grid.Resources>
+            <Style TargetType="Button">
+                <EventSetter Event="Click" Handler="Button_Click"/>
+            </Style>
+
+            <Style TargetType="ListViewItem">
+                <EventSetter Event="PreviewMouseLeftButtonDown" Handler="ListViewItem_PreviewMouseLeftButtonDown"/>
+            </Style>
+        </Grid.Resources>
+        <!-- 메뉴가 열리면 그리드 백그라운드 색이 변함 -->
+        <Grid x:Name="GridBackground" Background="#55313131" Opacity="0"/>
+        <!-- 메뉴 여는 버튼-->
+        <Button x:Name="BtnOpen" 
+                HorizontalAlignment="Left" VerticalAlignment="Top" 
+                Background="{x:Null}" BorderBrush="{x:Null}" 
+                Width="30" Height="30" 
+                Padding="0" Content="Menu"/>
+        <!-- 그리드 안의 버튼들 -->
+        <StackPanel Name="btn_SP" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
+            <Button Name="b_red" Width="100" Height="100" Background="Red"/>
+            <Button Name="b_orange" Width="100" Height="100" Background="Orange"/>
+            <Button Name="b_yellow" Width="100" Height="100" Background="Yellow"/>
+            <Button Name="b_greenyellow" Width="100" Height="100" Background="GreenYellow"/>
+            <Button Name="b_green" Width="100" Height="100" Background="Green"/>
+            <Button Name="b_blue" Width="100" Height="100" Background="Blue"/>
+            <Button Name="b_navy" Width="100" Height="100" Background="Navy"/>
+            <Button Name="b_purple" Width="100" Height="100" Background="Purple"/>
+        </StackPanel>
+        <!-- 메뉴 서랍 부분-->
+        <Grid x:Name="GridMenu" Width="150" HorizontalAlignment="Left" Margin="-150 0 0 0" Background="White" RenderTransformOrigin="0.5,0.5">
+            <Grid.RenderTransform>
+                <!-- 아래의 항목들이 있어야 애니메이션이 동작한다 -->
+                <TransformGroup>
+                    <ScaleTransform/>
+                    <SkewTransform/>
+                    <RotateTransform/>
+                    <TranslateTransform/>
+                </TransformGroup>
+            </Grid.RenderTransform>
+            <!-- 서랍 메뉴 -->
+            <StackPanel>
+                <Image Height="140" Stretch="Fill"/>
+                <ListView Name="LV">
+                    <!-- 1번 -->
+                    <ListViewItem Name="LVI1" Height="45">
+                        <TextBlock Text="No.1"/>
+                    </ListViewItem>
+                    <!-- 2번 -->
+                    <ListViewItem Name="LVI2" Height="45">
+                        <TextBlock Text="No.2"/>
+                    </ListViewItem>
+                    <!-- 3번 -->
+                    <ListViewItem Name="LVI3" Height="45">
+                        <TextBlock Text="No.3"/>
+                    </ListViewItem>
+                    <!-- 4번 -->
+                    <ListViewItem Name="LVI4" Height="45">
+                        <TextBlock Text="No.4"/>
+                    </ListViewItem>
+                </ListView>
+            </StackPanel>
+            <!-- 닫기 버튼 -->
+            <Button x:Name="BtnClose" 
+                    HorizontalAlignment="Right" VerticalAlignment="Top" 
+                    Background="{x:Null}" BorderBrush="{x:Null}" 
+                    Width="30" Height="30" 
+                    Padding="0" 
+                    Content="Close"/>
+        </Grid>
+    </Grid>
+</Window>
