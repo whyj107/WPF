@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:DrawerMenu"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="1080" ResizeMode="NoResize">
+        Title="MainWindow" Height="450" Width="450" ResizeMode="NoResize">
     <Window.Resources>
         <!-- 메뉴 닫는 애니메이션 스토리보드 -->
         <Storyboard x:Key="CloseMenu">
@@ -52,20 +52,24 @@
         <Grid x:Name="GridBackground" Background="#55313131" Opacity="0"/>
         <!-- 메뉴 여는 버튼-->
         <Button x:Name="BtnOpen" 
-                HorizontalAlignment="Left" VerticalAlignment="Top" 
-                Background="{x:Null}" BorderBrush="{x:Null}" 
-                Width="30" Height="30" 
-                Padding="0" Content="Menu"/>
+                HorizontalAlignment="Left" VerticalAlignment="Top"
+                Width="30" Height="30" Content="메뉴"/>
         <!-- 그리드 안의 버튼들 -->
         <StackPanel Name="btn_SP" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
-            <Button Name="b_red" Width="100" Height="100" Background="Red"/>
-            <Button Name="b_orange" Width="100" Height="100" Background="Orange"/>
-            <Button Name="b_yellow" Width="100" Height="100" Background="Yellow"/>
-            <Button Name="b_greenyellow" Width="100" Height="100" Background="GreenYellow"/>
-            <Button Name="b_green" Width="100" Height="100" Background="Green"/>
-            <Button Name="b_blue" Width="100" Height="100" Background="Blue"/>
-            <Button Name="b_navy" Width="100" Height="100" Background="Navy"/>
-            <Button Name="b_purple" Width="100" Height="100" Background="Purple"/>
+            <StackPanel.Resources>
+                <Style TargetType="Button">
+                    <Setter Property="Width" Value="50"/>
+                    <Setter Property="Height" Value="50"/>
+                    <EventSetter Event="Click" Handler="Button_Click"/>
+                </Style>
+            </StackPanel.Resources>
+            <Button Name="b_red" Background="Red"/>
+            <Button Name="b_orange" Background="Orange"/>
+            <Button Name="b_yellow" Background="Yellow"/>
+            <Button Name="b_green" Background="Green"/>
+            <Button Name="b_blue" Background="Blue"/>
+            <Button Name="b_navy" Background="Navy"/>
+            <Button Name="b_purple" Background="Purple"/>
         </StackPanel>
         <!-- 메뉴 서랍 부분-->
         <Grid x:Name="GridMenu" Width="150" HorizontalAlignment="Left" Margin="-150 0 0 0" Background="White" RenderTransformOrigin="0.5,0.5">
@@ -102,11 +106,9 @@
             </StackPanel>
             <!-- 닫기 버튼 -->
             <Button x:Name="BtnClose" 
-                    HorizontalAlignment="Right" VerticalAlignment="Top" 
-                    Background="{x:Null}" BorderBrush="{x:Null}" 
-                    Width="30" Height="30" 
-                    Padding="0" 
-                    Content="Close"/>
+                    HorizontalAlignment="Right" VerticalAlignment="Top"
+                    Width="30" Height="30"
+                    Content="닫기"/>
         </Grid>
     </Grid>
 </Window>

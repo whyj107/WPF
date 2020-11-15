@@ -4,11 +4,11 @@
 winexe
 C#
 .cs
-C:\Users\qndbs\OneDrive\바탕 화면\c#\WPF\DrawerMenu\DrawerMenu\obj\Debug\
+C:\Users\qndbs\OneDrive\바탕 화면\c#\WPF\DrawerMenu\DrawerMenu\obj\Release\
 DrawerMenu
 none
 false
-DEBUG;TRACE
+TRACE
 C:\Users\qndbs\OneDrive\바탕 화면\c#\WPF\DrawerMenu\DrawerMenu\App.xaml
 11151548125
 
