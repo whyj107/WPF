@@ -1,0 +1,15 @@
+C:\Users\AIRLab-PC4\source\repos\DisplaySettingsChanged\DisplaySettingsChanged\bin\Debug\DisplaySettingsChanged.exe.config
+C:\Users\AIRLab-PC4\source\repos\DisplaySettingsChanged\DisplaySettingsChanged\bin\Debug\DisplaySettingsChanged.exe
+C:\Users\AIRLab-PC4\source\repos\DisplaySettingsChanged\DisplaySettingsChanged\bin\Debug\DisplaySettingsChanged.pdb
+C:\Users\AIRLab-PC4\source\repos\DisplaySettingsChanged\DisplaySettingsChanged\obj\Debug\DisplaySettingsChanged.csprojAssemblyReference.cache
+C:\Users\AIRLab-PC4\source\repos\DisplaySettingsChanged\DisplaySettingsChanged\obj\Debug\MainWindow.g.cs
+C:\Users\AIRLab-PC4\source\repos\DisplaySettingsChanged\DisplaySettingsChanged\obj\Debug\App.g.cs
+C:\Users\AIRLab-PC4\source\repos\DisplaySettingsChanged\DisplaySettingsChanged\obj\Debug\DisplaySettingsChanged_MarkupCompile.cache
+C:\Users\AIRLab-PC4\source\repos\DisplaySettingsChanged\DisplaySettingsChanged\obj\Debug\DisplaySettingsChanged_MarkupCompile.lref
+C:\Users\AIRLab-PC4\source\repos\DisplaySettingsChanged\DisplaySettingsChanged\obj\Debug\MainWindow.baml
+C:\Users\AIRLab-PC4\source\repos\DisplaySettingsChanged\DisplaySettingsChanged\obj\Debug\DisplaySettingsChanged.g.resources
+C:\Users\AIRLab-PC4\source\repos\DisplaySettingsChanged\DisplaySettingsChanged\obj\Debug\DisplaySettingsChanged.Properties.Resources.resources
+C:\Users\AIRLab-PC4\source\repos\DisplaySettingsChanged\DisplaySettingsChanged\obj\Debug\DisplaySettingsChanged.csproj.GenerateResource.cache
+C:\Users\AIRLab-PC4\source\repos\DisplaySettingsChanged\DisplaySettingsChanged\obj\Debug\DisplaySettingsChanged.csproj.CoreCompileInputs.cache
+C:\Users\AIRLab-PC4\source\repos\DisplaySettingsChanged\DisplaySettingsChanged\obj\Debug\DisplaySettingsChanged.exe
+C:\Users\AIRLab-PC4\source\repos\DisplaySettingsChanged\DisplaySettingsChanged\obj\Debug\DisplaySettingsChanged.pdb
