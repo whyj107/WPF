@@ -29,7 +29,9 @@ namespace ProcessID
                 ComboBoxItem cbi = (ComboBoxItem)process_CB.SelectedItem;
                 if(cbi != null)
                 {
-                    ProgramShutDown(processes[int.Parse(cbi.Tag.ToString())].MainWindowHandle);
+                    processes[int.Parse(cbi.Tag.ToString())].CloseMainWindow();
+                    processes[int.Parse(cbi.Tag.ToString())].Refresh();
+                    processes[int.Parse(cbi.Tag.ToString())].Kill();
                     info_TB.Clear();
                     process_CB.Items.Clear();
                 }
@@ -76,26 +78,6 @@ namespace ProcessID
                     Content = process.ProcessName
                 };
                 process_CB.Items.Add(cbi);
-            }
-        }
-
-        [DllImport("user32.dll", SetLastError = true)]
-        static extern uint GetWindowThreadProcessId(IntPtr hWnd, out uint lpdwProcessId);
-        private void ProgramShutDown(IntPtr intPtr)
-        {
-            uint processId = 0;
-            GetWindowThreadProcessId(intPtr, out processId);
-            if (processId != 0)
-            {
-                Process process = Process.GetProcessById((int)processId);
-                process.CloseMainWindow();
-                process.Refresh();
-                process.Kill();
-                MessageBox.Show(process.ProcessName + " 끝냈습니다.");
-            }
-            else
-            {
-                MessageBox.Show("작업이 존재하지 않습니다.");
             }
         }
 
