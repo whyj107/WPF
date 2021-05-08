@@ -6,10 +6,11 @@
         xmlns:local="clr-namespace:ProjectMay"
         mc:Ignorable="d"
         Title="MainWindow" Height="300" Width="300">
-    <Grid>
-        <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
-            <TextBox Name="folder_tb" Width="150"/>
-            <Button Name="select_b" Content="폴더 선택" Click="Button_Click"/>
-        </StackPanel>
+    <Grid>        
+        <GroupBox Header="▼폴더를 드래그해서 추가해주세요▼" Margin="10">
+            <ListView Name="files_L" HorizontalContentAlignment="Stretch"
+                  DragEnter="ListView_DragEnter" Drop="ListView_Drop" AllowDrop="True">
+            </ListView>
+        </GroupBox>
     </Grid>
 </Window>
