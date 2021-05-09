@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Windows;
 using System.Windows.Controls;
@@ -12,6 +14,7 @@ namespace ProjectMay
     {
         #region 00. 변수 정의
         private Dictionary<string, ListViewItem> files_list = new Dictionary<string, ListViewItem>();
+
         #endregion
 
         public MainWindow()
@@ -82,6 +85,8 @@ namespace ProjectMay
 
                 files_list.Add(file, lvi);
                 files_L.Items.Add(lvi);
+
+                CheckProcess();
             }
         }       
 
@@ -117,8 +122,14 @@ namespace ProjectMay
             }
             return false;
         }
+        
+        private void CheckProcess()
+        {
+            foreach(string key in files_list.Keys)
+            {
 
 
-
+            }
+        }
     }
 }
