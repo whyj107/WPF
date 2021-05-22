@@ -1,9 +1,11 @@
-﻿using System;
+﻿using Microsoft.WindowsAPICodePack.Dialogs;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Windows;
 using System.Windows.Controls;
+using System.Xml;
 
 namespace ProjectMay
 {
@@ -12,124 +14,66 @@ namespace ProjectMay
     /// </summary>
     public partial class MainWindow : Window
     {
-        #region 00. 변수 정의
-        private Dictionary<string, ListViewItem> files_list = new Dictionary<string, ListViewItem>();
+        // https://www.codeproject.com/Articles/20880/Folder-protection-for-Windows-using-Csharp-and-con
 
+        #region 00. 변수 정의
+        public string status;
+        string[] arr;
+
+        private string _pathkey;
+        public string pathkey
+        {
+            get { return _pathkey; }
+            set { _pathkey = value; }
+        }
+
+        CommonOpenFileDialog cofd = new CommonOpenFileDialog();
         #endregion
 
         public MainWindow()
         {
             InitializeComponent();
+            status = string.Empty;
+            arr = new string[6];
+            arr[0] = ".{2559a1f2-21d7-11d4-bdaf-00c04f60b9f0}";
+            arr[1] = ".{21EC2020-3AEA-1069-A2DD-08002B30309D}";
+            arr[2] = ".{2559a1f4-21d7-11d4-bdaf-00c04f60b9f0}";
+            arr[3] = ".{645FF040-5081-101B-9F08-00AA002F954E}";
+            arr[4] = ".{2559a1f1-21d7-11d4-bdaf-00c04f60b9f0}";
+            arr[5] = ".{7007ACC7-3202-11D1-AAD2-00805FC1270E}";
+
+            cofd.IsFolderPicker = true;
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            Button b = sender as Button;
-
-            files_L.Items.Remove(files_list[b.Tag.ToString()]);
-            files_list.Remove(b.Tag.ToString());
-        }
-
-        private void ListView_DragEnter(object sender, DragEventArgs e)
-        {
-            if (e.Data.GetDataPresent(DataFormats.FileDrop))
-                e.Effects = DragDropEffects.All;
-            else
-                e.Effects = DragDropEffects.None;
-        }
-
-        private void ListView_Drop(object sender, DragEventArgs e)
-        {
-            string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
-            foreach(string file in files)
+            if (rWLock.IsChecked == true)
             {
-                // 중복 확인
-                if (CheckDuplicate(file))
-                {
-                    MessageBox.Show("이미 존재하는 폴더입니다.");
-                    return;
-                }
-
-                // 경로가 디렉토리인지 파일인지 확인
-                if (!IsDirectory(file))
-                {
-                    MessageBox.Show("디렉토리가 아닙니다!");
-                    return;
-                }
-
-
-                ListViewItem lvi = new ListViewItem() { Tag = file };
-
-                Grid g = new Grid();
-                Label l = new Label()
-                {
-                    Content = file,
-                    HorizontalAlignment = HorizontalAlignment.Left
-                };
-
-                Button b = new Button()
-                {
-                    Tag = file,
-                    Width = 20,
-                    Height = 20,
-                    Content = "X",
-                    HorizontalAlignment = HorizontalAlignment.Right
-                };
-
-                b.Click += Button_Click;
-
-                g.Children.Add(l);
-                g.Children.Add(b);
-
-                lvi.Content = g;
-
-                files_list.Add(file, lvi);
-                files_L.Items.Add(lvi);
-
-                CheckProcess();
+                status = arr[0];
             }
-        }       
 
-        /// <summary>
-        /// 디렉토리인지 체크하는 함수입니다. 
-        /// true : 디렉토리
-        /// false : 디렉토리가 아님
-        /// </summary>
-        /// <param name="path"></param>
-        /// <returns></returns>
-        private bool IsDirectory(string path)
-        {
-            FileAttributes chk = File.GetAttributes(path);
-            if((chk & FileAttributes.Directory) == FileAttributes.Directory)
-                return true;
-            else
-                return false;
+            if(cofd.ShowDialog() == CommonFileDialogResult.Ok)
+            {
+                DirectoryInfo d = new DirectoryInfo(cofd.FileName);
+                string selectedpath = d.Parent.FullName + d.Name;
+                
+            }
+
         }
 
-        /// <summary>
-        /// 추가하려는 항목이 ListViewItem 중에서 중복인지 확인하는 함수입니다.
-        /// true : 중복
-        /// false : 중복 아님
-        /// </summary>
-        /// <param name="path"></param>
-        /// <returns></returns>
-        private bool CheckDuplicate(string path)
+        private bool checkPassword()
         {
-            foreach(string key in files_list.Keys)
+            XmlTextReader read;
+            if(pathkey == null)
             {
-                if (path.Equals(key))
-                    return true;
+                //read = new XmlTextReader();
             }
+            else
+            {
+                read = new XmlTextReader(pathkey + "\\p.xml");
+            }
+
             return false;
-        }
-        
-        private void CheckProcess()
-        {
-            foreach(string key in files_list.Keys)
-            {
-
-
-            }
         }
     }
 }

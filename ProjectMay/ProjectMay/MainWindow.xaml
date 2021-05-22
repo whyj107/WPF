@@ -6,11 +6,10 @@
         xmlns:local="clr-namespace:ProjectMay"
         mc:Ignorable="d"
         Title="MainWindow" Height="300" Width="300">
-    <Grid>        
-        <GroupBox Header="▼폴더를 드래그해서 추가해주세요▼" Margin="10">
-            <ListView Name="files_L" HorizontalContentAlignment="Stretch"
-                  DragEnter="ListView_DragEnter" Drop="ListView_Drop" AllowDrop="True">
-            </ListView>
-        </GroupBox>
+    <Grid>
+        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+            <CheckBox Name="rWLock" Content="폴더 암호"/>
+            <Button Content="버튼 1"  Click="Button_Click"/>
+        </StackPanel>
     </Grid>
 </Window>
