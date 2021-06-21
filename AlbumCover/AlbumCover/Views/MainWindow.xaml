@@ -8,101 +8,98 @@
         xmlns:local="clr-namespace:AlbumCover"
         xmlns:VM="clr-namespace:AlbumCover.ViewModels"
         mc:Ignorable="d"
-        Title="MainWindow" Height="500" Width="800" Background="DimGray">
-    
+        ResizeMode="NoResize"
+        Title="음원 정보 바꾸기" Height="500" Width="800" Background="DimGray">
+    <!-- MainWindowViewModel과 연결 -->
     <Window.DataContext>
         <VM:MainWindowViewModel/>
     </Window.DataContext>
+
+    <!-- Window 종료 이벤트 -->
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="Closed">
+            <ei:CallMethodAction TargetObject="{Binding}" MethodName="Window_Closed"/>
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
     
     <Grid>
+        <!-- 메인 UI 부분 -->
         <TabControl Margin="20">
+            <!-- TAB 선택 변경 이벤트 -->
             <i:Interaction.Triggers>
                 <i:EventTrigger EventName="SelectionChanged">
                     <ei:CallMethodAction TargetObject="{Binding}" MethodName="TC_SelectionChanged"/>
                 </i:EventTrigger>
             </i:Interaction.Triggers>
             
-            <!-- Change Album Cover -->
-            <TabItem Header="Change Album Cover">
-                <Grid>
-                    <StackPanel Margin="10">
-                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                            <TextBox Text="{Binding musicDirPath}" Width="300" IsReadOnly="True"/>
-                            <Button Content="Select Directory" Command="{Binding SelectBtnCmd}"/>
-                        </StackPanel>
-                        <!-- 음악 목록 이미지로 나타내기 -->
-                        <ListView Height="200" Width="600" ItemsSource="{Binding ListItems}" SelectedItem="{Binding SelectedItem}" SelectedIndex="0">
-                            <ItemsControl.ItemsPanel>
-                                <ItemsPanelTemplate>
-                                    <UniformGrid Columns="4" HorizontalAlignment="Stretch"/>
-                                </ItemsPanelTemplate>
-                            </ItemsControl.ItemsPanel>
-                            <ListView.ItemTemplate>
-                                <DataTemplate>
-                                    <StackPanel Width="100">
-                                        <Border Background="Gray" Width="90" Height="90" HorizontalAlignment="Center">
-                                            <Image Source="{Binding coverImg}"/>
-                                        </Border>
-                                        <Viewbox Height="15">
-                                            <TextBlock Text="{Binding song}" HorizontalAlignment="Center"/>
-                                        </Viewbox>
-                                    </StackPanel>
-                                </DataTemplate>
-                            </ListView.ItemTemplate>
-                        </ListView>
-
-                        <!-- 변경 부분 -->
-                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                            <!-- 이미지 -->
-                            <Border Background="Gray" Width="150" Height="150" HorizontalAlignment="Center">
-                                <Image Source="{Binding showImg}"/>
-                            </Border>
-                            
-                            <!-- 이미지 관련 버튼 -->
-                            <StackPanel VerticalAlignment="Center">
-                                <Button Content="Reset" Command="{Binding ResetImgBtnCmd}"/>
-                                <Button Content="Change" Command="{Binding ChangeImgBtnCmd}"/>
-                                <Button Content="Save" Command="{Binding SaveAlbumBtnCmd}"/>
-                            </StackPanel>
-
-                            <!-- 앨범 정보 -->
-                            <Grid VerticalAlignment="Center" Width="300" Margin="20">
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="*"/>
-                                        <ColumnDefinition Width="3*"/>
-                                    </Grid.ColumnDefinitions>
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition Height="*"/>
-                                        <RowDefinition Height="*"/>
-                                    </Grid.RowDefinitions>
-
-                                    <TextBlock Grid.Row="0" Text="Album" HorizontalAlignment="Right"/>
-                                    <TextBlock Grid.Row="1" Text="Artist" HorizontalAlignment="Right"/>
-
-                                    <TextBox Grid.Column="1" Grid.Row="0" Text="{Binding Album.album}"/>
-                                    <TextBox Grid.Column="1" Grid.Row="1" Text="{Binding Album.albumArtist}"/>
-                                </Grid>
-                            
-                        </StackPanel>
+            <!-- TABITEM(앨범 커버 변경) -->
+            <TabItem Header="앨범 커버 변경">
+                <StackPanel Margin="10">
+                    <!-- TEXTBOX(디렉토리 경로) & BUTTON(디렉토리 선택) -->
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                        <TextBox Text="{Binding musicDirPath}" Width="300" IsReadOnly="True"/>
+                        <Button Content="Select Directory" Command="{Binding SelectBtnCmd}"/>
                     </StackPanel>
-                </Grid>
+                    
+                    <!-- LISTVIEW : 음악 목록 이미지로 표현 -->
+                    <ListView Style="{StaticResource AC_LV}" ItemsSource="{Binding ListItems}" SelectedItem="{Binding SelectedItem}"/>
+
+                    <!-- 앨범 정보 변경 부분 -->
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                        <!-- 앨범 커버 이미지 -->
+                        <Border Style="{StaticResource AC_Bor}">
+                            <Image Source="{Binding showImg}"/>
+                        </Border>
+
+                        <!-- 이미지 관련 버튼 -->
+                        <StackPanel VerticalAlignment="Center">
+                            <Button Content="Reset" Command="{Binding ResetImgBtnCmd}"/>
+                            <Button Content="Change" Command="{Binding ChangeImgBtnCmd}"/>
+                            <Button Content="Save" Command="{Binding SaveAlbumBtnCmd}"/>
+                        </StackPanel>
+
+                        <!-- 앨범 정보 -->
+                        <Grid Style="{StaticResource AC_G}">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="3*"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+
+                            <Grid.Resources>
+                                <Style TargetType="TextBlock" BasedOn="{StaticResource AC_TBlock}"/>
+                                <Style TargetType="TextBox" BasedOn="{StaticResource AC_Box}"/>
+                            </Grid.Resources>
+
+                            <TextBlock Grid.Row="0" Text="Album"/>
+                            <TextBlock Grid.Row="1" Text="Artist"/>
+
+                            <TextBox Grid.Row="0" Text="{Binding Album.album}"/>
+                            <TextBox Grid.Row="1" Text="{Binding Album.albumArtist}"/>
+                        </Grid>
+                    </StackPanel>
+                </StackPanel>
             </TabItem>
-            <!-- Change Song Information -->
-            <TabItem Header="Change Song Information">
+            
+            <!-- TABITEM(음원 정보 변경) -->
+            <TabItem Header="음원 정보 변경">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
 
-                    <!--왼쪽-->
+                    <!-- 음원 리스트, 추가 및 제거-->
                     <StackPanel Margin="10">
                         <StackPanel Orientation="Horizontal" Margin="10">
-                            <Button Content="+" Width="30" Height="30" Command="{Binding AddBtnCmd}"/>
-                            <Button Content="-" Width="30" Height="30" Command="{Binding DelBtnCmd}"/>
+                            <Button Content="+" Style="{StaticResource MI_Btn}" Command="{Binding AddBtnCmd}"/>
+                            <Button Content="-" Style="{StaticResource MI_Btn}" Command="{Binding DelBtnCmd}"/>
                         </StackPanel>
 
-                        <ListView Margin="10" Height="300" VerticalAlignment="Bottom" AllowDrop="True" SelectedItem="{Binding SelectedItem}" ItemsSource="{Binding ListItems}" DisplayMemberPath="song">
+                        <ListView Style="{StaticResource MI_LV}" SelectedItem="{Binding SelectedItem}" ItemsSource="{Binding ListItems}" DisplayMemberPath="song">
                             <i:Interaction.Triggers>
                                 <i:EventTrigger EventName="Drop">
                                     <ei:CallMethodAction TargetObject="{Binding}" MethodName="Drop"/>
@@ -117,12 +114,13 @@
                         </ListView>
                     </StackPanel>
 
-                    <!-- 오른쪽 -->
+                    <!-- 음원 정보 -->
                     <StackPanel Grid.Column="1" Margin="10">
-                        <!-- 위 -->
+                        <!-- 이미지 정보 -->
                         <StackPanel Orientation="Horizontal">
+                            <!-- 앨범 커버 이미지 -->
                             <StackPanel>
-                                <Border Background="Gray" Width="150" Height="150" HorizontalAlignment="Left" VerticalAlignment="Top">
+                                <Border Style="{StaticResource MI_Bor}">
                                     <Image Source="{Binding showImg}"/>
                                 </Border>
                                 <StackPanel Orientation="Horizontal">
@@ -130,13 +128,15 @@
                                     <Button Content="Change" Command="{Binding ChangeImgBtnCmd}"/>
                                 </StackPanel>
                             </StackPanel>
+                            
+                            <!-- 음원명 & 아티스트명 -->
                             <StackPanel Margin="10" VerticalAlignment="Center">
                                 <Label Content="{Binding SelectedItem.song}"/>
                                 <Label Content="{Binding SelectedItem.artist}"/>
                             </StackPanel>
                         </StackPanel>
                         
-                        <!-- 아래 -->
+                        <!-- 음원 상세 정보 -->
                         <Grid Margin="10">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*"/>
@@ -154,10 +154,8 @@
                             </Grid.RowDefinitions>
 
                             <Grid.Resources>
-                                <Style TargetType="TextBlock">
-                                    <Setter Property="Margin" Value="0, 0, 10, 0"/>
-                                    <Setter Property="HorizontalAlignment" Value="Right"/>
-                                </Style>
+                                <Style TargetType="TextBlock" BasedOn="{StaticResource MI_TBlock}"/>
+                                <Style TargetType="TextBox" BasedOn="{StaticResource MI_TBox}"/>
                             </Grid.Resources>
                             
                             <!-- 항목 -->
@@ -169,19 +167,19 @@
                             <TextBlock Grid.Row="5" Text="track"/>
                             <TextBlock Grid.Row="6" Text="path"/>
                             
-                            <!-- 수정 하는 부분 -->
-                            <TextBox Grid.Column="1" Grid.Row="0" Text="{Binding SelectedItem.song}"/>
-                            <TextBox Grid.Column="1" Grid.Row="1" Text="{Binding SelectedItem.artist}"/>
-                            <TextBox Grid.Column="1" Grid.Row="2" Text="{Binding SelectedItem.album}"/>
-                            <TextBox Grid.Column="1" Grid.Row="3" Text="{Binding SelectedItem.genre}"/>
-                            <TextBox Grid.Column="1" Grid.Row="4" Text="{Binding SelectedItem.year}" MaxLength="4">
+                            <!-- 음원 정보 수정 부분 -->
+                            <TextBox Grid.Row="0" Text="{Binding SelectedItem.song}"/>
+                            <TextBox Grid.Row="1" Text="{Binding SelectedItem.artist}"/>
+                            <TextBox Grid.Row="2" Text="{Binding SelectedItem.album}"/>
+                            <TextBox Grid.Row="3" Text="{Binding SelectedItem.genre}"/>
+                            <TextBox Grid.Row="4" Text="{Binding SelectedItem.year}" MaxLength="4">
                                 <i:Interaction.Triggers>
                                     <i:EventTrigger EventName="PreviewTextInput">
                                         <ei:CallMethodAction TargetObject="{Binding}" MethodName="PreviewTextInputOnlyNumber"/>
                                     </i:EventTrigger>
                                 </i:Interaction.Triggers>
                             </TextBox>
-                            <TextBox Grid.Column="1" Grid.Row="5" Text="{Binding SelectedItem.trackNum}" MaxLength="2">
+                            <TextBox Grid.Row="5" Text="{Binding SelectedItem.trackNum}" MaxLength="2">
                                 <i:Interaction.Triggers>
                                     <i:EventTrigger EventName="PreviewTextInput">
                                         <ei:CallMethodAction TargetObject="{Binding}" MethodName="PreviewTextInputOnlyNumber"/>
@@ -189,16 +187,18 @@
                                 </i:Interaction.Triggers>
                                 
                             </TextBox>
-                            <TextBox Grid.Column="1" Grid.Row="6" Text="{Binding SelectedItem.path}" IsReadOnly="True"/>
+                            <TextBox Grid.Row="6" Text="{Binding SelectedItem.path}" IsReadOnly="True"/>
                         </Grid>
                         
-                        <!-- 저장 버튼 -->
+                        <!-- 저장 -->
                         <Button Content="Save" HorizontalAlignment="Center" Command="{Binding SaveInfoBtnCmd}"/>
                     </StackPanel>
                 </Grid>
             </TabItem>
         </TabControl>
-
+        
+        <!-- 로딩 시 뒷 배경 -->
+        <Grid Background="Black" Opacity="0.8" Visibility="{Binding loading_back}"/>
     </Grid>
     
 </Window>

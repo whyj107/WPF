@@ -8,7 +8,6 @@ namespace AlbumCover.ViewModels
         private Action<object> execute;
         private Func<object, bool> canExecute;
 
-
         public event EventHandler CanExecuteChanged
         {
             add { CommandManager.RequerySuggested += value; }
@@ -30,7 +29,5 @@ namespace AlbumCover.ViewModels
         {
             this.execute(parameter);
         }
-
-        // [출처] View의 Event를 ViewModel에서 핸들링하기 - 개요|작성자 에로로
     }
 }
