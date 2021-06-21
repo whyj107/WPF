@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
 using AlbumCover.Models;
@@ -16,6 +18,9 @@ namespace AlbumCover.ViewModels
     public class MainWindowViewModel : ViewModelBase
     {
         #region [Variable]
+        BackgroundWorker bw = new BackgroundWorker();
+        Views.LoadingWindow l = new Views.LoadingWindow();
+
         // 오디오 확장자
         string[] extensions = { ".aa", ".aax", ".aac", ".aiff", ".ape", ".dsf", ".flac", ".m4a",
                                 ".m4b", ".m4p", ".mp3", ".mpc", ".mpp", ".ogg", ".oga", ".wav",
@@ -49,6 +54,17 @@ namespace AlbumCover.ViewModels
 
         #region 0. [Change Album Cover]
         #region [Variable]
+        private AlbumInfo _album = new AlbumInfo() { album="Album", albumArtist="Artist" };
+        public AlbumInfo Album
+        {
+            get => _album;
+            set
+            {
+                _album = value;
+                OnPropertyChanged("Album");
+            }
+        }
+
         private string _musicDirPath = "Music Directory Path";
         public string musicDirPath{ get => _musicDirPath; set { _musicDirPath = value; OnPropertyChanged("musicDirPath"); } }
         #endregion
@@ -86,46 +102,16 @@ namespace AlbumCover.ViewModels
         }
         private void ExeSaveAlbumBtn(object args)
         {
-            string tmp_path = Path.Combine(musicDirPath + "\\tmp.png");
-            if (!System.IO.File.Exists(SelectedItem.coverArtpath))
-            {
-                BitmapEncoder encoder = new PngBitmapEncoder();
-                encoder.Frames.Add(BitmapFrame.Create(showImg));
-                using (var fileStream = new FileStream(tmp_path, FileMode.Create))
-                {
-                    encoder.Save(fileStream);
-                }
-                SelectedItem.coverArtpath = tmp_path;
-            }
+            bw.DoWork += new DoWorkEventHandler(DoWork);
+            bw.RunWorkerCompleted += new RunWorkerCompletedEventHandler(RunWorkerCompleted);
 
-            foreach (var file in ListItems)
-            {
-                var tfile = TagLib.File.Create(file.path);
+            bw.RunWorkerAsync();
 
-                tfile.Tag.Title = file.song;
+            l = new Views.LoadingWindow();
+            l.Owner = Application.Current.MainWindow;
+            l.WindowStartupLocation = WindowStartupLocation.CenterOwner;
 
-                string tmp_artist = SelectedItem.artist.Replace(", ", ",").Trim();
-                tfile.Tag.Artists = tmp_artist.Split(',');
-
-                tfile.Tag.Album = SelectedItem.album;
-
-                if (System.IO.File.Exists(SelectedItem.coverArtpath) && showImg != null)
-                {
-                    var pic = new IPicture[1];
-                    pic[0] = new Picture(SelectedItem.coverArtpath);
-                    tfile.Tag.Pictures = pic;
-                }
-
-                tfile.Save();
-                tfile.Dispose();
-            }
-
-            if (System.IO.File.Exists(tmp_path))
-            {
-                System.IO.File.Delete(tmp_path);
-            }
-
-            ReadDirectory(musicDirPath);
+            l.ShowDialog();
         }
 
         #endregion
@@ -137,12 +123,14 @@ namespace AlbumCover.ViewModels
         {
             musicDirPath = path_;
 
-            ListItems.Clear();
-
             DirectoryInfo di = new DirectoryInfo(musicDirPath);
-            foreach (var file in di.GetFiles())
+            if (di.Exists)
             {
-                AddSongInfo(new string[] { file.FullName });
+                ListItems.Clear();
+                foreach (var file in di.GetFiles())
+                {
+                    AddSongInfo(new string[] { file.FullName });
+                }
             }
         }
         #endregion
@@ -223,6 +211,7 @@ namespace AlbumCover.ViewModels
 
             tfile.Save();
             tfile.Dispose();
+            MessageBox.Show("저장되었습니다.");
         }
 
         #endregion
@@ -242,7 +231,7 @@ namespace AlbumCover.ViewModels
             AddSongInfo(files);
         }
 
-        public void SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        public void LV_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
             try
             {
@@ -250,6 +239,7 @@ namespace AlbumCover.ViewModels
             }
             catch (Exception ex)
             {
+                Console.WriteLine(ex.Message);
                 showImg = null;
             }
         }
@@ -284,6 +274,11 @@ namespace AlbumCover.ViewModels
             ofd.Filter = "Image File|*.jpg;*.jpeg;*.png;*.gif;*.bmp";
             if (ofd.ShowDialog() == true)
             {
+                if(SelectedItem == null)
+                {
+                    SelectedItem = new SongInfo();
+                }
+
                 SelectedItem.coverArtpath = ofd.FileName;
 
                 BitmapImage tmp = new BitmapImage();
@@ -307,13 +302,100 @@ namespace AlbumCover.ViewModels
         }
         private void ExeResetImgBtn(object args)
         {
-            showImg = SelectedItem.coverImg;
+            if (SelectedItem != null)
+            {
+                showImg = SelectedItem.coverImg;
+            }
+        }
+        #endregion
+
+        #region 02. [TabControl Selection Changed]
+        public void TC_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        {
+            var tc = sender as TabControl;
+
+            if(tc.SelectedIndex == 0)
+            {
+                try
+                {
+                    ReadDirectory(musicDirPath);
+                }catch(Exception ex)
+                {
+                    Console.WriteLine("TC_SelectionChnaged Error");
+                    Console.WriteLine(ex.Message);
+                }
+            }
         }
         #endregion
 
         private bool CanExe(object args)
         {
             return true;
+        }
+        #endregion
+
+        #region [BackgroundWorker]
+        private void DoWork(object sender, DoWorkEventArgs e)
+        {
+            string tmp_path = Path.Combine(musicDirPath + "\\tmp.png");
+            if (!System.IO.File.Exists(Album.coverArtpath))
+            {
+                DirectoryInfo di = new DirectoryInfo(musicDirPath);
+                if (di.Exists)
+                {
+                    BitmapEncoder encoder = new PngBitmapEncoder();
+                    encoder.Frames.Add(BitmapFrame.Create(showImg));
+
+                    using (var fileStream = new FileStream(tmp_path, FileMode.Create))
+                    {
+                        encoder.Save(fileStream);
+                    }
+                    Album.coverArtpath = tmp_path;
+
+                }
+            }
+
+            foreach (var file in ListItems)
+            {
+                var tfile = TagLib.File.Create(file.path);
+
+                tfile.Tag.Title = file.song;
+
+                string tmp_artist = Album.albumArtist.Replace(", ", ",").Trim();
+                tfile.Tag.Artists = tmp_artist.Split(',');
+
+                tfile.Tag.Album = Album.album;
+
+                if (System.IO.File.Exists(Album.coverArtpath) && showImg != null)
+                {
+                    var pic = new IPicture[1];
+                    pic[0] = new Picture(Album.coverArtpath);
+                    tfile.Tag.Pictures = pic;
+                }
+
+                tfile.Save();
+                tfile.Dispose();
+            }
+
+            if (System.IO.File.Exists(tmp_path))
+            {
+                System.IO.File.Delete(tmp_path);
+            }
+        }
+
+        private void RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            if (l.ShowActivated == true)
+            {
+                l.Close();
+            }
+            string message = "저장되었습니다.";
+            if(ListItems.Count < 1)
+            {
+                message = "저장할 음원을 추가해주세요.";
+            }
+            MessageBox.Show(message);
+            ReadDirectory(musicDirPath);
         }
         #endregion
 

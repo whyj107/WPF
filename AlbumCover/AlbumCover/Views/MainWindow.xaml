@@ -16,6 +16,13 @@
     
     <Grid>
         <TabControl Margin="20">
+            <i:Interaction.Triggers>
+                <i:EventTrigger EventName="SelectionChanged">
+                    <ei:CallMethodAction TargetObject="{Binding}" MethodName="TC_SelectionChanged"/>
+                </i:EventTrigger>
+            </i:Interaction.Triggers>
+            
+            <!-- Change Album Cover -->
             <TabItem Header="Change Album Cover">
                 <Grid>
                     <StackPanel Margin="10">
@@ -72,14 +79,15 @@
                                     <TextBlock Grid.Row="0" Text="Album" HorizontalAlignment="Right"/>
                                     <TextBlock Grid.Row="1" Text="Artist" HorizontalAlignment="Right"/>
 
-                                    <TextBox Grid.Column="1" Grid.Row="0" Text="{Binding SelectedItem.album}"/>
-                                    <TextBox Grid.Column="1" Grid.Row="1" Text="{Binding SelectedItem.artist}"/>
+                                    <TextBox Grid.Column="1" Grid.Row="0" Text="{Binding Album.album}"/>
+                                    <TextBox Grid.Column="1" Grid.Row="1" Text="{Binding Album.albumArtist}"/>
                                 </Grid>
                             
                         </StackPanel>
                     </StackPanel>
                 </Grid>
             </TabItem>
+            <!-- Change Song Information -->
             <TabItem Header="Change Song Information">
                 <Grid>
                     <Grid.ColumnDefinitions>
@@ -103,7 +111,7 @@
                                     <ei:CallMethodAction TargetObject="{Binding}" MethodName="DragEnter"/>
                                 </i:EventTrigger>
                                 <i:EventTrigger EventName="SelectionChanged">
-                                    <ei:CallMethodAction TargetObject="{Binding}" MethodName="SelectionChanged"/>
+                                    <ei:CallMethodAction TargetObject="{Binding}" MethodName="LV_SelectionChanged"/>
                                 </i:EventTrigger>
                             </i:Interaction.Triggers>
                         </ListView>
