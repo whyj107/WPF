@@ -8,8 +8,7 @@
         xmlns:local="clr-namespace:AlbumCover"
         xmlns:VM="clr-namespace:AlbumCover.ViewModels"
         mc:Ignorable="d"
-        ResizeMode="NoResize"
-        Title="음원 정보 바꾸기" Height="500" Width="800" Background="DimGray">
+        Title="음원 정보 바꾸기" Height="600" Width="800" Background="{StaticResource color1}">
     <!-- MainWindowViewModel과 연결 -->
     <Window.DataContext>
         <VM:MainWindowViewModel/>
@@ -33,53 +32,62 @@
             </i:Interaction.Triggers>
             
             <!-- TABITEM(앨범 커버 변경) -->
-            <TabItem Header="앨범 커버 변경">
-                <StackPanel Margin="10">
+            <TabItem>
+                <TabItem.Header>
+                    <StackPanel Orientation="Horizontal">
+                        <Image Style="{StaticResource AC_I}"/>
+                        <TextBlock Text="앨범 커버 변경" Style="{StaticResource TC_TB}"/>
+                    </StackPanel>
+                </TabItem.Header>
+                <StackPanel Margin="5" >
                     <!-- TEXTBOX(디렉토리 경로) & BUTTON(디렉토리 선택) -->
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                        <TextBox Text="{Binding musicDirPath}" Width="300" IsReadOnly="True"/>
-                        <Button Content="Select Directory" Command="{Binding SelectBtnCmd}"/>
+                        <TextBox Text="{Binding musicDirPath}" Style="{StaticResource AC_TBox}" IsReadOnly="True"/>
+                        <Button Style="{StaticResource AC_SD_Btn}" Command="{Binding SelectBtnCmd}"/>
                     </StackPanel>
                     
                     <!-- LISTVIEW : 음악 목록 이미지로 표현 -->
                     <ListView Style="{StaticResource AC_LV}" ItemsSource="{Binding ListItems}" SelectedItem="{Binding SelectedItem}"/>
 
                     <!-- 앨범 정보 변경 부분 -->
-                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="10">
                         <!-- 앨범 커버 이미지 -->
                         <Border Style="{StaticResource AC_Bor}">
                             <Image Source="{Binding showImg}"/>
                         </Border>
 
-                        <!-- 이미지 관련 버튼 -->
-                        <StackPanel VerticalAlignment="Center">
-                            <Button Content="Reset" Command="{Binding ResetImgBtnCmd}"/>
-                            <Button Content="Change" Command="{Binding ChangeImgBtnCmd}"/>
-                            <Button Content="Save" Command="{Binding SaveAlbumBtnCmd}"/>
+                        <StackPanel Margin="20 0" VerticalAlignment="Bottom">
+                            <!-- 앨범 정보 -->
+                            <Grid Style="{StaticResource AC_G}">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="3*"/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="*"/>
+                                    <RowDefinition Height="*"/>
+                                </Grid.RowDefinitions>
+
+                                <Grid.Resources>
+                                    <Style TargetType="TextBlock" BasedOn="{StaticResource AC_TBlock}"/>
+                                    <Style TargetType="TextBox" BasedOn="{StaticResource AC_Box}"/>
+                                </Grid.Resources>
+
+                                <TextBlock Grid.Row="0" Text="앨범명"/>
+                                <TextBlock Grid.Row="1" Text="아티스트명"/>
+
+                                <TextBox Grid.Row="0" Text="{Binding Album.album}"/>
+                                <TextBox Grid.Row="1" Text="{Binding Album.albumArtist}"/>
+                            </Grid>
+
+                            <!-- 이미지 관련 버튼 -->
+                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="8 10 8 0">
+                                <Button Style="{StaticResource AC_reset_Btn}" Command="{Binding ResetImgBtnCmd}"/>
+                                <Button Style="{StaticResource AC_change_Btn}" Command="{Binding ChangeImgBtnCmd}"/>
+                                <Button Style="{StaticResource AC_save_Btn}" Command="{Binding SaveAlbumBtnCmd}"/>
+                            </StackPanel>
                         </StackPanel>
 
-                        <!-- 앨범 정보 -->
-                        <Grid Style="{StaticResource AC_G}">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="3*"/>
-                            </Grid.ColumnDefinitions>
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="*"/>
-                                <RowDefinition Height="*"/>
-                            </Grid.RowDefinitions>
-
-                            <Grid.Resources>
-                                <Style TargetType="TextBlock" BasedOn="{StaticResource AC_TBlock}"/>
-                                <Style TargetType="TextBox" BasedOn="{StaticResource AC_Box}"/>
-                            </Grid.Resources>
-
-                            <TextBlock Grid.Row="0" Text="Album"/>
-                            <TextBlock Grid.Row="1" Text="Artist"/>
-
-                            <TextBox Grid.Row="0" Text="{Binding Album.album}"/>
-                            <TextBox Grid.Row="1" Text="{Binding Album.albumArtist}"/>
-                        </Grid>
                     </StackPanel>
                 </StackPanel>
             </TabItem>
