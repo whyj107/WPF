@@ -27,6 +27,10 @@ namespace AlbumCover.ViewModels
         private ObservableCollection<SongInfo> _listItems = new ObservableCollection<SongInfo>();
         public ObservableCollection<SongInfo> ListItems{ get => _listItems; set { _listItems = value; OnPropertyChanged("ListItems"); } }
 
+        // 선택된 리스트의 인덱스입니다.
+        private int _selectIndex;
+        public int selectIndex { get => _selectIndex; set { _selectIndex = value; OnPropertyChanged("selectIndex"); } }
+
         // [앨범 커버 변경]과 [음원 정보 변경] 두 부분에서 보여지는 앨범 커버 이미지입니다.
         private BitmapImage _showImg;
         public BitmapImage showImg { get => _showImg; set { _showImg = value; OnPropertyChanged("showImg"); } }
@@ -36,7 +40,7 @@ namespace AlbumCover.ViewModels
         #region [변수]
         // 앨범 정보입니다.
         private AlbumInfo _album = new AlbumInfo() { album="Album", albumArtist="Artist" };
-        public AlbumInfo Album { get => _album; set { _album = value; OnPropertyChanged("Album"); } }
+        // public AlbumInfo Album { get => _album; set { _album = value; OnPropertyChanged("Album"); } }
 
         // 앨범 디렉토리 경로입니다.
         private string _musicDirPath = "앨범 경로";
@@ -112,7 +116,7 @@ namespace AlbumCover.ViewModels
         {
             // 선택한 음원의 이미지로 변경할 경우 tmp.png로 저장한 뒤 저장한 이미지로 앨범 커버를 적용합니다.
             string tmp_path = Path.Combine(musicDirPath + "\\tmp.png");
-            if (!System.IO.File.Exists(Album.coverArtpath))
+            if (!System.IO.File.Exists(SelectedItem.coverArtpath) && showImg != null)
             {
                 DirectoryInfo di = new DirectoryInfo(musicDirPath);
                 if (di.Exists)
@@ -124,31 +128,39 @@ namespace AlbumCover.ViewModels
                     {
                         encoder.Save(fileStream);
                     }
-                    Album.coverArtpath = tmp_path;
+                    SelectedItem.coverArtpath = tmp_path;
                 }
             }
+
 
             // LISTVIEW에 있는 음원들의 정보를 변경하는 부분입니다.
             foreach (var file in ListItems)
             {
-                var tfile = TagLib.File.Create(file.path);
-
-                tfile.Tag.Title = file.song;
-
-                string tmp_artist = Album.albumArtist.Replace(", ", ",").Trim();
-                tfile.Tag.Artists = tmp_artist.Split(',');
-
-                tfile.Tag.Album = Album.album;
-
-                if (System.IO.File.Exists(Album.coverArtpath) && showImg != null)
+                try
                 {
-                    var pic = new IPicture[1];
-                    pic[0] = new Picture(Album.coverArtpath);
-                    tfile.Tag.Pictures = pic;
-                }
+                    var tfile = TagLib.File.Create(file.path);
 
-                tfile.Save();
-                tfile.Dispose();
+                    tfile.Tag.Title = file.song;
+
+                    string tmp_artist = SelectedItem.artist.Replace(", ", ",").Trim();
+                    tfile.Tag.Artists = tmp_artist.Split(',');
+
+                    tfile.Tag.Album = SelectedItem.album;
+
+                    if (System.IO.File.Exists(SelectedItem.coverArtpath) && showImg != null)
+                    {
+                        var pic = new IPicture[1];
+                        pic[0] = new Picture(SelectedItem.coverArtpath);
+                        tfile.Tag.Pictures = pic;
+                    }
+
+                    tfile.Save();
+                    tfile.Dispose();
+                }
+                catch
+                {
+                    MessageBox.Show("변경할 수 없는 음원입니다.\n음원을 확인해 주세요.");
+                }
             }
 
             // 사용했던 tmp.png 이미지를 삭제합니다.
@@ -200,6 +212,7 @@ namespace AlbumCover.ViewModels
                 {
                     AddSongInfo(new string[] { file.FullName });
                 }
+                selectIndex = 0;
             }
         }
         #endregion
@@ -208,7 +221,7 @@ namespace AlbumCover.ViewModels
         #region 01. [음원 정보 변경]
         #region [변수]
         // 선택된 음원 정보입니다.
-        private SongInfo _selectedItem = new SongInfo() { song = "Title", artist = "Artist", album = "Album" };
+        private SongInfo _selectedItem = new SongInfo() { song = "음원", artist = "아티스트", album = "앨범" };
         public SongInfo SelectedItem { get => _selectedItem; set { _selectedItem = value; OnPropertyChanged("SelectedItem"); } }
         #endregion
 
@@ -260,78 +273,46 @@ namespace AlbumCover.ViewModels
         /// <param name="args"></param>
         private void ExeSaveInfoBtn(object args)
         {
-            var tfile = TagLib.File.Create(SelectedItem.path);
-
-            tfile.Tag.Title = SelectedItem.song;
-
-            string tmp_artist = SelectedItem.artist.Replace(", ", ",").Trim();
-            tfile.Tag.Artists = tmp_artist.Split(',');
-
-            tfile.Tag.Album = SelectedItem.album;
-
-            string tmp_genre = SelectedItem.genre.Replace(", ", ",").Trim();
-            tfile.Tag.Genres = tmp_genre.Split(',');
-
-            tfile.Tag.Year = SelectedItem.year;
-
-            tfile.Tag.Track = SelectedItem.trackNum;
-
-            if (System.IO.File.Exists(SelectedItem.coverArtpath) && showImg != null)
-            {
-                var pic = new IPicture[1];
-                pic[0] = new Picture(SelectedItem.coverArtpath);
-                tfile.Tag.Pictures = pic;
-                SelectedItem.covertArt = tfile.Tag.Pictures[0];
-            }
-
-            tfile.Save();
-            tfile.Dispose();
-            MessageBox.Show("저장되었습니다.");
-        }
-        #endregion
-        #endregion
-
-        #region [LISTVIEW 이벤트]
-        /// <summary>
-        /// 드레그하여 LISTVIEW 안으로 들어올 떄 발생하는 함수입니다. 외부 디렉토리에서 음원 파일을 추가하기 위하여 만든 이벤트입니다.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        public void DragEnter(object sender, DragEventArgs e)
-        {
-            e.Effects = DragDropEffects.Copy;
-        }
-
-        /// <summary>
-        /// LISTVIEW에서 드레그 드랍했을 때 발생하는 함수입니다. 외부 디렉토리에서 음원 파일을 추가하기 위하여 만든 이벤트입니다.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        public void Drop(object sender, DragEventArgs e)
-        {
-            string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
-
-            AddSongInfo(files);
-        }
-
-        /// <summary>
-        /// LISTVIEW에서 아이템 선택이 바뀔 경우 발생하는 함수입니다. 미리 SELECTITEM과 선택된 리스트를 연결해 두었기 때문에 앨범 커버만 여기서 바꿔줍니다.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        public void LV_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
-        {
+            loading_back = Visibility.Visible;
             try
             {
-                showImg = SelectedItem.coverImg;
+                var tfile = TagLib.File.Create(SelectedItem.path);
+
+                tfile.Tag.Title = SelectedItem.song;
+
+                string tmp_artist = SelectedItem.artist.Replace(", ", ",").Trim();
+                tfile.Tag.Artists = tmp_artist.Split(',');
+
+                tfile.Tag.Album = SelectedItem.album;
+
+                string tmp_genre = SelectedItem.genre.Replace(", ", ",").Trim();
+                tfile.Tag.Genres = tmp_genre.Split(',');
+
+                tfile.Tag.Year = SelectedItem.year;
+
+                tfile.Tag.Track = SelectedItem.trackNum;
+
+                if (System.IO.File.Exists(SelectedItem.coverArtpath) && showImg != null)
+                {
+                    var pic = new IPicture[1];
+                    pic[0] = new Picture(SelectedItem.coverArtpath);
+                    tfile.Tag.Pictures = pic;
+                    SelectedItem.covertArt = tfile.Tag.Pictures[0];
+                }
+
+                tfile.Save();
+                tfile.Dispose();
+                MessageBox.Show("저장되었습니다.");
             }
-            catch (Exception ex)
+            catch
             {
-                Console.WriteLine(ex.Message);
-                showImg = null;
+                MessageBox.Show("변경할 수 없는 음원입니다.\n음원을 확인해 주세요.");
             }
+            loading_back = Visibility.Collapsed;
         }
         #endregion
+        #endregion
+
 
         #region [TEXTBOX 이벤트]
         /// <summary>
@@ -399,6 +380,48 @@ namespace AlbumCover.ViewModels
         }
         #endregion
 
+        #region [LISTVIEW 이벤트]
+        /// <summary>
+        /// 드레그하여 LISTVIEW 안으로 들어올 떄 발생하는 함수입니다. 외부 디렉토리에서 음원 파일을 추가하기 위하여 만든 이벤트입니다.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        public void DragEnter(object sender, DragEventArgs e)
+        {
+            e.Effects = DragDropEffects.Copy;
+        }
+
+        /// <summary>
+        /// LISTVIEW에서 드레그 드랍했을 때 발생하는 함수입니다. 외부 디렉토리에서 음원 파일을 추가하기 위하여 만든 이벤트입니다.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        public void Drop(object sender, DragEventArgs e)
+        {
+            string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
+
+            AddSongInfo(files);
+        }
+
+        /// <summary>
+        /// LISTVIEW에서 아이템 선택이 바뀔 경우 발생하는 함수입니다. 미리 SELECTITEM과 선택된 리스트를 연결해 두었기 때문에 앨범 커버만 여기서 바꿔줍니다.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        public void LV_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        {
+            try
+            {
+                showImg = SelectedItem.coverImg;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                showImg = null;
+            }
+        }
+        #endregion
+
         #region [TABCONTROL 이벤트]
         /// <summary>
         /// TABCONTROL에서 다른 TAB을 선택할 떄 발생하는 함수입니다. [음원 정보 변경]->[앨범 커버 변경]으로 이동할 때 리스트를 REFRESH하기 위하여 만든 이벤트입니다.
@@ -409,16 +432,24 @@ namespace AlbumCover.ViewModels
         {
             var tc = sender as TabControl;
 
-            if(tc.SelectedIndex == 0)
+            int tabItem = (tc).SelectedIndex;
+            if(e.Source is TabControl)
             {
-                try
+                if (tabItem == 0)
                 {
-                    ReadDirectory(musicDirPath);
-                }catch(Exception ex)
-                {
-                    Console.WriteLine("TC_SelectionChnaged Error");
-                    Console.WriteLine(ex.Message);
+                    try
+                    {
+                        int tmp_index = selectIndex;
+                        ReadDirectory(musicDirPath);
+                        selectIndex = tmp_index;
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine("TC_SelectionChnaged Error");
+                        Console.WriteLine(ex.Message);
+                    }
                 }
+
             }
         }
         #endregion
@@ -480,15 +511,16 @@ namespace AlbumCover.ViewModels
 
             SongInfo si = new SongInfo()
             {
-                song = tfile.Tag.Title,
-                artist = string.Join(", ", tfile.Tag.Artists),
-                album = tfile.Tag.Album,
-                albumArtist = string.Join(", ", tfile.Tag.AlbumArtists),
-                genre = string.Join(", ", tfile.Tag.Genres),
+                song = tfile.Tag.Title ?? "",
+                artist = string.Join(", ", tfile.Tag.Artists) ?? "",
+                album = tfile.Tag.Album ?? "",
+                albumArtist = string.Join(", ", tfile.Tag.AlbumArtists) ?? "",
+                genre = string.Join(", ", tfile.Tag.Genres) ?? "",
                 year = tfile.Tag.Year,
                 trackNum = tfile.Tag.Track,
                 path = file,
-                covertArt = picture
+                covertArt = picture,
+                fileName = Path.GetFileName(file)
             };
 
             tfile.Dispose();

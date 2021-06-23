@@ -8,7 +8,7 @@
         mc:Ignorable="d"
         Title="LoadingWindow" Height="300" Width="400">
     <StackPanel VerticalAlignment="Center">
-        <TextBlock Text="저장 중..." HorizontalAlignment="Center"/>
-        <ProgressBar  Height="30" Margin="20" IsIndeterminate="True"/>
+        <TextBlock Text="작업 처리 중 입니다" HorizontalAlignment="Center" FontSize="30"/>
+        <ProgressBar  Height="30" Margin="20" IsIndeterminate="True" Foreground="{StaticResource color2}"/>
     </StackPanel>
 </Window>
