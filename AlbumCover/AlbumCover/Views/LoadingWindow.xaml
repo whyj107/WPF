@@ -1,0 +1,14 @@
+﻿<Window x:Class="AlbumCover.Views.LoadingWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:AlbumCover.Views"
+        WindowStyle="None"
+        mc:Ignorable="d"
+        Title="LoadingWindow" Height="300" Width="400">
+    <StackPanel VerticalAlignment="Center">
+        <TextBlock Text="작업 처리 중 입니다" HorizontalAlignment="Center" FontSize="30"/>
+        <ProgressBar  Height="30" Margin="20" IsIndeterminate="True" Foreground="{StaticResource color2}"/>
+    </StackPanel>
+</Window>

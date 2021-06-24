@@ -10,11 +10,11 @@ none
 false
 DEBUG;TRACE
 C:\Users\qndbs\source\repos\AlbumCover\AlbumCover\App.xaml
-11892971807
+31150657604
 
-14-539475362
+121282669077
 212048499983
-Views\MainWindow.xaml;
+Resources\MainResource.xaml;Views\LoadingWindow.xaml;Views\MainWindow.xaml;
 
-True
+False
 

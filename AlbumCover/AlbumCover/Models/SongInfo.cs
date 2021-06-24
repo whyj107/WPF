@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace AlbumCover.Models
+﻿namespace AlbumCover.Models
 {
     public class SongInfo : AlbumInfo
     {
@@ -27,5 +21,9 @@ namespace AlbumCover.Models
         // 년도
         private uint _year;
         public uint year { get => _year; set { _year = value; } }
+
+        // 파일 경로 상 이름
+        private string _fileName;
+        public string fileName { get => _fileName; set { _fileName = value; } }
     }
 }
