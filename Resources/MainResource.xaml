@@ -1,0 +1,614 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    
+    <!-- COLOR CHART -->
+    <!-- https://digitalsynopsis.com/design/beautiful-color-gradient-palettes/?fbclid=IwAR38eUYGKdvH2m_m3XSltn9Ele-pyzE03_0lZB67B88WI6SR3kEP8edfiEs#.XMkBHp6yLCM.facebook -->
+    <Color x:Key="light_gray">#ffb6b6b6</Color>
+    <Color x:Key="gray">#ff9b9b9b</Color>
+    <Color x:Key="purple">#ffbfb8da</Color>
+    <Color x:Key="blue">#ff7facd6</Color>
+    <Color x:Key="blue_op30">#ffd8e6f3</Color>
+    <Color x:Key="pink">#ffe8b7d4</Color>
+    <Color x:Key="pink_op30">#fff8e9f2</Color>
+
+    <!-- SOLID COLOR BRUSH-->
+    <SolidColorBrush x:Key="color0" Color="{StaticResource light_gray}"/>
+    <SolidColorBrush x:Key="color1" Color="{StaticResource gray}"/>
+    <SolidColorBrush x:Key="color2" Color="{StaticResource purple}"/>
+    <SolidColorBrush x:Key="color3" Color="{StaticResource blue}"/>
+    <SolidColorBrush x:Key="color3_op3" Color="{StaticResource blue_op30}"/>
+    <SolidColorBrush x:Key="color4" Color="{StaticResource pink}"/>
+    <SolidColorBrush x:Key="color4_op3" Color="{StaticResource pink_op30}"/>
+
+    <!-- WINDOW BACKGROUND GRADIENT -->
+    <LinearGradientBrush x:Key="gradient1" StartPoint="0, 0" EndPoint="0, 1">
+        <GradientStop Color="White" Offset="0"/>
+        <GradientStop Color="{StaticResource gray}" Offset="1"/>
+    </LinearGradientBrush>
+
+    <!-- GRADIENT ANIMATION1 : 앨범 커버 변경 선택 시 배경 바꾸는 애니메이션 -->
+    <Storyboard x:Key="album_SB">
+        <ColorAnimation Storyboard.TargetName="window" 
+                        Storyboard.TargetProperty="Background.GradientStops[0].Color" 
+                        From="White" To="{StaticResource blue_op30}" Duration="0:0:1"/>
+        <ColorAnimation Storyboard.TargetName="window" 
+                        Storyboard.TargetProperty="Background.GradientStops[1].Color" 
+                        From="{StaticResource gray}" To="{StaticResource blue}" Duration="0:0:1" />
+
+        <ColorAnimation Storyboard.TargetName="window" 
+                        Storyboard.TargetProperty="Background.GradientStops[0].Color" 
+                        From="{StaticResource blue_op30}" To="White" Duration="0:0:1" BeginTime="0:0:1" />
+        <ColorAnimation Storyboard.TargetName="window" 
+                        Storyboard.TargetProperty="Background.GradientStops[1].Color" 
+                        From="{StaticResource blue}" To="{StaticResource gray}" Duration="0:0:1" BeginTime="0:0:1"/>
+    </Storyboard>
+
+    <!-- GRADIENT ANIMATION2 : 음원 정보 변경 선택 시 배경 바꾸는 애니메이션 -->
+    <Storyboard x:Key="song_SB">
+        <ColorAnimation Storyboard.TargetName="window" 
+                        Storyboard.TargetProperty="Background.GradientStops[0].Color" 
+                        From="White" To="{StaticResource pink_op30}" Duration="0:0:1"/>
+        <ColorAnimation Storyboard.TargetName="window" 
+                        Storyboard.TargetProperty="Background.GradientStops[1].Color" 
+                        From="{StaticResource gray}" To="{StaticResource pink}" Duration="0:0:1" />
+
+        <ColorAnimation Storyboard.TargetName="window" 
+                        Storyboard.TargetProperty="Background.GradientStops[0].Color" 
+                        From="{StaticResource pink_op30}" To="White" Duration="0:0:1" BeginTime="0:0:1" />
+        <ColorAnimation Storyboard.TargetName="window" 
+                        Storyboard.TargetProperty="Background.GradientStops[1].Color" 
+                        From="{StaticResource pink}" To="{StaticResource gray}" Duration="0:0:1" BeginTime="0:0:1"/>
+    </Storyboard>
+    <!--=======================================================================================-->
+
+    <!-- 기본 공통 설정 -->
+    <!-- BUTTON -->
+    <Style x:Key="basic_Btn" TargetType="Button">
+        <Setter Property="BorderThickness" Value="2"/>
+        <Setter Property="BorderBrush" Value="{StaticResource color2}"/>
+        <Setter Property="Background" Value="{x:Null}"/>
+    </Style>
+    <!--=======================================-->
+
+    <!-- TEXTBOX -->
+    <Style x:Key="basic_TBox" TargetType="TextBox">
+        <Setter Property="Height" Value="30"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
+        <Setter Property="Padding" Value="3 0"/>
+    </Style>
+    <!--=======================================-->
+
+    <!-- BORDER -->
+    <Style x:Key="basic_Bor" TargetType="Border">
+        <Setter Property="BorderBrush" Value="{StaticResource color1}"/>
+        <Setter Property="BorderThickness" Value="2"/>
+        <Setter Property="Background" Value="{x:Null}"/>
+        <Setter Property="Width" Value="150"/>
+        <Setter Property="Height" Value="150"/>
+    </Style>
+    <!--=======================================-->
+
+    <!--TABCONTROL -->
+    <Style x:Key="TB" TargetType="TabControl">
+        <Setter Property="BorderBrush" Value="{StaticResource color0}"/>
+        <Setter Property="Margin" Value="20"/>
+    </Style>
+    <!--=======================================-->
+    
+    <!-- TABCONTROL IMAGE -->
+    <Style x:Key="TB_I" TargetType="Image">
+        <Setter Property="Height" Value="20"/>
+        <Setter Property="Margin" Value="2"/>
+    </Style>
+    <!--=======================================-->
+
+    <!-- TABCONROL TEXTBLOCK -->
+    <Style x:Key="TC_TB" TargetType="TextBlock">
+        <Setter Property="Margin" Value="2"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+    </Style>
+    <!--=======================================================================================-->
+    
+    
+    <!-- [앨범 커버 변경] -->
+    <!-- IMAGE -->
+    <Style x:Key="AC_I" TargetType="Image" BasedOn="{StaticResource TB_I}">
+        <Setter Property="Source" Value="pack://application:,,,/Resources/Imgs/album.png"/>
+    </Style>
+    <!--=======================================-->
+    
+    <!-- TEXTBOX -->
+    <Style x:Key="AC_TBox" TargetType="TextBox" BasedOn="{StaticResource basic_TBox}">
+        <Setter Property="Width" Value="300"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type TextBox}">
+                    <Grid>
+                        <Border x:Name="border" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" SnapsToDevicePixels="True">
+                            <ScrollViewer x:Name="PART_ContentHost" Focusable="False" HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Hidden"/>
+                        </Border>
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="BorderBrush" Value="{StaticResource color3}"/>
+                        </Trigger>
+                        <Trigger Property="IsFocused" Value="True">
+                            <Setter Property="BorderBrush" Value="{StaticResource color3}"/>
+                        </Trigger>
+                        <Trigger Property="IsKeyboardFocused" Value="True">
+                            <Setter Property="BorderBrush" Value="{StaticResource color3}"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <!--=======================================-->
+    
+    <!-- BUTTON -->
+    <Style x:Key="AC_SD_Btn" TargetType="Button" BasedOn="{StaticResource basic_Btn}">
+        <Setter Property="Margin" Value="10 3"/>
+        <Setter Property="Content">
+            <Setter.Value>
+                <Grid Width="40" Height="40">
+                    <Image Margin="5 3 2 3" Height="25" HorizontalAlignment="Center" VerticalAlignment="Center" Source="pack://application:,,,/Resources/imgs/search.png"/>
+                </Grid>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border x:Name="border" CornerRadius="100" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" SnapsToDevicePixels="True">
+                        <ContentPresenter RecognizesAccessKey="true" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Background" Value="{StaticResource color2}"/>
+                            <Setter Property="Content">
+                                <Setter.Value>
+                                    <Grid Width="40" Height="40">
+                                        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="앨범&#xd;선택" Foreground="White" FontWeight="ExtraBold"/>
+                                    </Grid>
+                                </Setter.Value>
+                            </Setter>
+
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter Property="Background" Value="{StaticResource color2}"/>
+                            <Setter Property="Content">
+                                <Setter.Value>
+                                    <Grid Width="40" Height="40">
+                                        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="앨범&#xd;선택" Foreground="White" FontWeight="ExtraBold"/>
+                                    </Grid>
+                                </Setter.Value>
+                            </Setter>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <!--=======================================-->
+    
+    <!-- LISTVIEW -->
+    <Style x:Key="AC_LV" TargetType="{x:Type ListView}" >
+        <Setter Property="Height" Value="250"/>
+        <Setter Property="Width" Value="600"/>
+        <Setter Property="Margin" Value="5"/>
+        <Setter Property="BorderBrush" Value="{StaticResource color1}"/>
+        <Setter Property="ItemsControl.ItemsPanel">
+            <Setter.Value>
+                <ItemsPanelTemplate>
+                    <UniformGrid Columns="4" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                </ItemsPanelTemplate>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="ItemTemplate">
+            <Setter.Value>
+                <DataTemplate>
+                    <StackPanel Width="100" Margin="10">
+                        <Border BorderBrush="{StaticResource color1}" Background="White" BorderThickness="2" Width="80" Height="80" HorizontalAlignment="Center">
+                            <Image Source="{Binding coverImg}"/>
+                        </Border>
+                        <Viewbox Height="15">
+                            <TextBlock Text="{Binding fileName}" HorizontalAlignment="Center"/>
+                        </Viewbox>
+                    </StackPanel>
+                </DataTemplate>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="ItemContainerStyle">
+            <Setter.Value>
+                <Style TargetType="{x:Type ListViewItem}">
+                    <Setter Property="BorderBrush" Value="{x:Null}"/>
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="{x:Type ListViewItem}">
+                                <Border CornerRadius="0" BorderThickness="{TemplateBinding BorderThickness}" BorderBrush="{TemplateBinding BorderBrush}" Background="{TemplateBinding Background}" SnapsToDevicePixels="True">
+                                    <ContentPresenter/>
+                                </Border>
+                                <ControlTemplate.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Background" Value="{StaticResource color3_op3}" />
+                                        <Setter Property="BorderBrush" Value="{StaticResource color3}" />
+                                    </Trigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <!--=======================================-->
+    
+    <!-- BORDER -->
+    <Style x:Key="AC_Bor" TargetType="Border" BasedOn="{StaticResource basic_Bor}">
+        <Setter Property="HorizontalAlignment" Value="Center"/>
+    </Style>
+    <!--=======================================-->
+    
+    <!-- GRID : 앨범 정보 -->
+    <Style x:Key="AC_G" TargetType="Grid">
+        <Setter Property="VerticalAlignment" Value="Center"/>
+    </Style>
+    <!--=======================================-->
+
+    <!-- TEXTBLOCK -->
+    <Style x:Key="AC_TBlock" TargetType="TextBlock">
+        <Setter Property="HorizontalAlignment" Value="Right"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+    </Style>
+    <!--=======================================-->
+
+    <!-- TEXTBOX -->
+    <Style x:Key="AC_Box" TargetType="TextBox" BasedOn="{StaticResource AC_TBox}">
+        <Setter Property="Width" Value="200"/>
+        <Setter Property="Margin" Value="5 5 0 5"/>
+        <Setter Property="Grid.Column" Value="1"/>
+        <Setter Property="FontWeight" Value="SemiBold"/>
+    </Style>
+    <!--=======================================-->
+    
+    <!-- BUTTON : 초기화 -->
+    <Style x:Key="AC_reset_Btn" TargetType="Button" BasedOn="{StaticResource AC_SD_Btn}">
+        <Setter Property="Width" Value="80"/>
+        <Setter Property="Height" Value="40"/>
+        <Setter Property="Content">
+            <Setter.Value>
+                <Grid Width="50" Height="30">
+                    <Image Height="25" HorizontalAlignment="Center" VerticalAlignment="Center" Source="pack://application:,,,/Resources/imgs/reset.png"/>
+                </Grid>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border x:Name="border" CornerRadius="10" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" SnapsToDevicePixels="True">
+                        <ContentPresenter RecognizesAccessKey="true" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Background" Value="{StaticResource color2}"/>
+                            <Setter Property="Content">
+                                <Setter.Value>
+                                    <Viewbox>
+                                        <TextBlock Margin="5" HorizontalAlignment="Center" VerticalAlignment="Center" Text="초기화" Foreground="White" FontWeight="ExtraBold"/>
+                                    </Viewbox>
+                                </Setter.Value>
+                            </Setter>
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter Property="Background" Value="{StaticResource color2}"/>
+                            <Setter Property="Content">
+                                <Setter.Value>
+                                    <Viewbox>
+                                        <TextBlock Margin="5" HorizontalAlignment="Center" VerticalAlignment="Center" Text="초기화" Foreground="White" FontWeight="ExtraBold"/>
+                                    </Viewbox>
+                                </Setter.Value>
+                            </Setter>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <!--=======================================-->
+
+    <!-- BUTTON : 이미지 선택 -->
+    <Style x:Key="AC_change_Btn" TargetType="Button" BasedOn="{StaticResource AC_reset_Btn}">
+        <Setter Property="Content">
+            <Setter.Value>
+                <Grid Width="50" Height="30">
+                    <Image Height="25" HorizontalAlignment="Center" VerticalAlignment="Center" Source="pack://application:,,,/Resources/imgs/change.png"/>
+                </Grid>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border x:Name="border" CornerRadius="10" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" SnapsToDevicePixels="True">
+                        <ContentPresenter RecognizesAccessKey="true" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Background" Value="{StaticResource color2}"/>
+                            <Setter Property="Content">
+                                <Setter.Value>
+                                    <Viewbox>
+                                        <TextBlock Margin="2" HorizontalAlignment="Center" VerticalAlignment="Center" Text="이미지&#xd; 선택" Foreground="White" FontWeight="ExtraBold"/>
+                                    </Viewbox>
+                                </Setter.Value>
+                            </Setter>
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter Property="Background" Value="{StaticResource color2}"/>
+                            <Setter Property="Content">
+                                <Setter.Value>
+                                    <Viewbox>
+                                        <TextBlock Margin="2" HorizontalAlignment="Center" VerticalAlignment="Center" Text="이미지&#xd; 선택" Foreground="White" FontWeight="ExtraBold"/>
+                                    </Viewbox>
+                                </Setter.Value>
+                            </Setter>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <!--=======================================-->
+
+    <!-- BUTTON : 저장 -->
+    <Style x:Key="AC_save_Btn" TargetType="Button" BasedOn="{StaticResource AC_reset_Btn}">
+        <Setter Property="Margin" Value="0"/>
+        <Setter Property="HorizontalAlignment" Value="Right"/>
+        <Setter Property="Content">
+            <Setter.Value>
+                <Grid Width="50" Height="30">
+                    <Image Height="25" HorizontalAlignment="Center" VerticalAlignment="Center" Source="pack://application:,,,/Resources/imgs/save.png"/>
+                </Grid>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border x:Name="border" CornerRadius="10" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" SnapsToDevicePixels="True">
+                        <ContentPresenter RecognizesAccessKey="true" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Background" Value="{StaticResource color2}"/>
+                            <Setter Property="Content">
+                                <Setter.Value>
+                                    <Viewbox>
+                                        <TextBlock Margin="5" HorizontalAlignment="Center" VerticalAlignment="Center" Text="저장" Foreground="White" FontWeight="ExtraBold"/>
+                                    </Viewbox>
+                                </Setter.Value>
+                            </Setter>
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter Property="Background" Value="{StaticResource color2}"/>
+                            <Setter Property="Content">
+                                <Setter.Value>
+                                    <Viewbox>
+                                        <TextBlock Margin="5" HorizontalAlignment="Center" VerticalAlignment="Center" Text="저장" Foreground="White" FontWeight="ExtraBold"/>
+                                    </Viewbox>
+                                </Setter.Value>
+                            </Setter>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!--=======================================================================================-->
+
+
+    <!-- [음원 정보 변경] -->
+    <!-- IMAGE -->
+    <Style x:Key="MI_I" TargetType="Image" BasedOn="{StaticResource TB_I}">
+        <Setter Property="Source" Value="pack://application:,,,/Resources/Imgs/sound.png"/>
+    </Style>
+    
+    <!-- BUTTON : 음원 추가 -->
+    <Style x:Key="MI_plus_Btn" TargetType="Button" BasedOn="{StaticResource basic_Btn}">
+        <Setter Property="Width" Value="35"/>
+        <Setter Property="Height" Value="35"/>
+        <Setter Property="Content">
+            <Setter.Value>
+                <Grid Width="15" Height="15" HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <Image Source="pack://application:,,,/Resources/Imgs/plus.png"/>
+                </Grid>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border x:Name="border" CornerRadius="100" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" SnapsToDevicePixels="True">
+                        <ContentPresenter SnapsToDevicePixels="True" RecognizesAccessKey="true" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Content" Value="추가"/>
+                            <Setter Property="Background" Value="{StaticResource color2}"/>
+                            <Setter Property="Foreground" Value="White"/>
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter Property="Content" Value="추가"/>
+                            <Setter Property="Background" Value="{StaticResource color2}"/>
+                            <Setter Property="Foreground" Value="White"/>                        
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <!--=======================================-->
+    
+    <!-- BUTTON : 음원 삭제 -->
+    <Style x:Key="MI_minus_Btn" TargetType="Button" BasedOn="{StaticResource MI_plus_Btn}">
+        <Setter Property="Content">
+            <Setter.Value>
+                <Grid Width="15" Height="15" HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <Image Source="pack://application:,,,/Resources/Imgs/minus.png"/>
+                </Grid>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border x:Name="border" CornerRadius="100" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" SnapsToDevicePixels="True">
+                        <ContentPresenter SnapsToDevicePixels="True" RecognizesAccessKey="true" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Content" Value="삭제"/>
+                            <Setter Property="Background" Value="{StaticResource color2}"/>
+                            <Setter Property="Foreground" Value="White"/>
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter Property="Content" Value="삭제"/>
+                            <Setter Property="Background" Value="{StaticResource color2}"/>
+                            <Setter Property="Foreground" Value="White"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+
+    </Style>
+    <!--=======================================-->
+
+    <!-- LISTVIEW -->
+    <Style x:Key="MI_LV" TargetType="ListView">
+        <Setter Property="Height" Value="400"/>
+        <Setter Property="Margin" Value="10 0"/>
+        <Setter Property="VerticalAlignment" Value="Bottom"/>
+        <Setter Property="AllowDrop" Value="True"/>
+        <Setter Property="BorderBrush" Value="{StaticResource color1}"/>
+        <Setter Property="ItemContainerStyle">
+            <Setter.Value>
+                <Style TargetType="{x:Type ListViewItem}">
+                    <Setter Property="BorderBrush" Value="{x:Null}"/>
+                    <Setter Property="Height" Value="30"/>
+                    <Setter Property="Margin" Value="10 3"/>
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="{x:Type ListViewItem}">
+                                <Border CornerRadius="0" BorderThickness="{TemplateBinding BorderThickness}" BorderBrush="{TemplateBinding BorderBrush}" Background="{TemplateBinding Background}" SnapsToDevicePixels="True">
+                                    <ContentPresenter VerticalAlignment="Center" Margin="10 0"/>
+                                </Border>
+                                <ControlTemplate.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Background" Value="{StaticResource color4_op3}" />
+                                        <Setter Property="BorderBrush" Value="{StaticResource color4}" />
+                                    </Trigger>
+                                    <Trigger Property="IsSelected" Value="True">
+                                        <Setter Property="Background" Value="{StaticResource color4_op3}" />
+                                        <Setter Property="BorderBrush" Value="{StaticResource color4}" />
+                                    </Trigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <!--=======================================-->
+    
+    <!-- BORDER : 이미지 -->
+    <Style x:Key="MI_Bor" TargetType="Border" BasedOn="{StaticResource basic_Bor}">
+        <Setter Property="HorizontalAlignment" Value="Left"/>
+        <Setter Property="VerticalAlignment" Value="Top"/>
+    </Style>
+    <!--=======================================-->
+
+    <!-- BUTTON : 초기화 -->
+    <Style x:Key="MI_reset_Btn" TargetType="Button" BasedOn="{StaticResource AC_reset_Btn}">
+        <Setter Property="Height" Value="30"/>
+        <Setter Property="Width" Value="60"/>
+        <Setter Property="HorizontalAlignment" Value="Left"/>
+        <Setter Property="Margin" Value="0 5"/>
+        <Setter Property="Content">
+            <Setter.Value>
+                <Grid Width="50" Height="25">
+                    <Image Height="15" HorizontalAlignment="Center" VerticalAlignment="Center" Source="pack://application:,,,/Resources/imgs/reset.png"/>
+                </Grid>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <!--=======================================-->
+
+    <!-- BUTTON : 이미지 선택 -->
+    <Style x:Key="MI_change_Btn" TargetType="Button" BasedOn="{StaticResource AC_change_Btn}">
+        <Setter Property="Height" Value="30"/>
+        <Setter Property="Width" Value="50"/>
+        <Setter Property="HorizontalAlignment" Value="Right"/>
+        <Setter Property="Margin" Value="0 5"/>
+        <Setter Property="Content">
+            <Setter.Value>
+                <Grid Width="50" Height="25" HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <Image Height="15" Source="pack://application:,,,/Resources/imgs/change.png"/>
+                </Grid>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <!--=======================================-->
+
+    <!-- BUTTON : 저장 -->
+    <Style x:Key="MI_save_Btn" TargetType="Button" BasedOn="{StaticResource AC_save_Btn}">
+        <Setter Property="Height" Value="30"/>
+        <Setter Property="Width" Value="50"/>
+        <Setter Property="HorizontalAlignment" Value="Right"/>
+        <Setter Property="Margin" Value="30 0"/>
+        <Setter Property="Content">
+            <Setter.Value>
+                <Grid Width="50" Height="30" HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <Image Height="15" HorizontalAlignment="Center" VerticalAlignment="Center" Source="pack://application:,,,/Resources/imgs/save.png"/>
+                </Grid>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <!--=======================================-->
+
+    <!-- TEXTBLOCK -->
+    <Style x:Key="MI_TBlock" TargetType="TextBlock">
+        <Setter Property="Margin" Value="0, 0, 10, 0"/>
+        <Setter Property="HorizontalAlignment" Value="Right"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+    </Style>
+    <!--=======================================-->
+
+    <!-- TEXTBOX -->
+    <Style x:Key="MI_TBox" TargetType="TextBox" BasedOn="{StaticResource basic_TBox}">
+        <Setter Property="Grid.Column" Value="1"/>
+        <Setter Property="Margin" Value="1"/>
+        <Setter Property="HorizontalAlignment" Value="Left"/>
+        <Setter Property="Width" Value="230"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type TextBox}">
+                    <Grid>
+                        <Border x:Name="border" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" SnapsToDevicePixels="True">
+                            <ScrollViewer x:Name="PART_ContentHost" Focusable="False" HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Hidden"/>
+                        </Border>
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="BorderBrush" Value="{StaticResource color4}"/>
+                        </Trigger>
+                        <Trigger Property="IsFocused" Value="True">
+                            <Setter Property="BorderBrush" Value="{StaticResource color4}"/>
+                        </Trigger>
+                        <Trigger Property="IsKeyboardFocused" Value="True">
+                            <Setter Property="BorderBrush" Value="{StaticResource color4}"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <!--=======================================================================================-->
+</ResourceDictionary>
