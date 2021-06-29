@@ -25,8 +25,8 @@
         <GradientStop Color="White" Offset="0"/>
         <GradientStop Color="{StaticResource gray}" Offset="1"/>
     </LinearGradientBrush>
-    
-    <!-- GRADIENT ANIMATION1 -->
+
+    <!-- GRADIENT ANIMATION1 : 앨범 커버 변경 선택 시 배경 바꾸는 애니메이션 -->
     <Storyboard x:Key="album_SB">
         <ColorAnimation Storyboard.TargetName="window" 
                         Storyboard.TargetProperty="Background.GradientStops[0].Color" 
@@ -43,7 +43,7 @@
                         From="{StaticResource blue}" To="{StaticResource gray}" Duration="0:0:1" BeginTime="0:0:1"/>
     </Storyboard>
 
-    <!-- GRADIENT ANIMATION2 -->
+    <!-- GRADIENT ANIMATION2 : 음원 정보 변경 선택 시 배경 바꾸는 애니메이션 -->
     <Storyboard x:Key="song_SB">
         <ColorAnimation Storyboard.TargetName="window" 
                         Storyboard.TargetProperty="Background.GradientStops[0].Color" 
@@ -320,7 +320,7 @@
         <Setter Property="Content">
             <Setter.Value>
                 <Grid Width="50" Height="30">
-                    <Image Height="25" HorizontalAlignment="Center" VerticalAlignment="Center" Source="pack://application:,,,/Resources/imgs/change.png"/>
+                    <Image Height="25" HorizontalAlignment="Center" VerticalAlignment="Center" Source="pack://application:,,,/Resources/imgs/img.png"/>
                 </Grid>
             </Setter.Value>
         </Setter>
@@ -365,7 +365,7 @@
         <Setter Property="Content">
             <Setter.Value>
                 <Grid Width="50" Height="30">
-                    <Image Height="25" HorizontalAlignment="Center" VerticalAlignment="Center" Source="pack://application:,,,/Resources/imgs/save.png"/>
+                    <Image Height="25" HorizontalAlignment="Center" VerticalAlignment="Center" Source="pack://application:,,,/Resources/imgs/change(1).png"/>
                 </Grid>
             </Setter.Value>
         </Setter>
@@ -550,7 +550,7 @@
         <Setter Property="Content">
             <Setter.Value>
                 <Grid Width="50" Height="25" HorizontalAlignment="Center" VerticalAlignment="Center">
-                    <Image Height="15" Source="pack://application:,,,/Resources/imgs/change.png"/>
+                    <Image Height="15" Source="pack://application:,,,/Resources/imgs/img.png"/>
                 </Grid>
             </Setter.Value>
         </Setter>
@@ -566,7 +566,7 @@
         <Setter Property="Content">
             <Setter.Value>
                 <Grid Width="50" Height="30" HorizontalAlignment="Center" VerticalAlignment="Center">
-                    <Image Height="15" HorizontalAlignment="Center" VerticalAlignment="Center" Source="pack://application:,,,/Resources/imgs/save.png"/>
+                    <Image Height="15" HorizontalAlignment="Center" VerticalAlignment="Center" Source="pack://application:,,,/Resources/imgs/change(2).png"/>
                 </Grid>
             </Setter.Value>
         </Setter>
@@ -611,6 +611,4 @@
         </Setter>
     </Style>
     <!--=======================================================================================-->
-
-
 </ResourceDictionary>
