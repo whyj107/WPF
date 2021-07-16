@@ -13,7 +13,6 @@ C:\Users\qndbs\source\repos\AlbumCover\AlbumCover\bin\Debug\Microsoft.Expression
 C:\Users\qndbs\source\repos\AlbumCover\AlbumCover\bin\Debug\System.Windows.Interactivity.xml
 C:\Users\qndbs\source\repos\AlbumCover\AlbumCover\bin\Debug\TagLibSharp.pdb
 C:\Users\qndbs\source\repos\AlbumCover\AlbumCover\bin\Debug\TagLibSharp.xml
-C:\Users\qndbs\source\repos\AlbumCover\AlbumCover\obj\Debug\AlbumCover.csprojAssemblyReference.cache
 C:\Users\qndbs\source\repos\AlbumCover\AlbumCover\obj\Debug\Views\LoadingWindow.g.cs
 C:\Users\qndbs\source\repos\AlbumCover\AlbumCover\obj\Debug\Views\MainWindow.g.cs
 C:\Users\qndbs\source\repos\AlbumCover\AlbumCover\obj\Debug\App.g.cs
