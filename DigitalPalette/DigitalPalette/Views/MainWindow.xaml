@@ -6,13 +6,28 @@
         xmlns:local="clr-namespace:DigitalPalette"
         xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
         xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
+        xmlns:VM="clr-namespace:DigitalPalette.ViewModels"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="650">
+
+    <Window.DataContext>
+        <VM:MainViewModel/>
+    </Window.DataContext>
+
+    <!-- Window 종료 이벤트
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="Closed">
+            <ei:CallMethodAction TargetObject="{Binding}" MethodName="Window_Closed"/>
+        </i:EventTrigger>
+    </i:Interaction.Triggers>  -->
+
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="2*"/>
         </Grid.ColumnDefinitions>
+
+        <CheckBox Content="색 뽑기" IsChecked="{Binding isFollowWindowActive}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
 
         <Grid Grid.Column="1">
             <TabControl Grid.Column="1" Margin="10">
@@ -23,7 +38,34 @@
                             <RowDefinition Height="*"/>
                         </Grid.RowDefinitions>
 
-                        <ListView Margin="5"/>
+                        <ListView ItemsSource="{Binding ListColors}" Margin="5">
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <UniformGrid Columns="4" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10"/>
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Width="70" Margin="5">
+                                        <Border Background="{Binding solidColorbrush}" Width="50" Height="50" CornerRadius="50" HorizontalAlignment="Center"/>
+                                        <Viewbox Height="15" Margin="3">
+                                            <TextBlock HorizontalAlignment="Center" Text="{Binding hex}"/>
+                                        </Viewbox>
+                                        <Viewbox Height="15">
+                                            <StackPanel Orientation="Horizontal">
+                                                <TextBlock Text="RGB("/>
+                                                <TextBlock Text="{Binding r}"/>
+                                                <TextBlock Text=", "/>
+                                                <TextBlock Text="{Binding g}"/>
+                                                <TextBlock Text=", "/>
+                                                <TextBlock Text="{Binding b}"/>
+                                                <TextBlock Text=")"/>
+                                            </StackPanel>
+                                        </Viewbox>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
                     </Grid>
                 </TabItem>
 

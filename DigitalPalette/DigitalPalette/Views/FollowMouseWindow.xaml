@@ -4,8 +4,6 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:DigitalPalette.ViewModels"
-        xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
-        xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
         xmlns:VM="clr-namespace:DigitalPalette.ViewModels"
         mc:Ignorable="d"
         Closed="Window_Closed"
@@ -15,15 +13,13 @@
     <Window.DataContext>
         <VM:MainViewModel/>
     </Window.DataContext>
-
+    
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
-        <Border Height="50" Width="50" Background="{Binding nowColor.solidColorbrush}" CornerRadius="50">
-            <Image Stretch="Fill"/>
-        </Border>
+        <Border Height="50" Width="50" Background="{Binding nowColor.solidColorbrush}" CornerRadius="50"/>
 
         <StackPanel Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center">
             <Label Content="{Binding nowColor.r}"/>

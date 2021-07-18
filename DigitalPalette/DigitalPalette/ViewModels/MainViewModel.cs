@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Windows;
+using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Threading;
 
@@ -27,11 +29,33 @@ namespace DigitalPalette.ViewModels
         };
         #endregion
 
+        public bool isFollowWindowActive = false;
+
         private Models.ColorInfo _nowColor = new Models.ColorInfo();
         public Models.ColorInfo nowColor { get => _nowColor; set { _nowColor = value; OnPropertyChanged("nowColor"); } }
+
+        private ObservableCollection<Models.ColorInfo> _ListColors = new ObservableCollection<Models.ColorInfo>();
+        public ObservableCollection<Models.ColorInfo> ListColors { get => _ListColors; set { _ListColors = value; OnPropertyChanged("ListColors"); } }
         #endregion
 
         #region [COMMAND]
+        private RelayCommand _openBtnCmd;
+        public ICommand OpenBtnCmd { get { return this._openBtnCmd ?? (this._openBtnCmd = new RelayCommand(OepnFMW, CanExe)); } }
+        private void OepnFMW(object args)
+        {
+            if (!isFollowWindowActive)
+            {
+                Views.FollowMouseWindow f = new Views.FollowMouseWindow();
+                f.Show();
+
+                isFollowWindowActive = true;
+            }
+        }
+
+        public void Window_Closed(object sender, EventArgs e)
+        {
+            Application.Current.Shutdown();
+        }
 
         private bool CanExe(object args)
         {
@@ -41,6 +65,12 @@ namespace DigitalPalette.ViewModels
 
         public MainViewModel()
         {
+            ListColors.Clear();
+            ListColors.Add(new Models.ColorInfo() { solidColorbrush = new SolidColorBrush(Colors.Red) });
+            ListColors.Add(new Models.ColorInfo() { solidColorbrush = new SolidColorBrush(Colors.Orange) });
+            ListColors.Add(new Models.ColorInfo() { solidColorbrush = new SolidColorBrush(Colors.Yellow) });
+            ListColors.Add(new Models.ColorInfo() { solidColorbrush = new SolidColorBrush(Colors.Green) });
+            ListColors.Add(new Models.ColorInfo() { solidColorbrush = new SolidColorBrush(Colors.Blue) });
             DispatcherTimer timer = new DispatcherTimer();
             timer.Interval = TimeSpan.FromMilliseconds(1);
             timer.Tick += new EventHandler(MousePointerColor);
@@ -87,8 +117,6 @@ namespace DigitalPalette.ViewModels
             g.CopyFromScreen(x, y, 0, 0, sz);
             return bmp.GetPixel(0, 0);
         }
-
-
     }
     #endregion
 
