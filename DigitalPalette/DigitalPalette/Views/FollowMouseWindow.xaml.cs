@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Windows;
 using System.Windows.Forms;
-using System.Windows.Input;
 
 namespace DigitalPalette.Views
 {
@@ -10,11 +9,17 @@ namespace DigitalPalette.Views
     /// </summary>
     public partial class FollowMouseWindow : Window
     {
-        System.Timers.Timer timer = new System.Timers.Timer();
+        private System.Timers.Timer timer = new System.Timers.Timer();
+
         public FollowMouseWindow()
         {
             InitializeComponent();
+            Test();
+        }
 
+        #region 지금 안씀
+        private void Test()
+        {
             double _x = SystemParameters.VirtualScreenWidth / (Screen.AllScreens).Length;
             double _y = SystemParameters.VirtualScreenHeight;
 
@@ -22,9 +27,10 @@ namespace DigitalPalette.Views
 
             timer.Elapsed += delegate
             {
-                this.Dispatcher.Invoke(new Action(delegate
+                Dispatcher.Invoke(new Action(delegate
                 {
-                    Point pointToScreen = ViewModels.MainViewModel.GetMousePosition();
+                    var pointToScreen = Control.MousePosition;
+                    ViewModels.MainViewModel.nowPoint = new Point(pointToScreen.X, pointToScreen.Y);
 
                     double x = pointToScreen.X + 1.5 * margin;
                     double y = pointToScreen.Y + margin;
@@ -43,15 +49,18 @@ namespace DigitalPalette.Views
 
                     this.Left = x;
                     this.Top = y;
+
                 }));
             };
             timer.Interval = 1;
-            timer.Start();
+            // timer.Start();
         }
+        #endregion
 
         private void Window_Closed(object sender, EventArgs e)
         {
-            timer.Stop();
+            if(timer.Enabled)
+                timer.Stop();
         }
     }
 }
