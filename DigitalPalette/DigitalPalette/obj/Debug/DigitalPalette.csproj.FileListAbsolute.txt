@@ -48,3 +48,5 @@ D:\c#\DigitalPalette\DigitalPalette\bin\Debug\ko\Microsoft.Windows.Design.Extens
 D:\c#\DigitalPalette\DigitalPalette\bin\Debug\Microsoft.Expression.Interactions.xml
 D:\c#\DigitalPalette\DigitalPalette\bin\Debug\System.Windows.Interactivity.xml
 D:\c#\DigitalPalette\DigitalPalette\bin\Debug\Microsoft.Windows.Design.Interaction.dll
+D:\c#\DigitalPalette\DigitalPalette\obj\Debug\App.baml
+D:\c#\DigitalPalette\DigitalPalette\obj\Debug\Resources\MainDictionary.baml

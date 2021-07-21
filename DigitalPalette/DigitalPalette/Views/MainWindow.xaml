@@ -7,8 +7,9 @@
         xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
         xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
         xmlns:VM="clr-namespace:DigitalPalette.ViewModels"
-        mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="650">
+        Name="window" ResizeMode="NoResize"
+        mc:Ignorable="d" Background="WhiteSmoke"
+        Title="MainWindow" Height="450" Width="700">
 
     <Window.DataContext>
         <VM:MainViewModel/>
@@ -27,30 +28,153 @@
             <ColumnDefinition Width="2*"/>
         </Grid.ColumnDefinitions>
 
-        <CheckBox Content="색 뽑기" IsChecked="{Binding isFollowWindowActive}" HorizontalAlignment="Center" VerticalAlignment="Center">
-            <i:Interaction.Triggers>
-                <i:EventTrigger EventName="Checked">
-                    <ei:CallMethodAction TargetObject="{Binding}" MethodName="OepnFMW"/>
-                </i:EventTrigger>
-                <i:EventTrigger EventName="Unchecked">
-                    <ei:CallMethodAction TargetObject="{Binding}" MethodName="OepnFMW"/>
-                </i:EventTrigger>
-            </i:Interaction.Triggers>
-        </CheckBox>
+        <!-- LEFT -->
+        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+            <StackPanel.Resources>
+                <Style TargetType="Slider" BasedOn="{StaticResource ColorSlider}"/>
+                <Style TargetType="TextBox" BasedOn="{StaticResource ColorSliderTB}"/>
+            </StackPanel.Resources>
 
+            <ToggleButton Content="색 뽑기" IsChecked="{Binding isFollowWindowActive}" HorizontalAlignment="Center" Margin="10">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="Checked">
+                        <ei:CallMethodAction TargetObject="{Binding}" MethodName="OepnFMW"/>
+                    </i:EventTrigger>
+                    <i:EventTrigger EventName="Unchecked">
+                        <ei:CallMethodAction TargetObject="{Binding}" MethodName="OepnFMW"/>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </ToggleButton>
+
+            <Border Height="100" Width="100" Margin="10" CornerRadius="50">
+                <Border.Effect>
+                    <DropShadowEffect Direction="135" Color="White" Opacity="0.8" ShadowDepth="5"/>
+                </Border.Effect>
+
+                <Border Background="{Binding selectColor.solidColorbrush}" CornerRadius="50">
+                    <Border.Effect>
+                        <DropShadowEffect Direction="315" Color="Black" Opacity="0.2" ShadowDepth="5"/>
+                    </Border.Effect>
+                </Border>
+            </Border>
+
+            <!-- R -->
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="10">
+                <TextBlock Text="R : " VerticalAlignment="Center"/>
+                <Slider x:Name="red_S" Value="{Binding selectColor.r}">
+                    <Slider.Resources>
+                        <LinearGradientBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" StartPoint="0, 0" EndPoint="1, 1">
+                            <GradientStop Color="White" Offset="0"/>
+                            <GradientStop Color="Red" Offset="1"/>
+                        </LinearGradientBrush>
+                    </Slider.Resources>
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="ValueChanged">
+                            <ei:CallMethodAction TargetObject="{Binding}" MethodName="Slider_ValueChanged"/>
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                </Slider>
+                <TextBox x:Name="red_TB" Text="{Binding selectColor.r, Mode=TwoWay}">
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="PreviewTextInput">
+                            <ei:CallMethodAction TargetObject="{Binding}" MethodName="NumPreviewTextInput"/>
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                </TextBox>
+            </StackPanel>
+
+            <!-- G -->
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="10">
+                <TextBlock Text="G : "  VerticalAlignment="Center"/>
+                <Slider x:Name="green_S" Value="{Binding selectColor.g}">
+                    <Slider.Resources>
+                        <LinearGradientBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" StartPoint="0, 0" EndPoint="1, 1">
+                            <GradientStop Color="White" Offset="0"/>
+                            <GradientStop Color="Green" Offset="1"/>
+                        </LinearGradientBrush>
+                    </Slider.Resources>
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="ValueChanged">
+                            <ei:CallMethodAction TargetObject="{Binding}" MethodName="Slider_ValueChanged"/>
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                </Slider>
+                <TextBox x:Name="green_TB" Text="{Binding selectColor.g, Mode=TwoWay}">
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="PreviewTextInput">
+                            <ei:CallMethodAction TargetObject="{Binding}" MethodName="NumPreviewTextInput"/>
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                </TextBox>
+            </StackPanel>
+
+            <!-- B -->
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="10">
+                <TextBlock Text="B : " VerticalAlignment="Center"/>
+                <Slider x:Name="blue_S" Value="{Binding selectColor.b}">
+                    <Slider.Resources>
+                        <LinearGradientBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" StartPoint="0, 0" EndPoint="1, 1">
+                            <GradientStop Color="White" Offset="0"/>
+                            <GradientStop Color="Blue" Offset="1"/>
+                        </LinearGradientBrush>
+                    </Slider.Resources>
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="ValueChanged">
+                            <ei:CallMethodAction TargetObject="{Binding}" MethodName="Slider_ValueChanged"/>
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                </Slider>
+                <TextBox x:Name="blue_TB" Text="{Binding selectColor.b, Mode=TwoWay}">
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="PreviewTextInput">
+                            <ei:CallMethodAction TargetObject="{Binding}" MethodName="NumPreviewTextInput"/>
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                </TextBox>
+
+            </StackPanel>
+
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="10">
+                <TextBlock Text="Hex : #"/>
+                <TextBox Text="{Binding selectColor.hex, Mode=TwoWay}" Width=" 80" MaxLength="6" HorizontalContentAlignment="Center">
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="PreviewTextInput">
+                            <ei:CallMethodAction TargetObject="{Binding}" MethodName="HexNumPreviewTextInput"/>
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                </TextBox>
+            </StackPanel>
+
+            <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="10">
+                <Button Content="색 추가" Command="{Binding AddColorCmd}" />
+            </StackPanel>
+        </StackPanel>
+
+        <!-- RIGHT -->
         <Grid Grid.Column="1">
-            <TabControl Grid.Column="1" Margin="10">
-                <TabItem Header="저장한 색">
+            <TabControl Grid.Column="1" Margin="20">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="SelectionChanged">
+                        <ei:CallMethodAction TargetObject="{Binding}" MethodName="TabControl_SelectionChanged"/>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+                
+                <TabItem Header="지정한 색">
                     <Grid>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="3*"/>
                             <RowDefinition Height="*"/>
                         </Grid.RowDefinitions>
 
-                        <ListView ItemsSource="{Binding ListColors}" Margin="5">
+                        <ListView ItemsSource="{Binding ListColors}" Margin="5" SelectionMode="Extended">
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="SelectionChanged">
+                                    <ei:CallMethodAction TargetObject="{Binding}" MethodName="Tab1_LV_SelectionChanged"/>
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
                             <ItemsControl.ItemsPanel>
                                 <ItemsPanelTemplate>
-                                    <UniformGrid Columns="4" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10"/>
+                                    <UniformGrid Columns="4" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5"/>
                                 </ItemsPanelTemplate>
                             </ItemsControl.ItemsPanel>
                             <ListView.ItemTemplate>
@@ -74,11 +198,82 @@
                                     </StackPanel>
                                 </DataTemplate>
                             </ListView.ItemTemplate>
+                            <ListView.InputBindings>
+                                <KeyBinding Key="Delete" Command="{Binding DeleteListItemCmd}"/>
+                            </ListView.InputBindings>
                         </ListView>
+
+                        <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center">
+                            <Button Content="선택 전체 해제" VerticalAlignment="Center" Command="{Binding UnSelectItemsCmd}"/>
+                            <Button Content="색 모음 생성" VerticalAlignment="Center"/>
+                        </StackPanel> 
                     </Grid>
                 </TabItem>
 
                 <TabItem Header="투명도">
+                    <StackPanel Margin="10">
+                        <Button Content="배경색 선택" HorizontalAlignment="Center"/>
+                        <Grid Width="350" Height="250" Margin="10" Background="{Binding backgroundColor.solidColorbrush}">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+
+                            <!-- 왼쪽 10-50 -->
+                            <Grid Grid.Row="0">
+                                <Border Background="{Binding selectColor}" Opacity="0.1"/>
+                                <TextBlock Text="10%" Foreground="Black"/>
+                            </Grid>
+                            <Grid Grid.Row="1">
+                                <Border Background="{Binding selectColor}" Opacity="0.2"/>
+                                <TextBlock Text="20%" Foreground="Black"/>
+                            </Grid>
+                            <Grid Grid.Row="2">
+                                <Border Background="{Binding selectColor}" Opacity="0.3"/>
+                                <TextBlock Text="30%" Foreground="Black"/>
+                            </Grid>
+                            <Grid Grid.Row="3">
+                                <Border Grid.Row="2" Background="{Binding selectColor}" Opacity="0.4"/>
+                                <TextBlock Text="40%" Foreground="Black"/>
+                            </Grid>
+                            <Grid Grid.Row="4">
+                                <Border Grid.Row="2" Background="{Binding selectColor}" Opacity="0.5"/>
+                                <TextBlock Text="50%" Foreground="Black"/>
+                            </Grid>
+                            
+                            <!-- 왼쪽 60-100 -->
+                            <Grid Grid.Row="0" Grid.Column="1">
+                                <Border Background="{Binding selectColor}" Opacity="0.6"/>
+                                <TextBlock Text="60%" Foreground="Black"/>
+                            </Grid>
+                            <Grid Grid.Row="1" Grid.Column="1">
+                                <Border Background="{Binding selectColor}" Opacity="0.7"/>
+                                <TextBlock Text="70%" Foreground="Black"/>
+                            </Grid>
+                            <Grid Grid.Row="2" Grid.Column="1">
+                                <Border Background="{Binding selectColor}" Opacity="0.8"/>
+                                <TextBlock Text="80%" Foreground="Black"/>
+                            </Grid>
+                            <Grid Grid.Row="3" Grid.Column="1">
+                                <Border Background="{Binding selectColor}" Opacity="0.9"/>
+                                <TextBlock Text="90%" Foreground="Black"/>
+                            </Grid>
+                            <StackPanel Grid.Row="4" Grid.Column="1">
+                                <Border Background="{Binding selectColor}" Opacity="1"/>
+                                <TextBlock Text="100%" Foreground="Black"/>
+                            </StackPanel>
+
+
+                        </Grid>
+
+                    </StackPanel>
                 </TabItem>
 
                 <TabItem Header="색 모음">

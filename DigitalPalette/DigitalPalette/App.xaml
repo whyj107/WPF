@@ -4,6 +4,6 @@
              xmlns:local="clr-namespace:DigitalPalette"
              StartupUri="/Views/MainWindow.xaml">
     <Application.Resources>
-         
+        <ResourceDictionary Source="pack://application:,,,/Resources/MainDictionary.xaml"/>
     </Application.Resources>
 </Application>

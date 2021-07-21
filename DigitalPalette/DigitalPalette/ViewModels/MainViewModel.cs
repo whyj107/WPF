@@ -1,8 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
+using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
+using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Threading;
 
@@ -11,15 +15,62 @@ namespace DigitalPalette.ViewModels
     #region [TAB1]
     public partial class MainViewModel : VMBase
     {
-        #region [Variable]
+        #region [변수]
         private ObservableCollection<Models.ColorInfo> _ListColors = new ObservableCollection<Models.ColorInfo>();
         public ObservableCollection<Models.ColorInfo> ListColors { get => _ListColors; set { _ListColors = value; OnPropertyChanged("ListColors"); } }
+
+        private List<int> SelectedItemsIdx = new List<int>();
+
+        private bool deleting = false;
+
+        ListView lv;
         #endregion
 
-        #region [COMMAND]        
-        private bool CanExe(object args)
+        #region [COMMAND]
+        private RelayCommand _deleteListItemCmd;
+        public ICommand DeleteListItemCmd { get { return _deleteListItemCmd ?? (_deleteListItemCmd = new RelayCommand(DeleteListItem, CanExe)); } }
+        private void DeleteListItem(object sender)
         {
-            return true;
+            deleting = true;
+            if(SelectedItemsIdx.Count > 0)
+            {
+                foreach(int idx in SelectedItemsIdx)
+                {
+                    ListColors.RemoveAt(idx);
+                }
+            }
+            deleting = false;
+        }
+
+        private RelayCommand _unSelectItemsCmd;
+        public ICommand UnSelectItemsCmd { get { return _unSelectItemsCmd ?? (_unSelectItemsCmd = new RelayCommand(UnSelectAllItems, CanExe)); } }
+        private void UnSelectAllItems(object sender)
+        {
+            if(lv!= null)
+            {
+                if (lv.SelectedItems.Count > 0)
+                {
+                    lv.UnselectAll();
+                }
+            }
+        }
+
+        public void Tab1_LV_SelectionChanged(object sender, RoutedEventArgs e)
+        {
+            if (!deleting)
+            {
+                lv = sender as ListView;
+                SelectedItemsIdx.Clear();
+                if (lv != null)
+                {
+                    foreach (Models.ColorInfo item in lv.SelectedItems)
+                    {
+                        SelectedItemsIdx.Add(lv.Items.IndexOf(item));
+                        selectColor = item;
+                    }
+                    SelectedItemsIdx.Reverse();
+                }
+            }
         }
         #endregion
 
@@ -30,7 +81,10 @@ namespace DigitalPalette.ViewModels
     #region [TAB2]
     public partial class MainViewModel : VMBase
     {
-
+        #region [변수]
+        private Models.ColorInfo _backgroundColor = new Models.ColorInfo() { solidColorbrush = new SolidColorBrush(Colors.White) };
+        public Models.ColorInfo backgroundColor { get => _backgroundColor; set { _backgroundColor = value; OnPropertyChanged("backgroundColor"); } }
+        #endregion
     }
     #endregion
 
@@ -42,10 +96,11 @@ namespace DigitalPalette.ViewModels
     }
     #endregion
 
+
     #region [COMMON]
     public partial class MainViewModel : VMBase
     {
-        #region [Variable]
+        #region [변수]
         // 포인터 위치를 나타내기 위한 타이머
         private DispatcherTimer timer = new DispatcherTimer();
 
@@ -57,6 +112,12 @@ namespace DigitalPalette.ViewModels
 
         // FollowMouseWindow 화면 창
         Views.FollowMouseWindow f;
+        // FollowMouseWindow 화면 창의 왼쪽과 위쪽
+        private String _left = "0";
+        public String left { get => _left; set { _left = value; OnPropertyChanged("left"); } }
+
+        private String _top = "0";
+        public String top { get => _top; set { _top = value; OnPropertyChanged("top"); } }
         // FollowMouseWindow 화면이 존재 및 CheckBox Check 확인 변수
         private bool _isFollowWindowActive = false;
         public bool isFollowWindowActive { get => _isFollowWindowActive; set { _isFollowWindowActive = value; OnPropertyChanged("isFollowWindowActive"); } }
@@ -64,16 +125,19 @@ namespace DigitalPalette.ViewModels
         // 포인터 위치의 색
         private Models.ColorInfo _nowColor = new Models.ColorInfo();
         public Models.ColorInfo nowColor { get => _nowColor; set { _nowColor = value; OnPropertyChanged("nowColor"); } }
+
+        private Models.ColorInfo _selectColor = new Models.ColorInfo();
+        public Models.ColorInfo selectColor { get => _selectColor; set { _selectColor = value; OnPropertyChanged("selectColor"); } }
         #endregion
 
         #region [COMMAND]
         public void OepnFMW(object sender, RoutedEventArgs e)
         {
-            CheckBox cb = sender as CheckBox;
-            if (cb.IsChecked == true)
+            ToggleButton tb = sender as ToggleButton;
+            if (tb.IsChecked == true)
             {
                 _listener = new LowLevelKeyboardListener();
-                _listener.doEvent += SaveColor;
+                _listener.doEvent += PickColor;
                 _listener.HookKeyboard();
 
                 f = new Views.FollowMouseWindow();
@@ -84,14 +148,6 @@ namespace DigitalPalette.ViewModels
                 f.Close();
                 _listener.UnHookKeyboard();
             }
-        }
-
-        /// <summary>
-        /// 마우스 후킹에서 진행되는 이벤트 함수입니다.
-        /// </summary>
-        private void SaveColor()
-        {
-            ListColors.Add(nowColor);
         }
 
         public void Window_Closed(object sender, EventArgs e)
@@ -108,23 +164,121 @@ namespace DigitalPalette.ViewModels
 
             Application.Current.Shutdown();
         }
+
+        public void Slider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            Slider s = sender as Slider;
+            if (s.Name.Equals("red_S"))
+            {
+                selectColor = new Models.ColorInfo()
+                {
+                    solidColorbrush = new SolidColorBrush(Color.FromRgb((byte)s.Value, (byte)selectColor.g, (byte)selectColor.b))
+                };
+            }
+            else if (s.Name.Equals("green_S"))
+            {
+                selectColor = new Models.ColorInfo()
+                {
+                    solidColorbrush = new SolidColorBrush(Color.FromRgb((byte)selectColor.r, (byte)s.Value, (byte)selectColor.b))
+                };
+            }
+            else if (s.Name.Equals("blue_S"))
+            {
+                selectColor = new Models.ColorInfo()
+                {
+                    solidColorbrush = new SolidColorBrush(Color.FromRgb((byte)selectColor.r, (byte)selectColor.g, (byte)s.Value))
+                };
+            }
+        }
+
+        private RelayCommand _addColorCmd;
+        public ICommand AddColorCmd { get { return _addColorCmd ?? (_addColorCmd = new RelayCommand(AddColor, CanExe)); } }
+        private void AddColor(object args)
+        {
+            ListColors.Add(selectColor);
+        }
+
+        public void NumPreviewTextInput(object sender, TextCompositionEventArgs e)
+        {
+            Regex regex = new Regex("[^0-9]+");
+            e.Handled = regex.IsMatch(e.Text);
+        }
+        public void HexNumPreviewTextInput(object sender, TextCompositionEventArgs e)
+        {
+            Regex regex = new Regex("[^0-9a-fA-F]+");
+            e.Handled = regex.IsMatch(e.Text);
+
+            TextBox tb = sender as TextBox;
+            if(tb.Text.Length == 6)
+            {
+                byte[] rgb = ConvertHexStringToByte(tb.Text);
+                selectColor = new Models.ColorInfo()
+                {
+                    solidColorbrush = new SolidColorBrush(Color.FromRgb(rgb[0], rgb[1], rgb[2]))
+                };
+            }
+            tb.Select(tb.Text.Length, 0);
+        }
+        public void TabControl_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        {
+            TabControl tc = sender as TabControl;
+            Console.WriteLine(tc.SelectedIndex);
+        }
+        private bool CanExe(object args)
+        {
+            return true;
+        }
         #endregion
 
+        #region [함수]
         public MainViewModel()
         {
             ListColors.Clear();
 
             timer.Interval = TimeSpan.FromMilliseconds(1);
-            timer.Tick += new EventHandler(MousePointerColor);
+            timer.Tick += new EventHandler(doTimer);
             timer.Start();
         }
 
-        private String _left = "0";
-        public String left { get => _left; set { _left = value; OnPropertyChanged("left"); } }
+        /// <summary>
+        /// 16진수문자열을 byte[]로 변경하는 함수입니다.
+        /// </summary>
+        /// <param name="str"></param>
+        /// <returns></returns>
+        public static byte[] ConvertHexStringToByte(string str)
+        {
+            byte[] result = new byte[str.Length / 2];
 
-        private String _top = "0";
-        public String top { get => _top; set { _top = value; OnPropertyChanged("top"); } }
-        private void Test()
+            for(int i=0; i<result.Length; i++)
+            {
+                result[i] = Convert.ToByte(str.Substring(i * 2, 2), 16);
+            }
+            return result;
+        }
+
+        /// <summary>
+        /// 마우스 후킹에서 진행되는 이벤트 함수입니다.
+        /// </summary>
+        private void PickColor()
+        {
+            ListColors.Add(nowColor);
+        }
+
+        /// <summary>
+        /// 타이머에서 동작시킬 이벤트 함수입니다.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void doTimer(object sender, EventArgs e)
+        {
+            SetFollowMouseWindowPosition();
+            MousePointerColor();
+        }
+
+        /// <summary>
+        /// FollowMouseWindow의 위치 설정하는 함수입니다.
+        /// </summary>
+        private void SetFollowMouseWindowPosition()
         {
             int height = 100;
             int width = 150;
@@ -160,9 +314,8 @@ namespace DigitalPalette.ViewModels
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        public void MousePointerColor(object sender, EventArgs e)
+        private void MousePointerColor()
         {
-            Test();
             // Console.WriteLine(string.Format("{0}, {1}", nowPoint.X, nowPoint.Y));
 
             System.Drawing.Color tmp = ScreenColor((int)nowPoint.X, (int)nowPoint.Y);
@@ -172,7 +325,6 @@ namespace DigitalPalette.ViewModels
             };
         }
 
-        #region 함수
         /// <summary>
         /// 포인터의 색 추출하는 함수입니다.
         /// </summary>

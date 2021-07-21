@@ -16,15 +16,33 @@
     </Window.DataContext>
 
     <Grid>
-        <Viewbox  HorizontalAlignment="Center" Margin="20 30 0 10">
-            <StackPanel Background="White" Width="100">
-                <TextBlock Text="{Binding nowColor.r}" HorizontalAlignment="Center"/>
-                <TextBlock Text="{Binding nowColor.g}" HorizontalAlignment="Center"/>
-                <TextBlock Text="{Binding nowColor.b}" HorizontalAlignment="Center"/>
-                <TextBlock Text="{Binding nowColor.hex}" HorizontalAlignment="Center"/>
-            </StackPanel>
-        </Viewbox>
-        
-        <Border VerticalAlignment="Top" HorizontalAlignment="Left" Height="50" Width="50" Margin="10" Background="{Binding nowColor.solidColorbrush}" CornerRadius="50"/>
+        <Border  HorizontalAlignment="Center" Margin="20 30 0 10" BorderThickness="1" BorderBrush="Black">
+            <Viewbox>
+                <StackPanel Background="white" Width="100">
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                        <TextBlock Text="R : "/>
+                        <TextBlock Text="{Binding nowColor.r}"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                        <TextBlock Text="G : "/>
+                        <TextBlock Text="{Binding nowColor.g}"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                        <TextBlock Text="B : " HorizontalAlignment="Center"/>
+                        <TextBlock Text="{Binding nowColor.b}" HorizontalAlignment="Center"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                        <TextBlock Text="Hex : "/>
+                        <TextBlock Text="{Binding nowColor.hex}"/>
+                    </StackPanel>
+                </StackPanel>
+            </Viewbox>
+        </Border>
+
+        <Border VerticalAlignment="Top" HorizontalAlignment="Left" Height="50" Width="50" Margin="10" Background="{Binding nowColor.solidColorbrush}" CornerRadius="50">
+            <Border.Effect>
+                <DropShadowEffect Direction="315" ShadowDepth="5" Color="#161b1d" Opacity="0.23" BlurRadius="10"/>
+            </Border.Effect>
+        </Border>
     </Grid>
 </Window>
