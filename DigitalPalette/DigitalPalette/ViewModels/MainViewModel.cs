@@ -82,9 +82,46 @@ namespace DigitalPalette.ViewModels
     public partial class MainViewModel : VMBase
     {
         #region [변수]
-        private Models.ColorInfo _backgroundColor = new Models.ColorInfo() { solidColorbrush = new SolidColorBrush(Colors.White) };
+        private Models.ColorInfo _backgroundColor = new Models.ColorInfo() { solidColorbrush = new SolidColorBrush(Colors.Black) };
         public Models.ColorInfo backgroundColor { get => _backgroundColor; set { _backgroundColor = value; OnPropertyChanged("backgroundColor"); } }
+
+        private Models.ColorInfo[] _opacColor = new Models.ColorInfo[9];
+        public Models.ColorInfo[] OpacColor { get => _opacColor; set { OnPropertyChanged("OpacColor"); } }
+
+        private SolidColorBrush[] _opacForeColor = new SolidColorBrush[10];
+        public SolidColorBrush[] OpacForeColor { get => _opacForeColor; set { OnPropertyChanged("OpacForeColor"); } }
         #endregion
+
+        private void CalcOpacityColor()
+        {
+            _opacColor = new Models.ColorInfo[9];
+
+            for(int i=1; i<10; i++)
+            {
+                Color s = Color.FromRgb((byte)selectColor.r, (byte)selectColor.g, (byte)selectColor.b);
+                Color b = Color.FromRgb((byte)backgroundColor.r, (byte)backgroundColor.g, (byte)backgroundColor.b);
+                Color tmp = Blend(s, b, i * 0.1);
+
+                _opacColor[i - 1] = new Models.ColorInfo() { solidColorbrush = new SolidColorBrush(tmp)};
+                _opacForeColor[i - 1] = new SolidColorBrush(Color.FromRgb((byte)(255 - tmp.R), (byte)(255 - tmp.G), (byte)(255 - tmp.B)));
+            }
+
+            _opacForeColor[9] = new SolidColorBrush(Color.FromRgb((byte)(255-selectColor.r), (byte)(255 - selectColor.g), (byte)(255 - selectColor.b)));
+
+            OpacColor = _opacColor;
+            OpacForeColor = _opacForeColor;
+        }
+
+        //https://stackoverflow.com/questions/3722307/is-there-an-easy-way-to-blend-two-system-drawing-color-values
+        private Color Blend(Color color, Color backColor, double amount)
+        {
+            byte r = (byte)((color.R * amount) + backColor.R * (1 - amount));
+            byte g = (byte)((color.G * amount) + backColor.G * (1 - amount));
+            byte b = (byte)((color.B * amount) + backColor.B * (1 - amount));
+            return Color.FromRgb(r, g, b);
+        }
+
+
     }
     #endregion
 
@@ -127,7 +164,7 @@ namespace DigitalPalette.ViewModels
         public Models.ColorInfo nowColor { get => _nowColor; set { _nowColor = value; OnPropertyChanged("nowColor"); } }
 
         private Models.ColorInfo _selectColor = new Models.ColorInfo();
-        public Models.ColorInfo selectColor { get => _selectColor; set { _selectColor = value; OnPropertyChanged("selectColor"); } }
+        public Models.ColorInfo selectColor { get => _selectColor; set { _selectColor = value; CalcOpacityColor(); OnPropertyChanged("selectColor"); } }
         #endregion
 
         #region [COMMAND]
@@ -222,7 +259,11 @@ namespace DigitalPalette.ViewModels
         public void TabControl_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
             TabControl tc = sender as TabControl;
-            Console.WriteLine(tc.SelectedIndex);
+            
+            if(tc.SelectedIndex == 1)
+            {
+                CalcOpacityColor();
+            }
         }
         private bool CanExe(object args)
         {
