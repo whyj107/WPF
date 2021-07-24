@@ -103,21 +103,20 @@ namespace DigitalPalette.ViewModels
                 Color tmp = Blend(s, b, i * 0.1);
 
                 _opacColor[i - 1] = new Models.ColorInfo() { solidColorbrush = new SolidColorBrush(tmp)};
-                _opacForeColor[i - 1] = new SolidColorBrush(Color.FromRgb((byte)(255 - tmp.R), (byte)(255 - tmp.G), (byte)(255 - tmp.B)));
+                _opacForeColor[i - 1] = new SolidColorBrush(_opacColor[i-1].BlackOrWhite());
             }
 
-            _opacForeColor[9] = new SolidColorBrush(Color.FromRgb((byte)(255-selectColor.r), (byte)(255 - selectColor.g), (byte)(255 - selectColor.b)));
+            _opacForeColor[9] = new SolidColorBrush(selectColor.BlackOrWhite());
 
             OpacColor = _opacColor;
             OpacForeColor = _opacForeColor;
         }
 
-        //https://stackoverflow.com/questions/3722307/is-there-an-easy-way-to-blend-two-system-drawing-color-values
-        private Color Blend(Color color, Color backColor, double amount)
+        private Color Blend(Color color, Color backColor, double alpha)
         {
-            byte r = (byte)((color.R * amount) + backColor.R * (1 - amount));
-            byte g = (byte)((color.G * amount) + backColor.G * (1 - amount));
-            byte b = (byte)((color.B * amount) + backColor.B * (1 - amount));
+            byte r = (byte)((color.R * alpha) + backColor.R * (1 - alpha));
+            byte g = (byte)((color.G * alpha) + backColor.G * (1 - alpha));
+            byte b = (byte)((color.B * alpha) + backColor.B * (1 - alpha));
             return Color.FromRgb(r, g, b);
         }
 
