@@ -82,7 +82,7 @@ namespace DigitalPalette.ViewModels
     public partial class MainViewModel : VMBase
     {
         #region [변수]
-        private Models.ColorInfo _backgroundColor = new Models.ColorInfo() { solidColorbrush = new SolidColorBrush(Colors.Black) };
+        private Models.ColorInfo _backgroundColor = new Models.ColorInfo() { solidColorbrush = new SolidColorBrush(Colors.White) };
         public Models.ColorInfo backgroundColor { get => _backgroundColor; set { _backgroundColor = value; OnPropertyChanged("backgroundColor"); } }
 
         private Models.ColorInfo[] _opacColor = new Models.ColorInfo[9];
@@ -92,6 +92,22 @@ namespace DigitalPalette.ViewModels
         public SolidColorBrush[] OpacForeColor { get => _opacForeColor; set { OnPropertyChanged("OpacForeColor"); } }
         #endregion
 
+        #region [COMMAND]
+        private RelayCommand _colorPickCmd;
+        public ICommand ColorPickCmd { get { return _colorPickCmd ?? (_colorPickCmd = new RelayCommand(ColorPick, CanExe)); } }
+        private void ColorPick(object sender)
+        {
+            System.Windows.Forms.ColorDialog cd = new System.Windows.Forms.ColorDialog();
+            if(cd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                backgroundColor = new Models.ColorInfo()
+                {
+                    solidColorbrush = new SolidColorBrush(Color.FromRgb(cd.Color.R, cd.Color.G, cd.Color.B))
+                };
+            }
+            CalcOpacityColor();
+        }
+
         private void CalcOpacityColor()
         {
             _opacColor = new Models.ColorInfo[9];
@@ -100,7 +116,7 @@ namespace DigitalPalette.ViewModels
             {
                 Color s = Color.FromRgb((byte)selectColor.r, (byte)selectColor.g, (byte)selectColor.b);
                 Color b = Color.FromRgb((byte)backgroundColor.r, (byte)backgroundColor.g, (byte)backgroundColor.b);
-                Color tmp = Blend(s, b, i * 0.1);
+                Color tmp = Blend(s, b, i * 0.1f);
 
                 _opacColor[i - 1] = new Models.ColorInfo() { solidColorbrush = new SolidColorBrush(tmp)};
                 _opacForeColor[i - 1] = new SolidColorBrush(_opacColor[i-1].BlackOrWhite());
@@ -112,15 +128,14 @@ namespace DigitalPalette.ViewModels
             OpacForeColor = _opacForeColor;
         }
 
-        private Color Blend(Color color, Color backColor, double alpha)
+        private Color Blend(Color color, Color backColor, float alpha)
         {
-            byte r = (byte)((color.R * alpha) + backColor.R * (1 - alpha));
-            byte g = (byte)((color.G * alpha) + backColor.G * (1 - alpha));
-            byte b = (byte)((color.B * alpha) + backColor.B * (1 - alpha));
+            byte r = (byte)((color.R * alpha) + (backColor.R * (1 - alpha)));
+            byte g = (byte)((color.G * alpha) + (backColor.G * (1 - alpha)));
+            byte b = (byte)((color.B * alpha) + (backColor.B * (1 - alpha)));
             return Color.FromRgb(r, g, b);
         }
-
-
+        #endregion
     }
     #endregion
 

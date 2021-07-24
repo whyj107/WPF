@@ -212,7 +212,7 @@
 
                 <TabItem Header="투명도">
                     <StackPanel Margin="10">
-                        <Button Content="배경색 선택" HorizontalAlignment="Center"/>
+                        <Button Content="배경색 선택" HorizontalAlignment="Center" Command="{Binding ColorPickCmd}"/>
                         <Grid Width="350" Height="250" Margin="10" Background="{Binding backgroundColor.solidColorbrush}">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*"/>
@@ -225,18 +225,17 @@
                                 <RowDefinition Height="*"/>
                                 <RowDefinition Height="*"/>
                             </Grid.RowDefinitions>
-
                             <Grid.Resources>
                                 <Style TargetType="Border">
                                     <Setter Property="Background" Value="{Binding selectColor.solidColorbrush}"/>
                                 </Style>
                                 <Style TargetType="TextBlock">
-                                    <Setter Property="Foreground" Value="Black"/>
                                     <Setter Property="FontWeight" Value="ExtraBold"/>
                                 </Style>
                             </Grid.Resources>
+                            
                             <!-- 왼쪽 10-50 -->
-                            <Grid Grid.Row="0" Background="{Binding OpacColor[0].hex, Mode=OneWayToSource}">
+                            <Grid Grid.Row="0">
                                 <Border Opacity="0.1"/>
                                 <TextBlock Text="10%" Foreground="{Binding OpacForeColor[0]}"/>
                                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
@@ -244,6 +243,7 @@
                                     <TextBlock Text="{Binding OpacColor[0].hex}" Foreground="{Binding OpacForeColor[0]}"/>
                                 </StackPanel>
                             </Grid>
+                            
                             <Grid Grid.Row="1">
                                 <Border Opacity="0.2"/>
                                 <TextBlock Text="20%" Foreground="{Binding OpacForeColor[1]}"/>
@@ -252,6 +252,7 @@
                                     <TextBlock Text="{Binding OpacColor[1].hex}" Foreground="{Binding OpacForeColor[1]}"/>
                                 </StackPanel>
                             </Grid>
+                            
                             <Grid Grid.Row="2">
                                 <Border Opacity="0.3"/>
                                 <TextBlock Text="30%" Foreground="{Binding OpacForeColor[2]}"/>
@@ -260,6 +261,7 @@
                                     <TextBlock Text="{Binding OpacColor[2].hex}" Foreground="{Binding OpacForeColor[2]}"/>
                                 </StackPanel>
                             </Grid>
+                            
                             <Grid Grid.Row="3">
                                 <Border Opacity="0.4"/>
                                 <TextBlock Text="40%" Foreground="{Binding OpacForeColor[3]}"/>
@@ -268,6 +270,7 @@
                                     <TextBlock Text="{Binding OpacColor[3].hex}" Foreground="{Binding OpacForeColor[3]}"/>
                                 </StackPanel>
                             </Grid>
+                            
                             <Grid Grid.Row="4">
                                 <Border Opacity="0.5"/>
                                 <TextBlock Text="50%" Foreground="{Binding OpacForeColor[4]}"/>
@@ -276,7 +279,7 @@
                                     <TextBlock Text="{Binding OpacColor[4].hex}" Foreground="{Binding OpacForeColor[4]}"/>
                                 </StackPanel>
                             </Grid>
-                            
+
                             <!-- 왼쪽 60-100 -->
                             <Grid Grid.Row="0" Grid.Column="1">
                                 <Border Opacity="0.6" />
@@ -286,6 +289,7 @@
                                     <TextBlock Text="{Binding OpacColor[5].hex}"  Foreground="{Binding OpacForeColor[5]}"/>
                                 </StackPanel>
                             </Grid>
+                            
                             <Grid Grid.Row="1" Grid.Column="1">
                                 <Border Opacity="0.7"/>
                                 <TextBlock Text="70%" Foreground="{Binding OpacForeColor[6]}" />
@@ -294,6 +298,7 @@
                                     <TextBlock Text="{Binding OpacColor[6].hex}"  Foreground="{Binding OpacForeColor[6]}"/>
                                 </StackPanel>
                             </Grid>
+                            
                             <Grid Grid.Row="2" Grid.Column="1">
                                 <Border Opacity="0.8"/>
                                 <TextBlock Text="80%" Foreground="{Binding OpacForeColor[7]}"/>
@@ -302,6 +307,7 @@
                                     <TextBlock Text="{Binding OpacColor[7].hex}"  Foreground="{Binding OpacForeColor[7]}"/>
                                 </StackPanel>
                             </Grid>
+                            
                             <Grid Grid.Row="3" Grid.Column="1">
                                 <Border Opacity="0.9"/>
                                 <TextBlock Text="90%" Foreground="{Binding OpacForeColor[8]}"/>
@@ -310,6 +316,7 @@
                                     <TextBlock Text="{Binding OpacColor[8].hex}" Foreground="{Binding OpacForeColor[8]}"/>
                                 </StackPanel>
                             </Grid>
+                            
                             <Grid Grid.Row="4" Grid.Column="1">
                                 <Border Opacity="1"/>
                                 <TextBlock Text="100%" Foreground="{Binding OpacForeColor[9]}"/>
@@ -318,10 +325,7 @@
                                     <TextBlock Text="{Binding selectColor.hex}" Foreground="{Binding OpacForeColor[9]}"/>
                                 </StackPanel>
                             </Grid>
-
-
                         </Grid>
-
                     </StackPanel>
                 </TabItem>
 
