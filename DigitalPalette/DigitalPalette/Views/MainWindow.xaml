@@ -150,6 +150,32 @@
             </StackPanel>
         </StackPanel>
 
+        <!-- 색 모음 일 경우만 나타도록 설정 -->
+        <ListView Height="370" Margin="10" Visibility="{Binding leftLV}" ItemsSource="{Binding ColorChipList}" SelectedItem="{Binding SelectedChip, Mode=TwoWay}">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Horizontal" Margin="5">
+                        <Border Width="50" Height="50" CornerRadius="50" HorizontalAlignment="Center">
+                            <Border.Effect>
+                                <DropShadowEffect Direction="135" Color="White" Opacity="0.8" ShadowDepth="2"/>
+                            </Border.Effect>
+
+                            <Border Background="{Binding idxColor.solidColorbrush}" CornerRadius="50">
+                                <Border.Effect>
+                                    <DropShadowEffect Direction="315" Color="Black" Opacity="0.2" ShadowDepth="2"/>
+                                </Border.Effect>
+                            </Border>
+                        </Border>
+                        <StackPanel VerticalAlignment="Center" Margin="10">
+                            <Viewbox Height="15" Margin="3">
+                                <TextBlock Text="{Binding name}"/>
+                            </Viewbox>
+                        </StackPanel>
+                    </StackPanel>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+
         <!-- RIGHT -->
         <Grid Grid.Column="1">
             <TabControl Grid.Column="1" Margin="20">
@@ -169,7 +195,7 @@
                         <ListView ItemsSource="{Binding ListColors}" Margin="5" SelectionMode="Extended">
                             <i:Interaction.Triggers>
                                 <i:EventTrigger EventName="SelectionChanged">
-                                    <ei:CallMethodAction TargetObject="{Binding}" MethodName="Tab1_LV_SelectionChanged"/>
+                                    <ei:CallMethodAction TargetObject="{Binding}" MethodName="Tab0_LV_SelectionChanged"/>
                                 </i:EventTrigger>
                             </i:Interaction.Triggers>
                             <ItemsControl.ItemsPanel>
@@ -180,7 +206,17 @@
                             <ListView.ItemTemplate>
                                 <DataTemplate>
                                     <StackPanel Width="70" Margin="5">
-                                        <Border Background="{Binding solidColorbrush}" Width="50" Height="50" CornerRadius="50" HorizontalAlignment="Center"/>
+                                        <Border Width="50" Height="50" CornerRadius="50" HorizontalAlignment="Center">
+                                            <Border.Effect>
+                                                <DropShadowEffect Direction="135" Color="White" Opacity="0.8" ShadowDepth="2"/>
+                                            </Border.Effect>
+
+                                            <Border Background="{Binding solidColorbrush}" CornerRadius="50">
+                                                <Border.Effect>
+                                                    <DropShadowEffect Direction="315" Color="Black" Opacity="0.2" ShadowDepth="2"/>
+                                                </Border.Effect>
+                                            </Border>
+                                        </Border>
                                         <Viewbox Height="15" Margin="3">
                                             <TextBlock HorizontalAlignment="Center" Text="{Binding hex}"/>
                                         </Viewbox>
@@ -199,7 +235,7 @@
                                 </DataTemplate>
                             </ListView.ItemTemplate>
                             <ListView.InputBindings>
-                                <KeyBinding Key="Delete" Command="{Binding DeleteListItemCmd}"/>
+                                <KeyBinding Key="Delete" Command="{Binding Tab0DeleteListItemCmd}"/>
                             </ListView.InputBindings>
                         </ListView>
 
@@ -212,7 +248,7 @@
 
                 <TabItem Header="투명도">
                     <StackPanel Margin="10">
-                        <Button Content="배경색 선택" HorizontalAlignment="Center"/>
+                        <Button Content="배경색 선택" HorizontalAlignment="Center" Command="{Binding ColorPickCmd}"/>
                         <Grid Width="350" Height="250" Margin="10" Background="{Binding backgroundColor.solidColorbrush}">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*"/>
@@ -225,18 +261,17 @@
                                 <RowDefinition Height="*"/>
                                 <RowDefinition Height="*"/>
                             </Grid.RowDefinitions>
-
                             <Grid.Resources>
                                 <Style TargetType="Border">
                                     <Setter Property="Background" Value="{Binding selectColor.solidColorbrush}"/>
                                 </Style>
                                 <Style TargetType="TextBlock">
-                                    <Setter Property="Foreground" Value="Black"/>
                                     <Setter Property="FontWeight" Value="ExtraBold"/>
                                 </Style>
                             </Grid.Resources>
+                            
                             <!-- 왼쪽 10-50 -->
-                            <Grid Grid.Row="0" Background="{Binding OpacColor[0].hex, Mode=OneWayToSource}">
+                            <Grid Grid.Row="0">
                                 <Border Opacity="0.1"/>
                                 <TextBlock Text="10%" Foreground="{Binding OpacForeColor[0]}"/>
                                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
@@ -244,6 +279,7 @@
                                     <TextBlock Text="{Binding OpacColor[0].hex}" Foreground="{Binding OpacForeColor[0]}"/>
                                 </StackPanel>
                             </Grid>
+                            
                             <Grid Grid.Row="1">
                                 <Border Opacity="0.2"/>
                                 <TextBlock Text="20%" Foreground="{Binding OpacForeColor[1]}"/>
@@ -252,6 +288,7 @@
                                     <TextBlock Text="{Binding OpacColor[1].hex}" Foreground="{Binding OpacForeColor[1]}"/>
                                 </StackPanel>
                             </Grid>
+                            
                             <Grid Grid.Row="2">
                                 <Border Opacity="0.3"/>
                                 <TextBlock Text="30%" Foreground="{Binding OpacForeColor[2]}"/>
@@ -260,6 +297,7 @@
                                     <TextBlock Text="{Binding OpacColor[2].hex}" Foreground="{Binding OpacForeColor[2]}"/>
                                 </StackPanel>
                             </Grid>
+                            
                             <Grid Grid.Row="3">
                                 <Border Opacity="0.4"/>
                                 <TextBlock Text="40%" Foreground="{Binding OpacForeColor[3]}"/>
@@ -268,6 +306,7 @@
                                     <TextBlock Text="{Binding OpacColor[3].hex}" Foreground="{Binding OpacForeColor[3]}"/>
                                 </StackPanel>
                             </Grid>
+                            
                             <Grid Grid.Row="4">
                                 <Border Opacity="0.5"/>
                                 <TextBlock Text="50%" Foreground="{Binding OpacForeColor[4]}"/>
@@ -276,7 +315,7 @@
                                     <TextBlock Text="{Binding OpacColor[4].hex}" Foreground="{Binding OpacForeColor[4]}"/>
                                 </StackPanel>
                             </Grid>
-                            
+
                             <!-- 왼쪽 60-100 -->
                             <Grid Grid.Row="0" Grid.Column="1">
                                 <Border Opacity="0.6" />
@@ -286,6 +325,7 @@
                                     <TextBlock Text="{Binding OpacColor[5].hex}"  Foreground="{Binding OpacForeColor[5]}"/>
                                 </StackPanel>
                             </Grid>
+                            
                             <Grid Grid.Row="1" Grid.Column="1">
                                 <Border Opacity="0.7"/>
                                 <TextBlock Text="70%" Foreground="{Binding OpacForeColor[6]}" />
@@ -294,6 +334,7 @@
                                     <TextBlock Text="{Binding OpacColor[6].hex}"  Foreground="{Binding OpacForeColor[6]}"/>
                                 </StackPanel>
                             </Grid>
+                            
                             <Grid Grid.Row="2" Grid.Column="1">
                                 <Border Opacity="0.8"/>
                                 <TextBlock Text="80%" Foreground="{Binding OpacForeColor[7]}"/>
@@ -302,6 +343,7 @@
                                     <TextBlock Text="{Binding OpacColor[7].hex}"  Foreground="{Binding OpacForeColor[7]}"/>
                                 </StackPanel>
                             </Grid>
+                            
                             <Grid Grid.Row="3" Grid.Column="1">
                                 <Border Opacity="0.9"/>
                                 <TextBlock Text="90%" Foreground="{Binding OpacForeColor[8]}"/>
@@ -310,6 +352,7 @@
                                     <TextBlock Text="{Binding OpacColor[8].hex}" Foreground="{Binding OpacForeColor[8]}"/>
                                 </StackPanel>
                             </Grid>
+                            
                             <Grid Grid.Row="4" Grid.Column="1">
                                 <Border Opacity="1"/>
                                 <TextBlock Text="100%" Foreground="{Binding OpacForeColor[9]}"/>
@@ -318,14 +361,112 @@
                                     <TextBlock Text="{Binding selectColor.hex}" Foreground="{Binding OpacForeColor[9]}"/>
                                 </StackPanel>
                             </Grid>
-
-
                         </Grid>
-
                     </StackPanel>
                 </TabItem>
 
                 <TabItem Header="색 모음">
+                    <Grid Margin="10">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="2.5*"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+
+                        <ListView ItemsSource="{Binding SelectedChip.colors}" Margin="5" SelectionMode="Extended">
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="SelectionChanged">
+                                    <ei:CallMethodAction TargetObject="{Binding}" MethodName="Tab2_LV_SelectionChanged"/>
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <UniformGrid Columns="4" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5"/>
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Width="70" Margin="5">
+                                        <Border Width="50" Height="50" CornerRadius="50" HorizontalAlignment="Center">
+                                            <Border.Effect>
+                                                <DropShadowEffect Direction="135" Color="White" Opacity="0.8" ShadowDepth="2"/>
+                                            </Border.Effect>
+
+                                            <Border Background="{Binding solidColorbrush}" CornerRadius="50">
+                                                <Border.Effect>
+                                                    <DropShadowEffect Direction="315" Color="Black" Opacity="0.2" ShadowDepth="2"/>
+                                                </Border.Effect>
+                                            </Border>
+                                        </Border>
+                                        <Viewbox Height="15" Margin="3">
+                                            <TextBlock HorizontalAlignment="Center" Text="{Binding hex}"/>
+                                        </Viewbox>
+                                        <Viewbox Height="15">
+                                            <StackPanel Orientation="Horizontal">
+                                                <TextBlock Text="RGB("/>
+                                                <TextBlock Text="{Binding r}"/>
+                                                <TextBlock Text=", "/>
+                                                <TextBlock Text="{Binding g}"/>
+                                                <TextBlock Text=", "/>
+                                                <TextBlock Text="{Binding b}"/>
+                                                <TextBlock Text=")"/>
+                                            </StackPanel>
+                                        </Viewbox>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+
+                            <ListView.InputBindings>
+                                <KeyBinding Key="Delete" Command="{Binding Tab2R_DeleteListItemCmd}"/>
+                            </ListView.InputBindings>
+                        </ListView>
+
+                        <Grid Grid.Row="1">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="3*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <StackPanel Orientation="Horizontal">
+                                <StackPanel Width="70" Margin="5">
+                                    <Border Width="50" Height="50" CornerRadius="50" HorizontalAlignment="Center">
+                                        <Border.Effect>
+                                            <DropShadowEffect Direction="135" Color="White" Opacity="0.8" ShadowDepth="2"/>
+                                        </Border.Effect>
+
+                                        <Border Background="{Binding SelectedChip.idxColor.solidColorbrush}" CornerRadius="50">
+                                            <Border.Effect>
+                                                <DropShadowEffect Direction="315" Color="Black" Opacity="0.2" ShadowDepth="2"/>
+                                            </Border.Effect>
+                                        </Border>
+                                    </Border>
+                                    <Viewbox Height="13" Margin="3">
+                                        <TextBlock HorizontalAlignment="Center" Text="{Binding SelectedChip.idxColor.hex}"/>
+                                    </Viewbox>
+                                    <Viewbox Height="13">
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock Text="RGB("/>
+                                            <TextBlock Text="{Binding SelectedChip.idxColor.r}"/>
+                                            <TextBlock Text=", "/>
+                                            <TextBlock Text="{Binding SelectedChip.idxColor.g}"/>
+                                            <TextBlock Text=", "/>
+                                            <TextBlock Text="{Binding SelectedChip.idxColor.b}"/>
+                                            <TextBlock Text=")"/>
+                                        </StackPanel>
+                                    </Viewbox>
+                                </StackPanel>
+                                <StackPanel VerticalAlignment="Center">
+                                    <StackPanel Orientation="Horizontal" Margin="5">
+                                        <TextBlock Text="제목 : "/>
+                                        <TextBox Width="150" Text="{Binding SelectedChip.name}"/>
+                                    </StackPanel>
+                                </StackPanel>
+                            </StackPanel>
+                            
+                            <StackPanel Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center">
+                                <Button Content="수정"/>
+                            </StackPanel>
+                        </Grid>
+                    </Grid>
                 </TabItem>
             </TabControl>
         </Grid>
