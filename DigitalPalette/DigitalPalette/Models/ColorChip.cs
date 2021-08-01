@@ -18,9 +18,9 @@ namespace DigitalPalette.Models
         public ColorInfo idxColor { get => _idxColor; set { _idxColor = value; } }
 
         // Colors
-        private List<ColorInfo> _colors = new List<ColorInfo>();
+        private ObservableCollection<ColorInfo> _colors = new ObservableCollection<ColorInfo>();
 
-        public List<ColorInfo> colors { get => _colors; set { _colors = value; } }
+        public ObservableCollection<ColorInfo> colors { get => _colors; set { _colors = value; } }
 
     }
 }

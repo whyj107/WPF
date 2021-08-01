@@ -18,12 +18,6 @@ namespace DigitalPalette.ViewModels
         #region [변수]
         private ObservableCollection<Models.ColorInfo> _ListColors = new ObservableCollection<Models.ColorInfo>();
         public ObservableCollection<Models.ColorInfo> ListColors { get => _ListColors; set { _ListColors = value; OnPropertyChanged("ListColors"); } }
-
-        private List<int> SelectedItemsIdx = new List<int>();
-
-        private bool deleting = false;
-
-        ListView lv;
         #endregion
 
         #region [COMMAND]
@@ -38,6 +32,7 @@ namespace DigitalPalette.ViewModels
                 {
                     ListColors.RemoveAt(idx);
                 }
+                SelectedItemsIdx.Clear();
             }
             deleting = false;
         }
@@ -54,24 +49,6 @@ namespace DigitalPalette.ViewModels
                 }
             }
         }
-
-        public void Tab0_LV_SelectionChanged(object sender, RoutedEventArgs e)
-        {
-            if (!deleting)
-            {
-                lv = sender as ListView;
-                SelectedItemsIdx.Clear();
-                if (lv != null)
-                {
-                    foreach (Models.ColorInfo item in lv.SelectedItems)
-                    {
-                        SelectedItemsIdx.Add(lv.Items.IndexOf(item));
-                        selectColor = item;
-                    }
-                    SelectedItemsIdx.Reverse();
-                }
-            }
-        }
         #endregion
     }
     #endregion
@@ -84,11 +61,18 @@ namespace DigitalPalette.ViewModels
         private Models.ColorInfo _backgroundColor = new Models.ColorInfo() { solidColorbrush = new SolidColorBrush(Colors.White) };
         public Models.ColorInfo backgroundColor { get => _backgroundColor; set { _backgroundColor = value; OnPropertyChanged("backgroundColor"); } }
 
-        private Models.ColorInfo[] _opacColor = new Models.ColorInfo[9];
-        public Models.ColorInfo[] OpacColor { get => _opacColor; set { OnPropertyChanged("OpacColor"); } }
+        private Models.ColorInfo[] _opacColorList = new Models.ColorInfo[9];
+        public Models.ColorInfo[] OpacColorList { get => _opacColorList; set { OnPropertyChanged("OpacColorList"); } }
 
-        private SolidColorBrush[] _opacForeColor = new SolidColorBrush[10];
-        public SolidColorBrush[] OpacForeColor { get => _opacForeColor; set { OnPropertyChanged("OpacForeColor"); } }
+        private SolidColorBrush[] _opacForeColorList = new SolidColorBrush[10];
+        public SolidColorBrush[] OpacForeColorList { get => _opacForeColorList; set { OnPropertyChanged("OpacForeColorList"); } }
+
+        private int _opacity = 0;
+        public int opacity { get => _opacity; set { _opacity = value; OnPropertyChanged("opacity"); } }
+        private Models.ColorInfo _opacColor = new Models.ColorInfo();
+        public Models.ColorInfo opacColor { get => _opacColor; set { _opacColor = value; OnPropertyChanged("opacColor"); } }
+        private SolidColorBrush _opacForeColor = new SolidColorBrush();
+        public SolidColorBrush opacForeColor { get => _opacForeColor; set { _opacForeColor = value; OnPropertyChanged("opacForeColor"); } }
         #endregion
 
         #region [COMMAND]
@@ -105,26 +89,44 @@ namespace DigitalPalette.ViewModels
                 };
             }
             CalcOpacityColor();
+            ChangeColor(null);
+        }
+
+        private RelayCommand _changeColorCmd;
+        public ICommand ChangeColorCmd { get { return _changeColorCmd ?? (_changeColorCmd = new RelayCommand(ChangeColor, CanExe)); } }
+        public void ChangeColor(object sender)
+        {
+            Color s = Color.FromRgb((byte)selectColor.r, (byte)selectColor.g, (byte)selectColor.b);
+            Color b = Color.FromRgb((byte)backgroundColor.r, (byte)backgroundColor.g, (byte)backgroundColor.b);
+
+            Color change = Blend(s, b, opacity * 0.01f);
+            opacColor = new Models.ColorInfo()
+            {
+                solidColorbrush = new SolidColorBrush(change)
+            };
+            opacForeColor = new SolidColorBrush(opacColor.BlackOrWhite());
+
         }
 
         private void CalcOpacityColor()
         {
-            _opacColor = new Models.ColorInfo[9];
+            _opacColorList = new Models.ColorInfo[9];
 
             for(int i=1; i<10; i++)
             {
                 Color s = Color.FromRgb((byte)selectColor.r, (byte)selectColor.g, (byte)selectColor.b);
                 Color b = Color.FromRgb((byte)backgroundColor.r, (byte)backgroundColor.g, (byte)backgroundColor.b);
+
                 Color tmp = Blend(s, b, i * 0.1f);
 
-                _opacColor[i - 1] = new Models.ColorInfo() { solidColorbrush = new SolidColorBrush(tmp)};
-                _opacForeColor[i - 1] = new SolidColorBrush(_opacColor[i-1].BlackOrWhite());
+                _opacColorList[i - 1] = new Models.ColorInfo() { solidColorbrush = new SolidColorBrush(tmp)};
+                _opacForeColorList[i - 1] = new SolidColorBrush(_opacColorList[i-1].BlackOrWhite());
             }
 
-            _opacForeColor[9] = new SolidColorBrush(selectColor.BlackOrWhite());
+            _opacForeColorList[9] = new SolidColorBrush(selectColor.BlackOrWhite());
 
-            OpacColor = _opacColor;
-            OpacForeColor = _opacForeColor;
+            OpacColorList = _opacColorList;
+            OpacForeColorList = _opacForeColorList;
         }
 
         private Color Blend(Color color, Color backColor, float alpha)
@@ -172,6 +174,34 @@ namespace DigitalPalette.ViewModels
             }
         }
 
+        private RelayCommand _tab2LdeleteListItemCmd;
+        public ICommand Tab2L_DeleteListItemCmd { get { return _tab2LdeleteListItemCmd ?? (_tab2LdeleteListItemCmd = new RelayCommand(Tab2L_DeleteListItem, CanExe)); } }
+        private void Tab2L_DeleteListItem(object sender)
+        {
+            if(MessageBox.Show("정말 삭제하시겠습니까?", "삭제", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+            {
+                if (File.Exists(SelectedChip.path))
+                {
+                    try
+                    {
+                        File.Delete(SelectedChip.path);
+
+                        ColorChipList.Remove(SelectedChip);
+
+                        if(ColorChipList.Count > 0)
+                        {
+                            SelectedChip = ColorChipList[0];
+                        }
+                    }
+                    catch
+                    {
+                        Log("Delete File Error!(" + SelectedChip.name + ")");
+                        MessageBox.Show("삭제에 실패했습니다.");
+                    }
+                }
+            }
+        }
+
         private void LoadColorChip()
         {
             string DirPath = currentDirectoryPath + savePath;
@@ -187,7 +217,7 @@ namespace DigitalPalette.ViewModels
                 if(fi.Extension.ToLower().Equals(".txt"))
                 {
                     string[] lines = File.ReadAllLines(fi.FullName);
-                    List<Models.ColorInfo> colors = new List<Models.ColorInfo>();
+                    ObservableCollection<Models.ColorInfo> colors = new ObservableCollection<Models.ColorInfo>();
                     foreach(string line in lines)
                     {
                         try
@@ -220,19 +250,21 @@ namespace DigitalPalette.ViewModels
             SelectedChip = ColorChipList[0];
         }
 
-        public void Tab2_LV_SelectionChanged(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-
         private RelayCommand _tab2RdeleteListItemCmd;
         public ICommand Tab2R_DeleteListItemCmd { get { return _tab2RdeleteListItemCmd ?? (_tab2RdeleteListItemCmd = new RelayCommand(Tab2R_DeleteListItem, CanExe)); } }
         private void Tab2R_DeleteListItem(object sender)
-        { 
-
+        {
+            deleting = true;
+            if (SelectedItemsIdx.Count > 0)
+            {
+                foreach (int idx in SelectedItemsIdx)
+                {
+                    _selectedChip.colors.RemoveAt(idx);
+                }
+                SelectedChip = _selectedChip;
+            }
+            deleting = false;
         }
-
         #endregion
 
     }
@@ -243,6 +275,18 @@ namespace DigitalPalette.ViewModels
     public partial class MainViewModel : VMBase
     {
         #region [변수]
+        // 이전 tab control index
+        private int pre_tabIdx = 0;
+
+        // 오른쪽 리스트뷰에서 선택된 아이템들의 인덱스 모음
+        private List<int> SelectedItemsIdx = new List<int>();
+
+        // 현재 삭제 중인지를 나타내는 변수
+        private bool deleting = false;
+
+        // 리스트뷰를 담기 위한 변수
+        ListView lv;
+
         // 포인터 위치를 나타내기 위한 타이머
         private DispatcherTimer timer = new DispatcherTimer();
 
@@ -269,7 +313,7 @@ namespace DigitalPalette.ViewModels
         public Models.ColorInfo nowColor { get => _nowColor; set { _nowColor = value; OnPropertyChanged("nowColor"); } }
 
         private Models.ColorInfo _selectColor = new Models.ColorInfo();
-        public Models.ColorInfo selectColor { get => _selectColor; set { _selectColor = value; CalcOpacityColor(); OnPropertyChanged("selectColor"); } }
+        public Models.ColorInfo selectColor { get => _selectColor; set { _selectColor = value; CalcOpacityColor(); ChangeColor(null); OnPropertyChanged("selectColor"); } }
         #endregion
 
         #region [COMMAND]
@@ -281,7 +325,7 @@ namespace DigitalPalette.ViewModels
                 _listener = new LowLevelKeyboardListener();
                 _listener.doEvent += PickColor;
                 _listener.HookKeyboard();
-
+                
                 f = new Views.FollowMouseWindow();
                 f.Show();
             }
@@ -337,7 +381,11 @@ namespace DigitalPalette.ViewModels
         public ICommand AddColorCmd { get { return _addColorCmd ?? (_addColorCmd = new RelayCommand(AddColor, CanExe)); } }
         private void AddColor(object args)
         {
-            ListColors.Add(selectColor);
+            Models.ColorInfo newColor = new Models.ColorInfo()
+            {
+                solidColorbrush = selectColor.solidColorbrush
+            };
+            ListColors.Add(newColor);
         }
 
         public void NumPreviewTextInput(object sender, TextCompositionEventArgs e)
@@ -363,7 +411,7 @@ namespace DigitalPalette.ViewModels
             tb.Select(tb.Text.Length, 0);
         }
 
-        public void TabControl_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        public void TabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             TabControl tc = sender as TabControl;
 
@@ -372,9 +420,45 @@ namespace DigitalPalette.ViewModels
             if (tc.SelectedIndex == 1)
             {
                 CalcOpacityColor();
-            }else if(tc.SelectedIndex == 2)
+                ChangeColor(null);
+            }
+            else if(tc.SelectedIndex == 2)
             {
                 leftLV = Visibility.Visible;
+            }
+
+            if(pre_tabIdx != tc.SelectedIndex)
+            {
+                SelectedItemsIdx.Clear(); 
+                UnSelectAllItems(null);
+            }
+
+            pre_tabIdx = tc.SelectedIndex;
+        }
+
+        public void Tab_LV_SelectionChanged(object sender, RoutedEventArgs e)
+        {
+            if (!deleting)
+            {
+                lv = sender as ListView;
+                SelectedItemsIdx.Clear();
+                if (lv != null)
+                {
+                    foreach (Models.ColorInfo item in lv.SelectedItems)
+                    {
+                        int idx = lv.Items.IndexOf(item);
+                        Console.WriteLine(idx);
+                        SelectedItemsIdx.Add(idx);
+                        if(pre_tabIdx != 2)
+                        {
+                            selectColor = new Models.ColorInfo()
+                            {
+                                solidColorbrush = item.solidColorbrush
+                            };
+                        }
+                    }
+                    SelectedItemsIdx.Reverse();
+                }
             }
         }
         private bool CanExe(object args)
