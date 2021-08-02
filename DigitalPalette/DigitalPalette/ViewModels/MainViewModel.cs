@@ -16,6 +16,9 @@ namespace DigitalPalette.ViewModels
     public partial class MainViewModel : VMBase
     {
         #region [변수]
+        private string _savePath = string.Empty;
+        public string SavePath { get => _savePath; set { _savePath = value; OnPropertyChanged("SavePath"); } }
+
         private ObservableCollection<Models.ColorInfo> _ListColors = new ObservableCollection<Models.ColorInfo>();
         public ObservableCollection<Models.ColorInfo> ListColors { get => _ListColors; set { _ListColors = value; OnPropertyChanged("ListColors"); } }
         #endregion
@@ -48,6 +51,74 @@ namespace DigitalPalette.ViewModels
                     lv.UnselectAll();
                 }
             }
+        }
+        
+
+        private RelayCommand _makeColorChipCmd;
+        public ICommand MakeColorChipCmd { get { return _makeColorChipCmd ?? (_makeColorChipCmd = new RelayCommand(MakeColorChip, CanExe)); } }
+        private void MakeColorChip(object sender)
+        {
+            if(SelectedItemsIdx.Count == 0)
+            {
+                MessageBox.Show("선택된 항목이 없습니다. \n색을 선택해주세요.");
+                return;
+            }else if (_savePath.Equals(string.Empty))
+            {
+                MessageBox.Show("색 모음 이름을 설정해주세요.");
+                return;
+            }
+
+            string DirPath = currentDirectoryPath + saveDirPath;
+
+            DirectoryInfo di = new DirectoryInfo(DirPath);
+            if (!di.Exists)
+            {
+                Directory.CreateDirectory(DirPath);
+            }
+
+            string FilePath = DirPath + @"\" + _savePath + ".txt";
+
+            FileInfo fi;
+            try
+            {
+                fi = new FileInfo(FilePath);
+            }
+            catch
+            {
+                MessageBox.Show("이름에는 다음 문자를 사용할 수 없습니다. \\ / : * ? < > | \"");
+                return;
+            }
+
+            try
+            {
+                // 파일이 존재할 경우와 존재하지 않을 경우로 나누어서 진행
+                if (fi.Exists)
+                {
+                    MessageBox.Show("같은 이름의 파일이 존재합니다.");
+                }
+                else
+                {
+                    using (StreamWriter sw = File.AppendText(FilePath))
+                    {
+                        if (SelectedItemsIdx.Count > 0)
+                        {
+                            SelectedItemsIdx.Reverse();
+                            foreach (int idx in SelectedItemsIdx)
+                            {
+                                sw.WriteLine("#" + ListColors[idx].hex);
+                            }
+                            SelectedItemsIdx.Clear();
+                        }
+                        sw.Close();
+                        MessageBox.Show("생성 성공했습니다!");
+                    }
+                }
+            }
+            catch
+            {
+                MessageBox.Show("생성 실패했습니다.");
+            }
+
         }
         #endregion
     }
@@ -145,10 +216,6 @@ namespace DigitalPalette.ViewModels
     public partial class MainViewModel : VMBase
     {
         #region [변수]
-        // ColorChips 경로
-        private string savePath = @"\ColorChips";
-        private string currentDirectoryPath = Environment.CurrentDirectory.ToString();
-
         // ListView Visibility
         private Visibility _leftLV = Visibility.Collapsed;
         public Visibility leftLV { get => _leftLV; set { _leftLV = value; OnPropertyChanged("leftLV"); } }
@@ -163,17 +230,6 @@ namespace DigitalPalette.ViewModels
         #endregion
 
         #region [COMMAND]
-        private void MakeColorChip()
-        {
-            string DirPath = currentDirectoryPath + savePath;
-
-            DirectoryInfo di = new DirectoryInfo(DirPath);
-            if (!di.Exists)
-            {
-                Directory.CreateDirectory(DirPath);
-            }
-        }
-
         private RelayCommand _tab2LdeleteListItemCmd;
         public ICommand Tab2L_DeleteListItemCmd { get { return _tab2LdeleteListItemCmd ?? (_tab2LdeleteListItemCmd = new RelayCommand(Tab2L_DeleteListItem, CanExe)); } }
         private void Tab2L_DeleteListItem(object sender)
@@ -204,7 +260,8 @@ namespace DigitalPalette.ViewModels
 
         private void LoadColorChip()
         {
-            string DirPath = currentDirectoryPath + savePath;
+            ColorChipList.Clear();
+            string DirPath = currentDirectoryPath + saveDirPath;
 
             DirectoryInfo di = new DirectoryInfo(DirPath);
             if (!di.Exists)
@@ -265,6 +322,13 @@ namespace DigitalPalette.ViewModels
             }
             deleting = false;
         }
+
+        private RelayCommand _resetColorChipCmd;
+        public ICommand ResetColorChipCmd { get { return _resetColorChipCmd ?? (_resetColorChipCmd = new RelayCommand(ResetColorChip, CanExe)); } }
+        private void ResetColorChip(object sender)
+        {
+
+        }
         #endregion
 
     }
@@ -275,6 +339,10 @@ namespace DigitalPalette.ViewModels
     public partial class MainViewModel : VMBase
     {
         #region [변수]
+        // ColorChips 경로
+        private string saveDirPath = @"\ColorChips";
+        private string currentDirectoryPath = Environment.CurrentDirectory.ToString();
+
         // 이전 tab control index
         private int pre_tabIdx = 0;
 
@@ -424,6 +492,7 @@ namespace DigitalPalette.ViewModels
             }
             else if(tc.SelectedIndex == 2)
             {
+                LoadColorChip();
                 leftLV = Visibility.Visible;
             }
 
@@ -470,8 +539,6 @@ namespace DigitalPalette.ViewModels
         #region [함수]
         public MainViewModel()
         {
-            LoadColorChip();
-
             ListColors.Clear();
 
             timer.Interval = TimeSpan.FromMilliseconds(1);

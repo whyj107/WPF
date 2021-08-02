@@ -14,7 +14,7 @@ namespace DigitalPalette.Views
         public FollowMouseWindow()
         {
             InitializeComponent();
-            Test();
+            // Test();
         }
 
         #region 지금 안씀
@@ -56,11 +56,5 @@ namespace DigitalPalette.Views
             // timer.Start();
         }
         #endregion
-
-        private void Window_Closed(object sender, EventArgs e)
-        {
-            if(timer.Enabled)
-                timer.Stop();
-        }
     }
 }

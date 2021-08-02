@@ -5,8 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:DigitalPalette.ViewModels"
         xmlns:VM="clr-namespace:DigitalPalette.ViewModels"
-        mc:Ignorable="d"
-        Closed="Window_Closed" AllowsTransparency="True"
+        mc:Ignorable="d" AllowsTransparency="True"
         Left="{Binding left, Mode=TwoWay}" Top="{Binding top, Mode=TwoWay}"
         Title="FollowMouseWindow"  Height="100" Width="150" Topmost="True" ShowInTaskbar="False"
         WindowStyle="None" ResizeMode="NoResize" Background="Transparent">
@@ -39,7 +38,7 @@
             </Viewbox>
         </Border>
 
-        <Border VerticalAlignment="Top" HorizontalAlignment="Left" Height="50" Width="50" Margin="10" Background="{Binding nowColor.solidColorbrush}" CornerRadius="50">
+        <Border VerticalAlignment="Top" HorizontalAlignment="Left" Height="50" Width="50" Margin="10" Background="{Binding nowColor.solidColorbrush}" CornerRadius="10">
             <Border.Effect>
                 <DropShadowEffect Direction="315" ShadowDepth="5" Color="#161b1d" Opacity="0.23" BlurRadius="10"/>
             </Border.Effect>

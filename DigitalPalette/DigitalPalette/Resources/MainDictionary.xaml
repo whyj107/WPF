@@ -1,4 +1,4 @@
-﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" 
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     
     <!-- COLOR -->
@@ -47,11 +47,11 @@
     </DataTemplate>
     <DataTemplate x:Key="ItemDataTemplate2">
         <StackPanel Orientation="Horizontal">
-            <Border Style="{DynamicResource OutSide2B}" Width="40" Height="40">
+            <Border Style="{DynamicResource OutSide2B}" Width="30" Height="30">
                 <Border Background="{Binding idxColor.solidColorbrush}" Style="{DynamicResource InSide2B}"/>
             </Border>
-            <Viewbox Margin="2">
-                <TextBlock Text="{Binding name}" FontWeight="ExtraBold" Effect="{x:Null}"/>
+            <Viewbox>
+                <TextBlock Text="{Binding name}" FontWeight="ExtraBlack" Effect="{x:Null}"/>
             </Viewbox>
         </StackPanel>
     </DataTemplate>
@@ -155,7 +155,7 @@
                         </Border>
                     </Grid>
                     <ControlTemplate.Triggers>
-                        <Trigger Property="IsSelected" Value="False">
+                        <Trigger Property="IsSelected" Value="True">
                             <Setter Property="Effect" Value="{StaticResource WhiteShadow3}" TargetName="TIInSideB"/>
                             <Setter Property="Effect" Value="{StaticResource BlackShadow3}" TargetName="TIOutSideB"/>
                         </Trigger>
