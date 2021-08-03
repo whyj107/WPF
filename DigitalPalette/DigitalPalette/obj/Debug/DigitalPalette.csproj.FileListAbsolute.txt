@@ -79,3 +79,5 @@ E:\c#\DigitalPalette\DigitalPalette\obj\Debug\DigitalPalette.csproj.CoreCompileI
 E:\c#\DigitalPalette\DigitalPalette\obj\Debug\DigitalPalette.csproj.CopyComplete
 E:\c#\DigitalPalette\DigitalPalette\obj\Debug\DigitalPalette.exe
 E:\c#\DigitalPalette\DigitalPalette\obj\Debug\DigitalPalette.pdb
+E:\c#\DigitalPalette\DigitalPalette\obj\Debug\Views\AddColor.g.cs
+E:\c#\DigitalPalette\DigitalPalette\obj\Debug\Views\AddColor.baml

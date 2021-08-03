@@ -1,0 +1,36 @@
+﻿<Window x:Class="DigitalPalette.Views.AddColor"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:DigitalPalette.Views"
+        xmlns:VM="clr-namespace:DigitalPalette.ViewModels"
+        xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
+        xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
+        mc:Ignorable="d"
+        Title="AddColor" Height="500" Width="500">
+    
+    <Window.DataContext>
+        <VM:MainViewModel/>
+    </Window.DataContext>
+
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="3*"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <ListView Style="{DynamicResource TabLV}">
+            <i:Interaction.Triggers>
+                <i:EventTrigger EventName="SelectionChanged">
+                    <ei:CallMethodAction TargetObject="{Binding}" MethodName="Tab_LV_SelectionChanged"/>
+                </i:EventTrigger>
+            </i:Interaction.Triggers>
+        </ListView>
+
+        <Grid Grid.Row="1" VerticalAlignment="Center">
+            <Button Content="취소" HorizontalAlignment="Left"/>
+            <Button Content="추가" HorizontalAlignment="Right"/>
+        </Grid>
+    </Grid>
+</Window>

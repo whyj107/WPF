@@ -323,11 +323,51 @@ namespace DigitalPalette.ViewModels
             deleting = false;
         }
 
+        private RelayCommand _addColorCmd2;
+        public ICommand AddColorCmd2 { get { return _addColorCmd2 ?? (_addColorCmd2 = new RelayCommand(AddColorBtn, CanExe)); } }
+        private void AddColorBtn(object sender)
+        {
+            Views.AddColor ac = new Views.AddColor();
+            ac.ShowDialog();
+
+
+        }
+
         private RelayCommand _resetColorChipCmd;
         public ICommand ResetColorChipCmd { get { return _resetColorChipCmd ?? (_resetColorChipCmd = new RelayCommand(ResetColorChip, CanExe)); } }
         private void ResetColorChip(object sender)
         {
+            FileInfo nowPath = new FileInfo(_selectedChip.path);
+            FileInfo newPath = new FileInfo(nowPath.DirectoryName + @"\" + SelectedChip.name  +".txt");
+            if (!nowPath.FullName.Equals(newPath.FullName))
+            {
+                if (newPath.Exists)
+                {
+                    MessageBox.Show("이미 다른 색 모음에서 사용중인 이름입니다. 이름을 변경해주세요.");
+                    return;
+                }
+            }
 
+            try{
+                File.Move(nowPath.FullName, newPath.FullName);
+
+                using (StreamWriter sw = File.AppendText(newPath.FullName))
+                {
+                    if (SelectedItemsIdx.Count > 0)
+                    {
+                        foreach (var item in _selectedChip.colors)
+                        {
+                            sw.WriteLine("#" + item.hex);
+                        }
+                    }
+                    sw.Close();
+                    MessageBox.Show("수정되었습니다.");
+                }
+            }
+            catch
+            {
+
+            }
         }
         #endregion
 
@@ -482,7 +522,6 @@ namespace DigitalPalette.ViewModels
         public void TabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             TabControl tc = sender as TabControl;
-
             leftLV = Visibility.Collapsed;
 
             if (tc.SelectedIndex == 1)
@@ -492,7 +531,10 @@ namespace DigitalPalette.ViewModels
             }
             else if(tc.SelectedIndex == 2)
             {
-                LoadColorChip();
+                if(pre_tabIdx != 2)
+                {
+                    LoadColorChip();
+                }
                 leftLV = Visibility.Visible;
             }
 
@@ -516,7 +558,6 @@ namespace DigitalPalette.ViewModels
                     foreach (Models.ColorInfo item in lv.SelectedItems)
                     {
                         int idx = lv.Items.IndexOf(item);
-                        Console.WriteLine(idx);
                         SelectedItemsIdx.Add(idx);
                         if(pre_tabIdx != 2)
                         {
@@ -654,7 +695,7 @@ namespace DigitalPalette.ViewModels
         private void Log(string str)
         {
             string currentDirectoryPath = Environment.CurrentDirectory.ToString();
-            string DirPath = System.IO.Path.Combine(currentDirectoryPath, "Logs");
+            string DirPath = Path.Combine(currentDirectoryPath, "Logs");
             string FilePath = DirPath + @"\Log_" + DateTime.Today.ToString("yyyyMMdd") + ".log";
 
             DirectoryInfo di = new DirectoryInfo(DirPath);

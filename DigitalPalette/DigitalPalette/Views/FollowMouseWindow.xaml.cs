@@ -14,7 +14,6 @@ namespace DigitalPalette.Views
         public FollowMouseWindow()
         {
             InitializeComponent();
-            // Test();
         }
 
         #region 지금 안씀

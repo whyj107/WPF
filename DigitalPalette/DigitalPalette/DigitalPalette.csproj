@@ -71,6 +71,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\AddColor.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\FollowMouseWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -86,6 +90,9 @@
     <Compile Include="Models\ColorChip.cs" />
     <Compile Include="Models\ColorInfo.cs" />
     <Compile Include="ViewModels\LowLevelKeyboardListener.cs" />
+    <Compile Include="Views\AddColor.xaml.cs">
+      <DependentUpon>AddColor.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\FollowMouseWindow.xaml.cs">
       <DependentUpon>FollowMouseWindow.xaml</DependentUpon>
     </Compile>
