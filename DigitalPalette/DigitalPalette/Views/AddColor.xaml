@@ -7,13 +7,9 @@
         xmlns:VM="clr-namespace:DigitalPalette.ViewModels"
         xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
         xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
-        mc:Ignorable="d"
+        mc:Ignorable="d" DataContext="{StaticResource MainVM}" Resources="{StaticResource MainRD}"
         Title="AddColor" Height="500" Width="500">
     
-    <Window.DataContext>
-        <VM:MainViewModel/>
-    </Window.DataContext>
-
     <Grid Margin="20">
         <Grid.RowDefinitions>
             <RowDefinition Height="3*"/>

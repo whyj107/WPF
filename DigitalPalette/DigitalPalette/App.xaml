@@ -2,8 +2,10 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:DigitalPalette"
+             xmlns:VM="clr-namespace:DigitalPalette.ViewModels"
              StartupUri="/Views/MainWindow.xaml">
     <Application.Resources>
-        <ResourceDictionary Source="pack://application:,,,/Resources/MainDictionary.xaml"/>
+        <VM:MainViewModel x:Key="MainVM"/>
+        <ResourceDictionary x:Key="MainRD" Source="pack://application:,,,/Resources/MainDictionary.xaml"/>
     </Application.Resources>
 </Application>

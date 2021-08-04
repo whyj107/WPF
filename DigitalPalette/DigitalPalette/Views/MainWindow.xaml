@@ -7,13 +7,9 @@
         xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
         xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
         xmlns:VM="clr-namespace:DigitalPalette.ViewModels"
-        Name="window" ResizeMode="NoResize"
+        Name="window" ResizeMode="NoResize" DataContext="{StaticResource MainVM}" Resources="{StaticResource MainRD}"
         mc:Ignorable="d" Background="{StaticResource MainColor}"
         Title="MainWindow" Height="450" Width="700">
-
-    <Window.DataContext>
-        <VM:MainViewModel/>
-    </Window.DataContext>
 
     <!-- Window 종료 이벤트 -->
     <i:Interaction.Triggers>
