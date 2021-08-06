@@ -227,6 +227,9 @@ namespace DigitalPalette.ViewModels
         // 오른쪽
         private Models.ColorChip _selectedChip = new Models.ColorChip();
         public Models.ColorChip SelectedChip { get => _selectedChip; set { _selectedChip = value; OnPropertyChanged("SelectedChip"); } }
+
+        // AddColor Window
+        Views.AddColor ac;
         #endregion
 
         #region [COMMAND]
@@ -323,14 +326,38 @@ namespace DigitalPalette.ViewModels
             deleting = false;
         }
 
-        private RelayCommand _addColorCmd2;
-        public ICommand AddColorCmd2 { get { return _addColorCmd2 ?? (_addColorCmd2 = new RelayCommand(AddColorBtn, CanExe)); } }
-        private void AddColorBtn(object sender)
+        private RelayCommand _openaddColorCmd;
+        public ICommand OpenAddColorCmd { get { return _openaddColorCmd ?? (_openaddColorCmd = new RelayCommand(OpenAddColor, CanExe)); } }
+        private void OpenAddColor(object sender)
         {
-            Views.AddColor ac = new Views.AddColor();
+            ac = new Views.AddColor();
+            ac.Owner = Application.Current.MainWindow;
+            ac.WindowStartupLocation = WindowStartupLocation.CenterOwner;
             ac.ShowDialog();
+        }
 
+        private RelayCommand _closeAddColorCmd;
+        public ICommand CloseAddColorCmd { get { return _closeAddColorCmd ?? (_closeAddColorCmd = new RelayCommand(CloseAddColor, CanExe)); } }
+        private void CloseAddColor(object sender)
+        {
+            ac.Close();
+        }
 
+        private RelayCommand _addColorCmd2;
+        public ICommand AddColorCmd2 { get { return _addColorCmd2 ?? (_addColorCmd2 = new RelayCommand(AddColor2, CanExe)); } }
+        private void AddColor2(object sender)
+        {
+            if (SelectedItemsIdx.Count > 0)
+            {
+                SelectedItemsIdx.Reverse();
+                foreach (int idx in SelectedItemsIdx)
+                {
+                    Models.ColorInfo ci = ListColors[idx];
+                    SelectedChip.colors.Add(ci);
+                }
+                SelectedItemsIdx.Clear();
+            }
+            ac.Close();
         }
 
         private RelayCommand _resetColorChipCmd;
@@ -353,7 +380,7 @@ namespace DigitalPalette.ViewModels
 
                 using (StreamWriter sw = File.AppendText(newPath.FullName))
                 {
-                    if (SelectedItemsIdx.Count > 0)
+                    if (_selectedChip.colors.Count > 0)
                     {
                         foreach (var item in _selectedChip.colors)
                         {
@@ -370,7 +397,6 @@ namespace DigitalPalette.ViewModels
             }
         }
         #endregion
-
     }
     #endregion
 
@@ -571,6 +597,7 @@ namespace DigitalPalette.ViewModels
                 }
             }
         }
+
         private bool CanExe(object args)
         {
             return true;

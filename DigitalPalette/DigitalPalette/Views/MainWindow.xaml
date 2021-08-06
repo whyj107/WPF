@@ -393,7 +393,7 @@
                                 </StackPanel>
 
                                 <StackPanel Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center">
-                                    <Button Content="색 추가" Command="{Binding AddColorCmd2}"/>
+                                    <Button Content="색 추가" Command="{Binding OpenAddColorCmd}"/>
                                     <Button Content="수정" Command="{Binding ResetColorChipCmd}"/>
                                 </StackPanel>
                             </Grid>

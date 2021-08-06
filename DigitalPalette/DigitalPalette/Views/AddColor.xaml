@@ -8,7 +8,8 @@
         xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
         xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
         mc:Ignorable="d" DataContext="{StaticResource MainVM}" Resources="{StaticResource MainRD}"
-        Title="AddColor" Height="500" Width="500">
+        Background="{DynamicResource MainColor}"
+        Title="AddColor" Height="400" Width="480">
     
     <Grid Margin="20">
         <Grid.RowDefinitions>
@@ -25,8 +26,8 @@
         </ListView>
 
         <Grid Grid.Row="1" VerticalAlignment="Center">
-            <Button Content="취소" HorizontalAlignment="Left"/>
-            <Button Content="추가" HorizontalAlignment="Right"/>
+            <Button Content="취소" HorizontalAlignment="Left" Command="{Binding CloseAddColorCmd}"/>
+            <Button Content="추가" HorizontalAlignment="Right" Command="{Binding AddColorCmd2}"/>
         </Grid>
     </Grid>
 </Window>
