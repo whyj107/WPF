@@ -24,6 +24,11 @@
             <ColumnDefinition Width="2*"/>
         </Grid.ColumnDefinitions>
 
+        <Grid.Resources>
+            <Style TargetType="TextBox" BasedOn="{StaticResource baseTB}"/>
+            <Style TargetType="ToggleButton" BasedOn="{StaticResource baseToggleBtn}"/>
+        </Grid.Resources>
+
         <!-- LEFT -->
         <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
             <StackPanel.Resources>
@@ -122,7 +127,7 @@
             </StackPanel>
 
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="10">
-                <TextBlock Text="Hex : #"/>
+                <TextBlock Text="Hex : # "/>
                 <TextBox Text="{Binding selectColor.hex, Mode=TwoWay}" Width=" 80" MaxLength="6" HorizontalContentAlignment="Center">
                     <i:Interaction.Triggers>
                         <i:EventTrigger EventName="PreviewTextInput">
@@ -133,7 +138,7 @@
             </StackPanel>
 
             <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="10">
-                <Button Content="색 추가" Command="{Binding AddColorCmd}" />
+                <Button Content="색 추가" Command="{Binding AddColorCmd}"/>
             </StackPanel>
         </StackPanel>
 
@@ -160,7 +165,7 @@
                     </TabControl.Resources>
 
                     <!-- TAB INDEX : 0 -->
-                    <TabItem Header="색">
+                    <TabItem Header=" 색 ">
                         <Grid>
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="4*"/>
@@ -179,14 +184,14 @@
                                 </ListView.InputBindings>
                             </ListView>
 
-                            <Grid Grid.Row="1" Margin="10">
+                            <Grid Grid.Row="1" Margin="10 5">
                                 <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Left">
                                     <TextBlock Text="색 모음 이름 : "/>
                                     <TextBox Width="150" Text="{Binding SavePath}"/>
                                 </StackPanel>
                                 <StackPanel VerticalAlignment="Center" HorizontalAlignment="Right">
-                                    <Button Content="선택 전체 해제" VerticalAlignment="Center" Command="{Binding UnSelectItemsCmd}"/>
-                                    <Button Content="색 모음 생성" VerticalAlignment="Center" Command="{Binding MakeColorChipCmd}"/>
+                                    <Button Content="선택 해제" VerticalAlignment="Center" Command="{Binding UnSelectItemsCmd}"/>
+                                    <Button Content="모음 생성" VerticalAlignment="Center" Command="{Binding MakeColorChipCmd}"/>
                                 </StackPanel>
                             </Grid>
                         </Grid>
@@ -194,7 +199,7 @@
 
                     <!-- TAB INDEX : 1 -->
                     <TabItem Header="투명도">
-                        <StackPanel Margin="10">
+                        <StackPanel Margin="10 5">
                             <Button Content="배경색 선택" HorizontalAlignment="Center" Command="{Binding ColorPickCmd}"/>
                             <!-- 투명도 10% ~ 100% -->
                             <Grid Width="350" Height="250" Margin="10" Background="{Binding backgroundColor.solidColorbrush}" Effect="{DynamicResource BlackShadow3}">
@@ -386,7 +391,7 @@
                                     </StackPanel>
                                     <StackPanel VerticalAlignment="Center">
                                         <StackPanel Orientation="Horizontal" Margin="5">
-                                            <TextBlock Text="이름 : "/>
+                                            <TextBlock Text="이름 :  "/>
                                             <TextBox Width="100" Text="{Binding SelectedChip.name}"/>
                                         </StackPanel>
                                     </StackPanel>

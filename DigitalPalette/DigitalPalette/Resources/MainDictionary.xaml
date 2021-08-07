@@ -7,7 +7,8 @@
 
     <!-- SOLIDBRUSH -->
     <SolidColorBrush x:Key="MainColor">WhiteSmoke</SolidColorBrush>
-    
+    <SolidColorBrush x:Key="BrightColor">White</SolidColorBrush>
+
     <!-- SHADOW EFFECT -->
     <DropShadowEffect x:Key="WhiteShadow1" Direction="135" Color="{StaticResource WhiteShadowColor}" Opacity="1" ShadowDepth="2"/>
     <DropShadowEffect x:Key="BlackShadow1" Direction="315" Color="{StaticResource BlackShadowColor}" Opacity="0.28" ShadowDepth="5"/>
@@ -51,7 +52,7 @@
                 <Border Background="{Binding idxColor.solidColorbrush}" Style="{DynamicResource InSide2B}"/>
             </Border>
             <Viewbox>
-                <TextBlock Text="{Binding name}" FontWeight="ExtraBlack" Effect="{x:Null}"/>
+                <TextBlock Text="{Binding name}" FontWeight="ExtraBlack"/>
             </Viewbox>
         </StackPanel>
     </DataTemplate>
@@ -84,8 +85,54 @@
             </Setter.Value>
         </Setter>
     </Style>
-
     
+    <!-- TOGGLE BUTTON -->
+    <Style x:Key="baseToggleBtn" TargetType="{x:Type ToggleButton}">
+        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="Background" Value="{StaticResource MainColor}"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type ToggleButton}">
+                    <Grid>
+                        <Border x:Name="Border" CornerRadius="5" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" Effect="{StaticResource BlackShadow2}"/>
+                        <ContentPresenter Margin="4" HorizontalAlignment="Center" VerticalAlignment="Center" RecognizesAccessKey="True"/>
+                    </Grid>
+                    
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsChecked" Value="True">
+                            
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    
+    <!-- BUTTON -->
+    <Style TargetType="{x:Type Button}">
+        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="Background" Value="{StaticResource MainColor}"/>
+        <Setter Property="Margin" Value="3"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Button}">
+                    <Grid>
+                        <Border x:Name="Border2" Effect="{StaticResource WhiteShadow2}"/>
+                        <Border x:Name="Border" CornerRadius="5" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" Effect="{StaticResource BlackShadow2}"/>
+                        <ContentPresenter Margin="4" HorizontalAlignment="Center" VerticalAlignment="Center" RecognizesAccessKey="True"/>
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="true">
+                            <Setter Property="Effect" Value="{StaticResource BlackShadow3}" TargetName="Border2"/>
+                            <Setter Property="Effect" Value="{StaticResource WhiteShadow3}" TargetName="Border"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- SLIDER -->
     <Style x:Key="ColorSlider" TargetType="{x:Type Slider}">
         <Setter Property="Width" Value="150"/>
         <Setter Property="Maximum" Value="255"/>
@@ -100,13 +147,29 @@
         <Setter Property="Stylus.IsPressAndHoldEnabled" Value="False"/>
     </Style>
 
-    <Style x:Key="ColorSliderTB" TargetType="{x:Type TextBox}">
+    <!-- TEXT BOX -->
+    <Style x:Key="baseTB" TargetType="{x:Type TextBox}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type TextBox}">
+                    <Grid>
+                        <Border Name="Border" Effect="{StaticResource BlackShadow3}" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="0"/>
+                        <Border Effect="{StaticResource WhiteShadow3}"/>
+                        <ScrollViewer x:Name="PART_ContentHost" Effect="{x:Null}"/>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    
+    <Style x:Key="ColorSliderTB" TargetType="{x:Type TextBox}" BasedOn="{StaticResource baseTB}">
         <Setter Property="Width" Value="35"/>
         <Setter Property="HorizontalContentAlignment" Value="Center"/>
         <Setter Property="VerticalAlignment" Value="Center"/>
         <Setter Property="MaxLength" Value="3"/>
     </Style>
 
+    <!-- BORDER -->
     <Style x:Key="OutSide1B" TargetType="{x:Type Border}">
         <Setter Property="Height" Value="100"/>
         <Setter Property="Width" Value="100"/>
@@ -131,6 +194,7 @@
         <Setter Property="Effect" Value="{StaticResource BlackShadow2}"/>
     </Style>
 
+    <!-- TAB CONTROL -->
     <Style x:Key="MainTC" TargetType="{x:Type TabControl}">
         <Setter Property="Margin" Value="20"/>
         <Setter Property="Background" Value="{StaticResource MainColor}"/>
@@ -138,6 +202,7 @@
         <Setter Property="Effect" Value="{DynamicResource BlackShadow1}"/>
     </Style>
 
+    <!-- TAB ITEM -->
     <Style x:Key="MainTI" TargetType="{x:Type TabItem}">
         <Setter Property="BorderBrush" Value="Transparent"/>
         <Setter Property="BorderThickness" Value="0"/>
@@ -165,6 +230,7 @@
         </Setter>
     </Style>
 
+    <!-- LIST VIEW -->
     <Style x:Key="LeftLV" TargetType="{x:Type ListView}">
         <Setter Property="SelectionMode" Value="Single"/>
         <Setter Property="Height" Value="370"/>
@@ -195,4 +261,6 @@
         <Setter Property="AllowDrop" Value="True"/>
         <Setter Property="ItemContainerStyle" Value="{StaticResource ItemContainerStyle}"/>
     </Style>
+    
+    
 </ResourceDictionary>
