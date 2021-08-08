@@ -81,3 +81,5 @@ E:\c#\DigitalPalette\DigitalPalette\obj\Debug\DigitalPalette.exe
 E:\c#\DigitalPalette\DigitalPalette\obj\Debug\DigitalPalette.pdb
 E:\c#\DigitalPalette\DigitalPalette\obj\Debug\Views\AddColor.g.cs
 E:\c#\DigitalPalette\DigitalPalette\obj\Debug\Views\AddColor.baml
+D:\c#\DigitalPalette\DigitalPalette\obj\Debug\Views\AddColor.g.cs
+D:\c#\DigitalPalette\DigitalPalette\obj\Debug\Views\AddColor.baml

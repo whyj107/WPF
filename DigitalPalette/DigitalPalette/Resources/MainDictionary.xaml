@@ -2,12 +2,13 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     
     <!-- COLOR -->
+    <!--<Color x:Key="WhiteShadowColor">White</Color>-->
     <Color x:Key="WhiteShadowColor">White</Color>
     <Color x:Key="BlackShadowColor">Black</Color>
 
     <!-- SOLIDBRUSH -->
-    <SolidColorBrush x:Key="MainColor">WhiteSmoke</SolidColorBrush>
-    <SolidColorBrush x:Key="BrightColor">White</SolidColorBrush>
+    <!--<SolidColorBrush x:Key="MainColor">WhiteSmoke</SolidColorBrush>-->
+    <SolidColorBrush x:Key="MainColor">#eff2f9</SolidColorBrush>
 
     <!-- SHADOW EFFECT -->
     <DropShadowEffect x:Key="WhiteShadow1" Direction="135" Color="{StaticResource WhiteShadowColor}" Opacity="1" ShadowDepth="2"/>
@@ -65,11 +66,10 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type ListViewItem}">
-                        <Grid Background="{TemplateBinding Background}" SnapsToDevicePixels="True">
-                            <Border x:Name="itemOutSideBorder" Background="{TemplateBinding Background}" Margin="{TemplateBinding Margin}"/>
-                            <Border x:Name="itemInSideBorder" Background="{StaticResource MainColor}">
-                                <ContentPresenter />
-                            </Border>
+                        <Grid SnapsToDevicePixels="True">
+                            <Border x:Name="itemOutSideBorder" Background="{TemplateBinding Background}"/>
+                            <Border x:Name="itemInSideBorder" Background="{StaticResource MainColor}"/>
+                            <ContentPresenter />
                         </Grid>
                         <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
@@ -95,12 +95,17 @@
                 <ControlTemplate TargetType="{x:Type ToggleButton}">
                     <Grid>
                         <Border x:Name="Border" CornerRadius="5" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" Effect="{StaticResource BlackShadow2}"/>
+                        <Border x:Name="Border2" CornerRadius="5" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" Effect="{StaticResource BlackShadow2}"/>
                         <ContentPresenter Margin="4" HorizontalAlignment="Center" VerticalAlignment="Center" RecognizesAccessKey="True"/>
                     </Grid>
-                    
                     <ControlTemplate.Triggers>
-                        <Trigger Property="IsChecked" Value="True">
-                            
+                        <Trigger Property="IsMouseOver" Value="true">
+                            <Setter Property="Effect" Value="{StaticResource BlackShadow3}" TargetName="Border2"/>
+                            <Setter Property="Effect" Value="{StaticResource WhiteShadow3}" TargetName="Border"/>
+                        </Trigger>
+                        <Trigger Property="IsChecked" Value="true">
+                            <Setter Property="Effect" Value="{StaticResource BlackShadow3}" TargetName="Border2"/>
+                            <Setter Property="Effect" Value="{StaticResource WhiteShadow3}" TargetName="Border"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -109,7 +114,7 @@
     </Style>
     
     <!-- BUTTON -->
-    <Style TargetType="{x:Type Button}">
+    <Style x:Key="baseBtn" TargetType="{x:Type Button}">
         <Setter Property="BorderThickness" Value="0"/>
         <Setter Property="Background" Value="{StaticResource MainColor}"/>
         <Setter Property="Margin" Value="3"/>
@@ -117,8 +122,8 @@
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Button}">
                     <Grid>
-                        <Border x:Name="Border2" Effect="{StaticResource WhiteShadow2}"/>
                         <Border x:Name="Border" CornerRadius="5" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" Effect="{StaticResource BlackShadow2}"/>
+                        <Border x:Name="Border2" CornerRadius="5" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" Effect="{StaticResource BlackShadow2}"/>
                         <ContentPresenter Margin="4" HorizontalAlignment="Center" VerticalAlignment="Center" RecognizesAccessKey="True"/>
                     </Grid>
                     <ControlTemplate.Triggers>

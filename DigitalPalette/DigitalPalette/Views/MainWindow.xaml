@@ -25,8 +25,9 @@
         </Grid.ColumnDefinitions>
 
         <Grid.Resources>
-            <Style TargetType="TextBox" BasedOn="{StaticResource baseTB}"/>
-            <Style TargetType="ToggleButton" BasedOn="{StaticResource baseToggleBtn}"/>
+            <Style TargetType="{x:Type Button}" BasedOn="{StaticResource baseBtn}"/>
+            <Style TargetType="{x:Type TextBox}" BasedOn="{StaticResource baseTB}"/>
+            <Style TargetType="{x:Type ToggleButton}" BasedOn="{StaticResource baseToggleBtn}"/>
         </Grid.Resources>
 
         <!-- LEFT -->
@@ -392,7 +393,7 @@
                                     <StackPanel VerticalAlignment="Center">
                                         <StackPanel Orientation="Horizontal" Margin="5">
                                             <TextBlock Text="이름 :  "/>
-                                            <TextBox Width="100" Text="{Binding SelectedChip.name}"/>
+                                            <TextBox Width="100" MaxLength="10" Text="{Binding SelectedChip.name}"/>
                                         </StackPanel>
                                     </StackPanel>
                                 </StackPanel>

@@ -17,6 +17,14 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
+        <Grid.Resources>
+            <Style TargetType="{x:Type Button}" BasedOn="{StaticResource baseBtn}">
+                <Setter Property="Height" Value="30"/>
+                <Setter Property="Width" Value="100"/>
+                <Setter Property="Margin" Value="10 0"/>
+            </Style>
+        </Grid.Resources>
+        
         <ListView Style="{DynamicResource TabLV}">
             <i:Interaction.Triggers>
                 <i:EventTrigger EventName="SelectionChanged">

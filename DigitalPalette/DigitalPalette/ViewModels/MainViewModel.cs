@@ -378,6 +378,12 @@ namespace DigitalPalette.ViewModels
             try{
                 File.Move(nowPath.FullName, newPath.FullName);
 
+                using (StreamWriter sw = new StreamWriter(newPath.FullName))
+                {
+                    sw.WriteLine("");
+                    sw.Close();
+                }
+
                 using (StreamWriter sw = File.AppendText(newPath.FullName))
                 {
                     if (_selectedChip.colors.Count > 0)
