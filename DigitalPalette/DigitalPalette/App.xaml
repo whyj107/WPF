@@ -5,7 +5,6 @@
              xmlns:VM="clr-namespace:DigitalPalette.ViewModels"
              StartupUri="/Views/MainWindow.xaml">
     <Application.Resources>
-        <VM:MainViewModel x:Key="MainVM"/>
-        <ResourceDictionary x:Key="MainRD" Source="pack://application:,,,/Resources/MainDictionary.xaml"/>
+        <ResourceDictionary Source="pack://application:,,,/Resources/MainDictionary.xaml"/>
     </Application.Resources>
 </Application>

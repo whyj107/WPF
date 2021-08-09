@@ -7,17 +7,20 @@
         xmlns:VM="clr-namespace:DigitalPalette.ViewModels"
         mc:Ignorable="d" AllowsTransparency="True"
         Left="{Binding left, Mode=TwoWay}" Top="{Binding top, Mode=TwoWay}"
-        Title="FollowMouseWindow"  Height="100" Width="150" Topmost="True" ShowInTaskbar="False"
+        Title="FollowMouseWindow"  Height="120" Width="120" Topmost="True" ShowInTaskbar="False"
         WindowStyle="None" ResizeMode="NoResize" Background="Transparent">
 
-    <Window.DataContext>
-        <VM:MainViewModel/>
-    </Window.DataContext>
-
-    <Grid>
-        <Border  HorizontalAlignment="Center" Margin="20 30 0 10" BorderThickness="1" BorderBrush="Black">
-            <Viewbox>
-                <StackPanel Background="white" Width="100">
+    <Grid VerticalAlignment="Center" HorizontalAlignment="Center">
+        <Border Height="101" Width="101" BorderThickness="1" BorderBrush="{Binding nowColor.foreGroundColor}" CornerRadius="10"/>
+        <Border Height="100" Width="100" Margin="10" Background="{Binding nowColor.solidColorbrush}" CornerRadius="10" Effect="{DynamicResource BlackShadow1}">
+            <Viewbox Margin="2">
+                <StackPanel Background="Transparent" Width="100">
+                    <StackPanel.Resources>
+                        <Style TargetType="{x:Type TextBlock}">
+                            <Setter Property="Foreground" Value="{Binding nowColor.foreGroundColor}"/>
+                            <Setter Property="FontWeight" Value="ExtraBlack"/>
+                        </Style>
+                    </StackPanel.Resources>
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                         <TextBlock Text="R : "/>
                         <TextBlock Text="{Binding nowColor.r}"/>
@@ -31,17 +34,11 @@
                         <TextBlock Text="{Binding nowColor.b}" HorizontalAlignment="Center"/>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                        <TextBlock Text="Hex : "/>
+                        <TextBlock Text="Hex : #"/>
                         <TextBlock Text="{Binding nowColor.hex}"/>
                     </StackPanel>
                 </StackPanel>
             </Viewbox>
-        </Border>
-
-        <Border VerticalAlignment="Top" HorizontalAlignment="Left" Height="50" Width="50" Margin="10" Background="{Binding nowColor.solidColorbrush}" CornerRadius="10">
-            <Border.Effect>
-                <DropShadowEffect Direction="315" ShadowDepth="5" Color="#161b1d" Opacity="0.23" BlurRadius="10"/>
-            </Border.Effect>
         </Border>
     </Grid>
 </Window>

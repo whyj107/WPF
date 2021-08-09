@@ -16,14 +16,20 @@ namespace DigitalPalette.ViewModels
     public partial class MainViewModel : VMBase
     {
         #region [변수]
+
+        // 색 모음 파일 저장 경로
         private string _savePath = string.Empty;
         public string SavePath { get => _savePath; set { _savePath = value; OnPropertyChanged("SavePath"); } }
 
+        // 색 추가로 추가된 색들의 리스트
         private ObservableCollection<Models.ColorInfo> _ListColors = new ObservableCollection<Models.ColorInfo>();
         public ObservableCollection<Models.ColorInfo> ListColors { get => _ListColors; set { _ListColors = value; OnPropertyChanged("ListColors"); } }
         #endregion
 
         #region [COMMAND]
+        /// <summary>
+        /// ListColor에서 색을 삭제하는 COMMAND입니다. 선택한 상태에서 'Delete' 버튼을 누르면 삭제됩니다.
+        /// </summary>
         private RelayCommand _deleteListItemCmd;
         public ICommand Tab0DeleteListItemCmd { get { return _deleteListItemCmd ?? (_deleteListItemCmd = new RelayCommand(Tab0_DeleteListItem, CanExe)); } }
         private void Tab0_DeleteListItem(object sender)
@@ -40,6 +46,9 @@ namespace DigitalPalette.ViewModels
             deleting = false;
         }
 
+        /// <summary>
+        /// ListColor에서 선택된 항목들을 선택해제하는 COMMAND입니다.
+        /// </summary>
         private RelayCommand _unSelectItemsCmd;
         public ICommand UnSelectItemsCmd { get { return _unSelectItemsCmd ?? (_unSelectItemsCmd = new RelayCommand(UnSelectAllItems, CanExe)); } }
         private void UnSelectAllItems(object sender)
@@ -53,7 +62,9 @@ namespace DigitalPalette.ViewModels
             }
         }
         
-
+        /// <summary>
+        /// ListColor에서 선택한 색들로 새로운 색 모음을 만드는 COMMAND입니다.
+        /// </summary>
         private RelayCommand _makeColorChipCmd;
         public ICommand MakeColorChipCmd { get { return _makeColorChipCmd ?? (_makeColorChipCmd = new RelayCommand(MakeColorChip, CanExe)); } }
         private void MakeColorChip(object sender)
@@ -129,27 +140,30 @@ namespace DigitalPalette.ViewModels
     public partial class MainViewModel : VMBase
     {
         #region [변수]
+        // 투명도의 바탕에 사용되는 색
         private Models.ColorInfo _backgroundColor = new Models.ColorInfo() { solidColorbrush = new SolidColorBrush(Colors.White) };
         public Models.ColorInfo backgroundColor { get => _backgroundColor; set { _backgroundColor = value; OnPropertyChanged("backgroundColor"); } }
 
+        // 투명도에 사용될 색
         private Models.ColorInfo[] _opacColorList = new Models.ColorInfo[9];
         public Models.ColorInfo[] OpacColorList { get => _opacColorList; set { OnPropertyChanged("OpacColorList"); } }
 
-        private SolidColorBrush[] _opacForeColorList = new SolidColorBrush[10];
-        public SolidColorBrush[] OpacForeColorList { get => _opacForeColorList; set { OnPropertyChanged("OpacForeColorList"); } }
-
+        // 원하는 투명도 설정 값
         private int _opacity = 0;
         public int opacity { get => _opacity; set { _opacity = value; OnPropertyChanged("opacity"); } }
+        
+        // 원하는 투명도 설정한 값 색
         private Models.ColorInfo _opacColor = new Models.ColorInfo();
         public Models.ColorInfo opacColor { get => _opacColor; set { _opacColor = value; OnPropertyChanged("opacColor"); } }
-        private SolidColorBrush _opacForeColor = new SolidColorBrush();
-        public SolidColorBrush opacForeColor { get => _opacForeColor; set { _opacForeColor = value; OnPropertyChanged("opacForeColor"); } }
         #endregion
 
         #region [COMMAND]
-        private RelayCommand _colorPickCmd;
-        public ICommand ColorPickCmd { get { return _colorPickCmd ?? (_colorPickCmd = new RelayCommand(ColorPick, CanExe)); } }
-        private void ColorPick(object sender)
+        /// <summary>
+        /// 배경색을 선택하는 COMMAND입니다. ColorDialog를 사용했습니다.
+        /// </summary>
+        private RelayCommand _backgroundColorPickCmd;
+        public ICommand BackgroundColorPickCmd { get { return _backgroundColorPickCmd ?? (_backgroundColorPickCmd = new RelayCommand(BackgroundColorPick, CanExe)); } }
+        private void BackgroundColorPick(object sender)
         {
             System.Windows.Forms.ColorDialog cd = new System.Windows.Forms.ColorDialog();
             if(cd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
@@ -163,6 +177,9 @@ namespace DigitalPalette.ViewModels
             ChangeColor(null);
         }
 
+        /// <summary>
+        /// 투명도를 설정한 색을 계산하여 _opacColor에 저장하는 COMMAND입니다.
+        /// </summary>
         private RelayCommand _changeColorCmd;
         public ICommand ChangeColorCmd { get { return _changeColorCmd ?? (_changeColorCmd = new RelayCommand(ChangeColor, CanExe)); } }
         public void ChangeColor(object sender)
@@ -175,10 +192,11 @@ namespace DigitalPalette.ViewModels
             {
                 solidColorbrush = new SolidColorBrush(change)
             };
-            opacForeColor = new SolidColorBrush(opacColor.BlackOrWhite());
-
         }
 
+        /// <summary>
+        /// 투명도 10 ~100% 사이의 색을 계산하여 _opacColorList에 저장하는 COMMAND입니다.
+        /// </summary>
         private void CalcOpacityColor()
         {
             _opacColorList = new Models.ColorInfo[9];
@@ -191,15 +209,17 @@ namespace DigitalPalette.ViewModels
                 Color tmp = Blend(s, b, i * 0.1f);
 
                 _opacColorList[i - 1] = new Models.ColorInfo() { solidColorbrush = new SolidColorBrush(tmp)};
-                _opacForeColorList[i - 1] = new SolidColorBrush(_opacColorList[i-1].BlackOrWhite());
             }
-
-            _opacForeColorList[9] = new SolidColorBrush(selectColor.BlackOrWhite());
-
             OpacColorList = _opacColorList;
-            OpacForeColorList = _opacForeColorList;
         }
 
+        /// <summary>
+        /// 2가지의 색을 섞는 함수입니다. 
+        /// </summary>
+        /// <param name="color"></param>
+        /// <param name="backColor"></param>
+        /// <param name="alpha">color 색의 비율을 나타냅니다. 0~1 사이의 값으로 사용됩니다.</param>
+        /// <returns></returns>
         private Color Blend(Color color, Color backColor, float alpha)
         {
             byte r = (byte)((color.R * alpha) + (backColor.R * (1 - alpha)));
@@ -216,15 +236,11 @@ namespace DigitalPalette.ViewModels
     public partial class MainViewModel : VMBase
     {
         #region [변수]
-        // ListView Visibility
-        private Visibility _leftLV = Visibility.Collapsed;
-        public Visibility leftLV { get => _leftLV; set { _leftLV = value; OnPropertyChanged("leftLV"); } }
-
-        // 왼쪽
+        // 색 모음의 리스트
         private ObservableCollection<Models.ColorChip> _colorchiplist = new ObservableCollection<Models.ColorChip>();
         public ObservableCollection<Models.ColorChip> ColorChipList { get => _colorchiplist; set { _colorchiplist = value; OnPropertyChanged("ColorChipList"); } }
 
-        // 오른쪽
+        // 선택된 색 모음
         private Models.ColorChip _selectedChip = new Models.ColorChip();
         public Models.ColorChip SelectedChip { get => _selectedChip; set { _selectedChip = value; OnPropertyChanged("SelectedChip"); } }
 
@@ -233,34 +249,9 @@ namespace DigitalPalette.ViewModels
         #endregion
 
         #region [COMMAND]
-        private RelayCommand _tab2LdeleteListItemCmd;
-        public ICommand Tab2L_DeleteListItemCmd { get { return _tab2LdeleteListItemCmd ?? (_tab2LdeleteListItemCmd = new RelayCommand(Tab2L_DeleteListItem, CanExe)); } }
-        private void Tab2L_DeleteListItem(object sender)
-        {
-            if(MessageBox.Show("정말 삭제하시겠습니까?", "삭제", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
-            {
-                if (File.Exists(SelectedChip.path))
-                {
-                    try
-                    {
-                        File.Delete(SelectedChip.path);
-
-                        ColorChipList.Remove(SelectedChip);
-
-                        if(ColorChipList.Count > 0)
-                        {
-                            SelectedChip = ColorChipList[0];
-                        }
-                    }
-                    catch
-                    {
-                        Log("Delete File Error!(" + SelectedChip.name + ")");
-                        MessageBox.Show("삭제에 실패했습니다.");
-                    }
-                }
-            }
-        }
-
+        /// <summary>
+        /// 색 모음이 저장된 폴더에서 색 모음 내용들을 읽어오는 함수입니다.
+        /// </summary>
         private void LoadColorChip()
         {
             ColorChipList.Clear();
@@ -272,13 +263,13 @@ namespace DigitalPalette.ViewModels
                 Directory.CreateDirectory(DirPath);
             }
 
-            foreach(FileInfo fi in di.GetFiles())
+            foreach (FileInfo fi in di.GetFiles())
             {
-                if(fi.Extension.ToLower().Equals(".txt"))
+                if (fi.Extension.ToLower().Equals(".txt"))
                 {
                     string[] lines = File.ReadAllLines(fi.FullName);
                     ObservableCollection<Models.ColorInfo> colors = new ObservableCollection<Models.ColorInfo>();
-                    foreach(string line in lines)
+                    foreach (string line in lines)
                     {
                         try
                         {
@@ -307,9 +298,46 @@ namespace DigitalPalette.ViewModels
                     ColorChipList.Add(cc);
                 }
             }
-            SelectedChip = ColorChipList[0];
+            if (ColorChipList.Count > 0)
+            {
+                SelectedChip = ColorChipList[0];
+            }
         }
 
+        /// <summary>
+        /// 선택된 색 모음(SelectedChip)을 삭제하는 COMMAND입니다. 선택한 상태에서 'Delete' 버튼을 누르면 삭제됩니다.
+        /// </summary>
+        private RelayCommand _tab2LdeleteListItemCmd;
+        public ICommand Tab2L_DeleteListItemCmd { get { return _tab2LdeleteListItemCmd ?? (_tab2LdeleteListItemCmd = new RelayCommand(Tab2L_DeleteListItem, CanExe)); } }
+        private void Tab2L_DeleteListItem(object sender)
+        {
+            if(MessageBox.Show("정말 삭제하시겠습니까?", "삭제", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+            {
+                if (File.Exists(SelectedChip.path))
+                {
+                    try
+                    {
+                        File.Delete(SelectedChip.path);
+
+                        ColorChipList.Remove(SelectedChip);
+
+                        if(ColorChipList.Count > 0)
+                        {
+                            SelectedChip = ColorChipList[0];
+                        }
+                    }
+                    catch
+                    {
+                        Log("Delete File Error!(" + SelectedChip.name + ")");
+                        MessageBox.Show("삭제에 실패했습니다.");
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// SelectedChip.colors에서 색을 삭제하는 COMMAND입니다. 선택한 상태에서 'Delete' 버튼을 누르면 삭제됩니다.
+        /// </summary>
         private RelayCommand _tab2RdeleteListItemCmd;
         public ICommand Tab2R_DeleteListItemCmd { get { return _tab2RdeleteListItemCmd ?? (_tab2RdeleteListItemCmd = new RelayCommand(Tab2R_DeleteListItem, CanExe)); } }
         private void Tab2R_DeleteListItem(object sender)
@@ -326,6 +354,9 @@ namespace DigitalPalette.ViewModels
             deleting = false;
         }
 
+        /// <summary>
+        /// AddColor Window를 여는 COMMAND입니다.
+        /// </summary>
         private RelayCommand _openaddColorCmd;
         public ICommand OpenAddColorCmd { get { return _openaddColorCmd ?? (_openaddColorCmd = new RelayCommand(OpenAddColor, CanExe)); } }
         private void OpenAddColor(object sender)
@@ -333,9 +364,13 @@ namespace DigitalPalette.ViewModels
             ac = new Views.AddColor();
             ac.Owner = Application.Current.MainWindow;
             ac.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+            ac.DataContext = this;
             ac.ShowDialog();
         }
 
+        /// <summary>
+        /// AddColor Window를 닫는 COMMAND입니다. 이건 사실 ViewModel로 코드를 구성하지 않고 Views에서 구성해도 무관할 것 같습니다.
+        /// </summary>
         private RelayCommand _closeAddColorCmd;
         public ICommand CloseAddColorCmd { get { return _closeAddColorCmd ?? (_closeAddColorCmd = new RelayCommand(CloseAddColor, CanExe)); } }
         private void CloseAddColor(object sender)
@@ -343,6 +378,9 @@ namespace DigitalPalette.ViewModels
             ac.Close();
         }
 
+        /// <summary>
+        /// AddColor Window에서 선택한 색들을 추가하는 COMMAND입니다.
+        /// </summary>
         private RelayCommand _addColorCmd2;
         public ICommand AddColorCmd2 { get { return _addColorCmd2 ?? (_addColorCmd2 = new RelayCommand(AddColor2, CanExe)); } }
         private void AddColor2(object sender)
@@ -360,6 +398,9 @@ namespace DigitalPalette.ViewModels
             ac.Close();
         }
 
+        /// <summary>
+        /// 선택된 색 모음에서 수정 버튼을 누를 때 이름 및 색을 다시 저장하는 COMMAND입니다.
+        /// </summary>
         private RelayCommand _resetColorChipCmd;
         public ICommand ResetColorChipCmd { get { return _resetColorChipCmd ?? (_resetColorChipCmd = new RelayCommand(ResetColorChip, CanExe)); } }
         private void ResetColorChip(object sender)
@@ -411,14 +452,14 @@ namespace DigitalPalette.ViewModels
     public partial class MainViewModel : VMBase
     {
         #region [변수]
-        // ColorChips 경로
+        // 색 모음 경로
         private string saveDirPath = @"\ColorChips";
         private string currentDirectoryPath = Environment.CurrentDirectory.ToString();
 
-        // 이전 tab control index
+        // 이전 Tab Control Index
         private int pre_tabIdx = 0;
 
-        // 오른쪽 리스트뷰에서 선택된 아이템들의 인덱스 모음
+        // Tab Control 리스트뷰에서 선택된 아이템들의 인덱스 모음
         private List<int> SelectedItemsIdx = new List<int>();
 
         // 현재 삭제 중인지를 나타내는 변수
@@ -438,12 +479,14 @@ namespace DigitalPalette.ViewModels
 
         // FollowMouseWindow 화면 창
         Views.FollowMouseWindow f;
+
         // FollowMouseWindow 화면 창의 왼쪽과 위쪽
         private String _left = "0";
         public String left { get => _left; set { _left = value; OnPropertyChanged("left"); } }
 
         private String _top = "0";
         public String top { get => _top; set { _top = value; OnPropertyChanged("top"); } }
+
         // FollowMouseWindow 화면이 존재 및 CheckBox Check 확인 변수
         private bool _isFollowWindowActive = false;
         public bool isFollowWindowActive { get => _isFollowWindowActive; set { _isFollowWindowActive = value; OnPropertyChanged("isFollowWindowActive"); } }
@@ -452,11 +495,21 @@ namespace DigitalPalette.ViewModels
         private Models.ColorInfo _nowColor = new Models.ColorInfo();
         public Models.ColorInfo nowColor { get => _nowColor; set { _nowColor = value; OnPropertyChanged("nowColor"); } }
 
+        // 선택된 색
         private Models.ColorInfo _selectColor = new Models.ColorInfo();
         public Models.ColorInfo selectColor { get => _selectColor; set { _selectColor = value; CalcOpacityColor(); ChangeColor(null); OnPropertyChanged("selectColor"); } }
+
+        // 색 모음 리스트의 Visibility
+        private Visibility _leftLV = Visibility.Collapsed;
+        public Visibility leftLV { get => _leftLV; set { _leftLV = value; OnPropertyChanged("leftLV"); } }
         #endregion
 
-        #region [COMMAND]
+        #region [UI EVENT & COMMAND]
+        /// <summary>
+        /// TOGGLE BUTTON을 이용하여 FollowMouseWindow를 여는 이벤트 함수입니다. FollowMouseWindow를 사용할 때 후킹도 함께 사용해야하므로 timer도 같이 설정합니다.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         public void OepnFMW(object sender, RoutedEventArgs e)
         {
             ToggleButton tb = sender as ToggleButton;
@@ -465,17 +518,31 @@ namespace DigitalPalette.ViewModels
                 _listener = new LowLevelKeyboardListener();
                 _listener.doEvent += PickColor;
                 _listener.HookKeyboard();
-                
+
+                timer.Interval = TimeSpan.FromMilliseconds(1);
+                timer.Tick += new EventHandler(doTimer);
+                timer.Start();
+
                 f = new Views.FollowMouseWindow();
+                f.DataContext = this;
                 f.Show();
             }
             else
             {
                 f.Close();
                 _listener.UnHookKeyboard();
+                if (timer.IsEnabled)
+                {
+                    timer.Stop();
+                }
             }
         }
 
+        /// <summary>
+        /// 현재 MainWindow를 닫을 경우 사용하는 이벤트 함수입니다. timer와 후킹을 중지한 뒤 종료합니다.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         public void Window_Closed(object sender, EventArgs e)
         {
             if (timer.IsEnabled)
@@ -491,6 +558,11 @@ namespace DigitalPalette.ViewModels
             Application.Current.Shutdown();
         }
 
+        /// <summary>
+        /// Slider의 값이 바뀔 때마다 선택된 색을 설정하도록 하는 이벤트 함수입니다.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         public void Slider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             Slider s = sender as Slider;
@@ -517,23 +589,22 @@ namespace DigitalPalette.ViewModels
             }
         }
 
-        private RelayCommand _addColorCmd;
-        public ICommand AddColorCmd { get { return _addColorCmd ?? (_addColorCmd = new RelayCommand(AddColor, CanExe)); } }
-        private void AddColor(object args)
-        {
-            Models.ColorInfo newColor = new Models.ColorInfo()
-            {
-                solidColorbrush = selectColor.solidColorbrush
-            };
-            ListColors.Add(newColor);
-        }
-
+        /// <summary>
+        /// 0-9 숫자만 입력되도록하는 이벤트 함수입니다.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         public void NumPreviewTextInput(object sender, TextCompositionEventArgs e)
         {
             Regex regex = new Regex("[^0-9]+");
             e.Handled = regex.IsMatch(e.Text);
         }
 
+        /// <summary>
+        /// 0-9A-F 16진수만 입력되도록하는 이벤트 함수입니다.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         public void HexNumPreviewTextInput(object sender, TextCompositionEventArgs e)
         {
             Regex regex = new Regex("[^0-9a-fA-F]+");
@@ -551,6 +622,11 @@ namespace DigitalPalette.ViewModels
             tb.Select(tb.Text.Length, 0);
         }
 
+        /// <summary>
+        /// TabControl에서 Tab Index가 바뀔 때마다 사용되는 이벤트 함수입니다.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         public void TabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             TabControl tc = sender as TabControl;
@@ -579,6 +655,11 @@ namespace DigitalPalette.ViewModels
             pre_tabIdx = tc.SelectedIndex;
         }
 
+        /// <summary>
+        /// TabControl 안의 ListView에서 선택할때 사용되는 이벤트 함수입니다.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         public void Tab_LV_SelectionChanged(object sender, RoutedEventArgs e)
         {
             if (!deleting)
@@ -604,6 +685,25 @@ namespace DigitalPalette.ViewModels
             }
         }
 
+        /// <summary>
+        /// 왼쪽 Border에 나타난 색(선택된 색, selectColor)을 ListColors에 추가하는 COMMAND입니다.
+        /// </summary>
+        private RelayCommand _addColorCmd;
+        public ICommand AddColorCmd { get { return _addColorCmd ?? (_addColorCmd = new RelayCommand(AddColor, CanExe)); } }
+        private void AddColor(object args)
+        {
+            Models.ColorInfo newColor = new Models.ColorInfo()
+            {
+                solidColorbrush = selectColor.solidColorbrush
+            };
+            ListColors.Add(newColor);
+        }
+
+        /// <summary>
+        /// COMMAND에서 사용되는 공용 취소 COMMAND입니다.
+        /// </summary>
+        /// <param name="args"></param>
+        /// <returns></returns>
         private bool CanExe(object args)
         {
             return true;
@@ -614,10 +714,6 @@ namespace DigitalPalette.ViewModels
         public MainViewModel()
         {
             ListColors.Clear();
-
-            timer.Interval = TimeSpan.FromMilliseconds(1);
-            timer.Tick += new EventHandler(doTimer);
-            timer.Start();
         }
 
         /// <summary>

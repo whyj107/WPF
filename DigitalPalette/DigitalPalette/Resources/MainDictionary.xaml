@@ -1,6 +1,6 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" 
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-    
+
     <!-- COLOR -->
     <!--<Color x:Key="WhiteShadowColor">White</Color>-->
     <Color x:Key="WhiteShadowColor">White</Color>
@@ -166,7 +166,7 @@
             </Setter.Value>
         </Setter>
     </Style>
-    
+
     <Style x:Key="ColorSliderTB" TargetType="{x:Type TextBox}" BasedOn="{StaticResource baseTB}">
         <Setter Property="Width" Value="35"/>
         <Setter Property="HorizontalContentAlignment" Value="Center"/>
@@ -249,7 +249,7 @@
         <Setter Property="ItemTemplate" Value="{StaticResource ItemDataTemplate2}"/>
         <Setter Property="ItemContainerStyle" Value="{StaticResource ItemContainerStyle}"/>
     </Style>
-    
+
     <Style x:Key="TabLV" TargetType="{x:Type ListView}">
         <Setter Property="ItemsSource" Value="{Binding ListColors}"/>
         <Setter Property="Margin" Value="5"/>
@@ -266,6 +266,4 @@
         <Setter Property="AllowDrop" Value="True"/>
         <Setter Property="ItemContainerStyle" Value="{StaticResource ItemContainerStyle}"/>
     </Style>
-    
-    
 </ResourceDictionary>

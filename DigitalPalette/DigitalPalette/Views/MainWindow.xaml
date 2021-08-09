@@ -7,10 +7,15 @@
         xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
         xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
         xmlns:VM="clr-namespace:DigitalPalette.ViewModels"
-        Name="window" ResizeMode="NoResize" DataContext="{StaticResource MainVM}" Resources="{StaticResource MainRD}"
+        Name="window" ResizeMode="NoResize"
         mc:Ignorable="d" Background="{StaticResource MainColor}"
-        Title="MainWindow" Height="450" Width="700">
+        Title="Digital Palette" Height="450" Width="700">
 
+    <!-- DATACONTEXT 설정 -->
+    <Window.DataContext>
+        <VM:MainViewModel/>
+    </Window.DataContext>
+    
     <!-- Window 종료 이벤트 -->
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="Closed">
@@ -30,7 +35,7 @@
             <Style TargetType="{x:Type ToggleButton}" BasedOn="{StaticResource baseToggleBtn}"/>
         </Grid.Resources>
 
-        <!-- LEFT -->
+        <!-- GRID COLUMN 0 -->
         <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
             <StackPanel.Resources>
                 <Style TargetType="Slider" BasedOn="{StaticResource ColorSlider}"/>
@@ -48,11 +53,12 @@
                 </i:Interaction.Triggers>
             </ToggleButton>
 
+            <!-- 선택된 색 -->
             <Border Style="{DynamicResource OutSide1B}">
                 <Border Background="{Binding selectColor.solidColorbrush}" Style="{DynamicResource InSide1B}"/>
             </Border>
 
-            <!-- R -->
+            <!-- 선택된 색의 R -->
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="10">
                 <TextBlock Text="R : " VerticalAlignment="Center"/>
                 <Slider x:Name="red_S" Value="{Binding selectColor.r}">
@@ -77,7 +83,7 @@
                 </TextBox>
             </StackPanel>
 
-            <!-- G -->
+            <!-- 선택된 색의 G -->
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="10">
                 <TextBlock Text="G : "  VerticalAlignment="Center"/>
                 <Slider x:Name="green_S" Value="{Binding selectColor.g}">
@@ -102,7 +108,7 @@
                 </TextBox>
             </StackPanel>
 
-            <!-- B -->
+            <!-- 선택된 색의 B -->
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="10">
                 <TextBlock Text="B : " VerticalAlignment="Center"/>
                 <Slider x:Name="blue_S" Value="{Binding selectColor.b}">
@@ -127,6 +133,7 @@
                 </TextBox>
             </StackPanel>
 
+            <!-- 선택된 색의 hex -->
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="10">
                 <TextBlock Text="Hex : # "/>
                 <TextBox Text="{Binding selectColor.hex, Mode=TwoWay}" Width=" 80" MaxLength="6" HorizontalContentAlignment="Center">
@@ -138,12 +145,11 @@
                 </TextBox>
             </StackPanel>
 
-            <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="10">
-                <Button Content="색 추가" Command="{Binding AddColorCmd}"/>
-            </StackPanel>
+            <!-- 선택된 색을 ListColor에 추가하는 버튼 -->
+            <Button HorizontalAlignment="Center" Margin="10" Content="색 추가" Command="{Binding AddColorCmd}"/>
         </StackPanel>
 
-        <!-- 색 모음 일 경우만 나타도록 설정 -->
+        <!-- 색 모음 리스트 뷰 : 색 모음일 경우(TAB Index == 2)만 나타도록 설정 -->
         <Border Effect="{DynamicResource WhiteShadow1}">
             <ListView Style="{DynamicResource LeftLV}" Effect="{DynamicResource BlackShadow1}">
                 <ListView.InputBindings>
@@ -151,10 +157,11 @@
                 </ListView.InputBindings>
             </ListView>
         </Border>
-        
-        <!-- RIGHT -->
+
+        <!-- GRID COLUMN 1 -->
         <Grid Grid.Column="1">
             <Border Effect="{DynamicResource WhiteShadow1}">
+                <!-- TABCONTROL : 색, 투명도, 색 모음 -->
                 <TabControl Style="{DynamicResource MainTC}">
                     <i:Interaction.Triggers>
                         <i:EventTrigger EventName="SelectionChanged">
@@ -173,7 +180,11 @@
                                 <RowDefinition Height="*"/>
                             </Grid.RowDefinitions>
 
-                            <Border Effect="{DynamicResource BlackShadow3}" Background="WhiteSmoke" Margin="5"/>
+                            <!-- GRID ROW 0 -->
+                            <!-- 그림자 효과 -->
+                            <Border Effect="{DynamicResource BlackShadow3}" Margin="5"/>
+                            
+                            <!-- ListColor의 ListView -->
                             <ListView Style="{DynamicResource TabLV}">
                                 <i:Interaction.Triggers>
                                     <i:EventTrigger EventName="SelectionChanged">
@@ -185,6 +196,7 @@
                                 </ListView.InputBindings>
                             </ListView>
 
+                            <!-- GRID ROW 1 -->
                             <Grid Grid.Row="1" Margin="10 5">
                                 <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Left">
                                     <TextBlock Text="색 모음 이름 : "/>
@@ -201,7 +213,9 @@
                     <!-- TAB INDEX : 1 -->
                     <TabItem Header="투명도">
                         <StackPanel Margin="10 5">
-                            <Button Content="배경색 선택" HorizontalAlignment="Center" Command="{Binding ColorPickCmd}"/>
+                            <!-- 배경 선택 BUTTON -->
+                            <Button Content="배경색 선택" HorizontalAlignment="Center" Command="{Binding BackgroundColorPickCmd}"/>
+
                             <!-- 투명도 10% ~ 100% -->
                             <Grid Width="350" Height="250" Margin="10" Background="{Binding backgroundColor.solidColorbrush}" Effect="{DynamicResource BlackShadow3}">
                                 <Grid.ColumnDefinitions>
@@ -229,92 +243,92 @@
                                 <!-- 왼쪽 10-50 -->
                                 <Grid Grid.Row="0">
                                     <Border Opacity="0.1"/>
-                                    <TextBlock Text="10%" Foreground="{Binding OpacForeColorList[0]}"/>
+                                    <TextBlock Text="10%" Foreground="{Binding OpacColorList[0].foreGroundColor}"/>
                                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
-                                        <TextBlock Text="#" Foreground="{Binding OpacForeColorList[0]}"/>
-                                        <TextBlock Text="{Binding OpacColorList[0].hex}" Foreground="{Binding OpacForeColorList[0]}"/>
+                                        <TextBlock Text="#" Foreground="{Binding OpacColorList[0].foreGroundColor}"/>
+                                        <TextBlock Text="{Binding OpacColorList[0].hex}" Foreground="{Binding OpacColorList[0].foreGroundColor}"/>
                                     </StackPanel>
                                 </Grid>
 
                                 <Grid Grid.Row="1">
                                     <Border Opacity="0.2"/>
-                                    <TextBlock Text="20%" Foreground="{Binding OpacForeColorList[1]}"/>
+                                    <TextBlock Text="20%" Foreground="{Binding OpacColorList[1].foreGroundColor}"/>
                                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
-                                        <TextBlock Text="#" Foreground="{Binding OpacForeColorList[1]}"/>
-                                        <TextBlock Text="{Binding OpacColorList[1].hex}" Foreground="{Binding OpacForeColorList[1]}"/>
+                                        <TextBlock Text="#" Foreground="{Binding OpacColorList[1].foreGroundColor}"/>
+                                        <TextBlock Text="{Binding OpacColorList[1].hex}" Foreground="{Binding OpacColorList[1].foreGroundColor}"/>
                                     </StackPanel>
                                 </Grid>
 
                                 <Grid Grid.Row="2">
                                     <Border Opacity="0.3"/>
-                                    <TextBlock Text="30%" Foreground="{Binding OpacForeColorList[2]}"/>
+                                    <TextBlock Text="30%" Foreground="{Binding OpacColorList[2].foreGroundColor}"/>
                                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
-                                        <TextBlock Text="#" Foreground="{Binding OpacForeColorList[2]}"/>
-                                        <TextBlock Text="{Binding OpacColorList[2].hex}" Foreground="{Binding OpacForeColorList[2]}"/>
+                                        <TextBlock Text="#" Foreground="{Binding  OpacColorList[2].foreGroundColor}"/>
+                                        <TextBlock Text="{Binding OpacColorList[2].hex}" Foreground="{Binding  OpacColorList[2].foreGroundColor}"/>
                                     </StackPanel>
                                 </Grid>
 
                                 <Grid Grid.Row="3">
                                     <Border Opacity="0.4"/>
-                                    <TextBlock Text="40%" Foreground="{Binding OpacForeColorList[3]}"/>
+                                    <TextBlock Text="40%" Foreground="{Binding OpacColorList[3].foreGroundColor}"/>
                                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
-                                        <TextBlock Text="#" Foreground="{Binding OpacForeColorList[3]}"/>
-                                        <TextBlock Text="{Binding OpacColorList[3].hex}" Foreground="{Binding OpacForeColorList[3]}"/>
+                                        <TextBlock Text="#" Foreground="{Binding OpacColorList[3].foreGroundColor}"/>
+                                        <TextBlock Text="{Binding OpacColorList[3].hex}" Foreground="{Binding OpacColorList[3].foreGroundColor}"/>
                                     </StackPanel>
                                 </Grid>
 
                                 <Grid Grid.Row="4">
                                     <Border Opacity="0.5"/>
-                                    <TextBlock Text="50%" Foreground="{Binding OpacForeColorList[4]}"/>
+                                    <TextBlock Text="50%" Foreground="{Binding OpacColorList[4].foreGroundColor}"/>
                                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
-                                        <TextBlock Text="#" Foreground="{Binding OpacForeColorList[4]}"/>
-                                        <TextBlock Text="{Binding OpacColorList[4].hex}" Foreground="{Binding OpacForeColorList[4]}"/>
+                                        <TextBlock Text="#" Foreground="{Binding OpacColorList[4].foreGroundColor}"/>
+                                        <TextBlock Text="{Binding OpacColorList[4].hex}" Foreground="{Binding OpacColorList[4].foreGroundColor}"/>
                                     </StackPanel>
                                 </Grid>
 
                                 <!-- 왼쪽 60-100 -->
                                 <Grid Grid.Row="0" Grid.Column="1">
                                     <Border Opacity="0.6" />
-                                    <TextBlock Text="60%" Foreground="{Binding OpacForeColorList[5]}"/>
+                                    <TextBlock Text="60%" Foreground="{Binding OpacColorList[5].foreGroundColor}"/>
                                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
-                                        <TextBlock Text="#"  Foreground="{Binding OpacForeColorList[5]}"/>
-                                        <TextBlock Text="{Binding OpacColorList[5].hex}"  Foreground="{Binding OpacForeColorList[5]}"/>
+                                        <TextBlock Text="#"  Foreground="{Binding OpacColorList[5].foreGroundColor}"/>
+                                        <TextBlock Text="{Binding OpacColorList[5].hex}"  Foreground="{Binding OpacColorList[5].foreGroundColor}"/>
                                     </StackPanel>
                                 </Grid>
 
                                 <Grid Grid.Row="1" Grid.Column="1">
                                     <Border Opacity="0.7"/>
-                                    <TextBlock Text="70%" Foreground="{Binding OpacForeColorList[6]}" />
+                                    <TextBlock Text="70%" Foreground="{Binding OpacColorList[6].foreGroundColor}" />
                                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
-                                        <TextBlock Text="#" Foreground="{Binding OpacForeColorList[6]}"/>
-                                        <TextBlock Text="{Binding OpacColorList[6].hex}"  Foreground="{Binding OpacForeColorList[6]}"/>
+                                        <TextBlock Text="#" Foreground="{Binding OpacColorList[6].foreGroundColor}"/>
+                                        <TextBlock Text="{Binding OpacColorList[6].hex}"  Foreground="{Binding OpacColorList[6].foreGroundColor}"/>
                                     </StackPanel>
                                 </Grid>
 
                                 <Grid Grid.Row="2" Grid.Column="1">
                                     <Border Opacity="0.8"/>
-                                    <TextBlock Text="80%" Foreground="{Binding OpacForeColorList[7]}"/>
+                                    <TextBlock Text="80%" Foreground="{Binding OpacColorList[7].foreGroundColor}"/>
                                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
-                                        <TextBlock Text="#" Foreground="{Binding OpacForeColorList[7]}"/>
-                                        <TextBlock Text="{Binding OpacColorList[7].hex}"  Foreground="{Binding OpacForeColorList[7]}"/>
+                                        <TextBlock Text="#" Foreground="{Binding OpacColorList[7].foreGroundColor}"/>
+                                        <TextBlock Text="{Binding OpacColorList[7].hex}"  Foreground="{Binding OpacColorList[7].foreGroundColor}"/>
                                     </StackPanel>
                                 </Grid>
 
                                 <Grid Grid.Row="3" Grid.Column="1">
                                     <Border Opacity="0.9"/>
-                                    <TextBlock Text="90%" Foreground="{Binding OpacForeColorList[8]}"/>
+                                    <TextBlock Text="90%" Foreground="{Binding OpacColorList[8].foreGroundColor}"/>
                                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
-                                        <TextBlock Text="#" Foreground="{Binding OpacForeColorList[8]}"/>
-                                        <TextBlock Text="{Binding OpacColorList[8].hex}" Foreground="{Binding OpacForeColorList[8]}"/>
+                                        <TextBlock Text="#" Foreground="{Binding OpacColorList[8].foreGroundColor}"/>
+                                        <TextBlock Text="{Binding OpacColorList[8].hex}" Foreground="{Binding OpacColorList[8].foreGroundColor}"/>
                                     </StackPanel>
                                 </Grid>
 
                                 <Grid Grid.Row="4" Grid.Column="1">
                                     <Border Opacity="1"/>
-                                    <TextBlock Text="100%" Foreground="{Binding OpacForeColorList[9]}"/>
+                                    <TextBlock Text="100%" Foreground="{Binding OpacColorList[9].foreGroundColor}"/>
                                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
-                                        <TextBlock Text="#" Foreground="{Binding OpacForeColorList[9]}"/>
-                                        <TextBlock Text="{Binding selectColor.hex}" Foreground="{Binding OpacForeColorList[9]}"/>
+                                        <TextBlock Text="#" Foreground="{Binding OpacColorList[9].foreGroundColor}"/>
+                                        <TextBlock Text="{Binding selectColor.hex}" Foreground="{Binding OpacColorList[9].foreGroundColor}"/>
                                     </StackPanel>
                                 </Grid>
                             </Grid>
@@ -332,8 +346,8 @@
                                 <Button Content="색 확인" Margin="10 0 25 0" VerticalAlignment="Center" Command="{Binding ChangeColorCmd}"/>
                                 <Border Width="150" Height="25" Background="{Binding opacColor.solidColorbrush}">
                                     <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
-                                        <TextBlock Text="#" FontWeight="ExtraBold" Foreground="{Binding opacForeColor}"/>
-                                        <TextBlock Text="{Binding opacColor.hex}" FontWeight="ExtraBold" Foreground="{Binding opacForeColor}"/>
+                                        <TextBlock Text="#" FontWeight="ExtraBold" Foreground="{Binding opacColor.foreGroundColor}"/>
+                                        <TextBlock Text="{Binding opacColor.hex}" FontWeight="ExtraBold" Foreground="{Binding opacColor.foreGroundColor}"/>
                                     </StackPanel>
                                 </Border>
                             </StackPanel>
@@ -348,7 +362,9 @@
                                 <RowDefinition Height="*"/>
                             </Grid.RowDefinitions>
 
+                            <!-- GRID ROW 0 -->
                             <Border Effect="{DynamicResource BlackShadow3}" Background="WhiteSmoke" Margin="5"/>
+                            <!-- 선택된 색 모음의 색 리스트 -->
                             <ListView ItemsSource="{Binding SelectedChip.colors}" Style="{DynamicResource TabLV}">
                                 <i:Interaction.Triggers>
                                     <i:EventTrigger EventName="SelectionChanged">
@@ -360,12 +376,14 @@
                                 </ListView.InputBindings>
                             </ListView>
 
+                            <!-- GRID ROW 1 -->
                             <Grid Grid.Row="1">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="3*"/>
                                     <ColumnDefinition Width="*"/>
                                 </Grid.ColumnDefinitions>
 
+                                <!-- GRID COLUMN 0 -->
                                 <StackPanel Orientation="Horizontal">
                                     <StackPanel Margin="5" Orientation="Horizontal">
                                         <Border Style="{DynamicResource OutSide2B}">
@@ -398,6 +416,7 @@
                                     </StackPanel>
                                 </StackPanel>
 
+                                <!-- GRID COLUMN 1 -->
                                 <StackPanel Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center">
                                     <Button Content="색 추가" Command="{Binding OpenAddColorCmd}"/>
                                     <Button Content="수정" Command="{Binding ResetColorChipCmd}"/>

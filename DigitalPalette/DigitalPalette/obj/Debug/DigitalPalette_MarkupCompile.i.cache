@@ -4,17 +4,17 @@
 winexe
 C#
 .cs
-E:\c#\DigitalPalette\DigitalPalette\obj\Debug\
+D:\c#\DigitalPalette\DigitalPalette\obj\Debug\
 DigitalPalette
 none
 false
 DEBUG;TRACE
-E:\c#\DigitalPalette\DigitalPalette\App.xaml
+D:\c#\DigitalPalette\DigitalPalette\App.xaml
 41373631927
 
-171369603536
-181553453860
+141341720438
+182002322337
 Resources\MainDictionary.xaml;Views\AddColor.xaml;Views\FollowMouseWindow.xaml;Views\MainWindow.xaml;
 
-True
+False
 
