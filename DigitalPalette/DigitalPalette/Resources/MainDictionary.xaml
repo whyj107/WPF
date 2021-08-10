@@ -2,13 +2,11 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
     <!-- COLOR -->
-    <!--<Color x:Key="WhiteShadowColor">White</Color>-->
     <Color x:Key="WhiteShadowColor">White</Color>
     <Color x:Key="BlackShadowColor">Black</Color>
 
     <!-- SOLIDBRUSH -->
-    <!--<SolidColorBrush x:Key="MainColor">WhiteSmoke</SolidColorBrush>-->
-    <SolidColorBrush x:Key="MainColor">#eff2f9</SolidColorBrush>
+    <SolidColorBrush x:Key="MainColor">WhiteSmoke</SolidColorBrush>
 
     <!-- SHADOW EFFECT -->
     <DropShadowEffect x:Key="WhiteShadow1" Direction="135" Color="{StaticResource WhiteShadowColor}" Opacity="1" ShadowDepth="2"/>
@@ -246,6 +244,7 @@
         <Setter Property="Visibility" Value="{Binding leftLV}"/>
         <Setter Property="ItemsSource" Value="{Binding ColorChipList}"/>
         <Setter Property="SelectedItem" Value="{Binding SelectedChip, Mode=TwoWay}"/>
+        <Setter Property="SelectedIndex" Value="{Binding SelectedChipIdx, Mode=TwoWay}"/>
         <Setter Property="ItemTemplate" Value="{StaticResource ItemDataTemplate2}"/>
         <Setter Property="ItemContainerStyle" Value="{StaticResource ItemContainerStyle}"/>
     </Style>

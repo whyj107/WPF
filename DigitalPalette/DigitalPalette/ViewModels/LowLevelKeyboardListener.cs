@@ -89,7 +89,6 @@ namespace DigitalPalette.ViewModels
                 if (vkCode == 162 || vkCode == 163) //162 is Left Ctrl, 163 is Right Ctrl
                 {
                     ctrlPressed = true;
-                    return (IntPtr)1;
                 }
                 else
                 {
@@ -120,7 +119,6 @@ namespace DigitalPalette.ViewModels
                 }
             }
             #endregion
-
             return CallNextHookEx(_MousehookID, nCode, wParam, lParam);
         }
 

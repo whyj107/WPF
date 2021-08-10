@@ -121,6 +121,7 @@ namespace DigitalPalette.ViewModels
                             SelectedItemsIdx.Clear();
                         }
                         sw.Close();
+                        UnSelectAllItems(null);
                         MessageBox.Show("생성 성공했습니다!");
                     }
                 }
@@ -244,6 +245,10 @@ namespace DigitalPalette.ViewModels
         private Models.ColorChip _selectedChip = new Models.ColorChip();
         public Models.ColorChip SelectedChip { get => _selectedChip; set { _selectedChip = value; OnPropertyChanged("SelectedChip"); } }
 
+        // 선택된 색 모음 index
+        private int _selectedChipIdx = 0;
+        public int SelectedChipIdx { get => _selectedChipIdx; set { _selectedChipIdx = value; OnPropertyChanged("SelectedChipIndx"); } }
+
         // AddColor Window
         Views.AddColor ac;
         #endregion
@@ -317,13 +322,17 @@ namespace DigitalPalette.ViewModels
                 {
                     try
                     {
-                        File.Delete(SelectedChip.path);
-
-                        ColorChipList.Remove(SelectedChip);
-
-                        if(ColorChipList.Count > 0)
+                        if (File.Exists(SelectedChip.path))
                         {
-                            SelectedChip = ColorChipList[0];
+                            File.Delete(SelectedChip.path);
+
+                            ColorChipList.RemoveAt(SelectedChipIdx);
+
+                            if (ColorChipList.Count > 0)
+                            {
+                                SelectedChip = ColorChipList[0];
+                                SelectedChipIdx = 0;
+                            }
                         }
                     }
                     catch
@@ -345,11 +354,28 @@ namespace DigitalPalette.ViewModels
             deleting = true;
             if (SelectedItemsIdx.Count > 0)
             {
-                foreach (int idx in SelectedItemsIdx)
+                try
                 {
-                    _selectedChip.colors.RemoveAt(idx);
+                    foreach (int idx in SelectedItemsIdx)
+                    {
+                        _selectedChip.colors.RemoveAt(idx);
+                    }
+
+                    if (SelectedChip.colors.Count > 0)
+                    {
+                        SelectedChip.idxColor = _selectedChip.colors[0];
+                    }
+                    else
+                    {
+                        SelectedChip.idxColor = null;
+                    }
+
+                    SelectedChip = _selectedChip;
                 }
-                SelectedChip = _selectedChip;
+                catch(Exception ex)
+                {
+                    Log("Tab2R_Delete Error\n" + ex.Message);
+                }
             }
             deleting = false;
         }
@@ -421,7 +447,6 @@ namespace DigitalPalette.ViewModels
 
                 using (StreamWriter sw = new StreamWriter(newPath.FullName))
                 {
-                    sw.WriteLine("");
                     sw.Close();
                 }
 
@@ -435,6 +460,10 @@ namespace DigitalPalette.ViewModels
                         }
                     }
                     sw.Close();
+
+                    _selectedChip.path = newPath.FullName;
+                    ColorChipList[SelectedChipIdx].path = newPath.FullName;
+
                     MessageBox.Show("수정되었습니다.");
                 }
             }

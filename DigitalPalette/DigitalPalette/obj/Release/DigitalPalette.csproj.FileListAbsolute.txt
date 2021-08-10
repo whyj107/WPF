@@ -28,4 +28,3 @@ D:\c#\DigitalPalette\DigitalPalette\obj\Release\DigitalPalette.csproj.CoreCompil
 D:\c#\DigitalPalette\DigitalPalette\obj\Release\DigitalPalette.csproj.CopyComplete
 D:\c#\DigitalPalette\DigitalPalette\obj\Release\DigitalPalette.exe
 D:\c#\DigitalPalette\DigitalPalette\obj\Release\DigitalPalette.pdb
-D:\c#\DigitalPalette\DigitalPalette\obj\Release\DigitalPalette.csprojAssemblyReference.cache
